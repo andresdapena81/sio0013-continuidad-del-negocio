@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio 3 · SIO0013 Continuidad del negocio</title>
+<style>
+/* Hoja común de los laboratorios de SIO0010. Misma identidad del laboratorio 1.
+   Al final está la hoja de impresión: el PDF de cada laboratorio sale de este mismo archivo. */
+:root{
+  --naranja:#F36406; --naranja-lav:#FDEFE9; --azul:#154361; --azul-lav:#E9F0F5;
+  --tinta:#15171C; --tinta-2:#4A505C; --gris:#5C5C5C; --papel:#FFFFFF; --papel-2:#F4F4F4;
+  --linea:#D8DBDF; --linea-suave:#E9EBEE; --verde:#1B6B47; --verde-lav:#E1F0E8;
+  --rojo:#A8321B; --rojo-lav:#FBEAE6;
+  --mono:"Consolas","Cascadia Mono",ui-monospace,monospace;
+  --sans:Arial,Helvetica,sans-serif; --titular:"Arial Black",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel-2);color:var(--tinta);font-family:var(--sans);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 80px;background:var(--papel)}
+header.top{padding:26px 0 0}
+.marca{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.marca img{height:40px;width:auto}
+.regla{height:5px;background:var(--tinta);margin:0 0 12px}
+.kicker{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.20em;text-transform:uppercase;color:var(--gris)}
+h1{font-family:var(--titular);font-size:38px;line-height:1.1;margin:8px 0 14px;letter-spacing:-.01em}
+.lead{font-size:16px;color:var(--tinta-2);max-width:78ch}
+.aviso{border-left:4px solid var(--naranja);background:var(--naranja-lav);padding:12px 16px;margin:18px 0}
+.aviso b{color:var(--tinta)}
+.adv{border-left:4px solid var(--rojo);background:var(--rojo-lav);padding:12px 16px;margin:16px 0;font-size:14.5px;color:var(--tinta-2)}
+.adv b{color:var(--rojo)}
+section{margin-top:44px;scroll-margin-top:16px}
+.sec-h{border-top:4px solid var(--tinta);padding-top:10px;margin-bottom:16px}
+.sec-n{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--naranja)}
+h2{font-family:var(--titular);font-size:25px;margin:6px 0 0;letter-spacing:-.01em}
+h3{font-size:16px;margin:22px 0 8px}
+.nav{position:sticky;top:0;background:var(--papel);border-bottom:1px solid var(--linea);padding:10px 0;z-index:9;display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--gris);border:1px solid var(--linea);padding:5px 9px;border-radius:2px}
+.nav a:hover{color:var(--naranja);border-color:var(--naranja)}
+.panel{border:1px solid var(--linea);border-radius:3px;padding:16px;margin:14px 0;background:var(--papel)}
+.et{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--azul);margin-bottom:7px}
+textarea,input[type=text],input[type=number],select{width:100%;font-family:var(--mono);font-size:13px;padding:9px 11px;border:1px solid var(--linea);border-radius:2px;background:var(--papel);color:var(--tinta);resize:vertical}
+textarea{min-height:72px}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.fila label{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);font-weight:700}
+button{font-family:var(--sans);font-size:13px;font-weight:700;padding:8px 15px;border:1px solid var(--tinta);background:var(--tinta);color:#fff;border-radius:2px;cursor:pointer}
+button:hover{background:var(--naranja);border-color:var(--naranja)}
+button.sec{background:transparent;color:var(--tinta)}
+button.sec:hover{color:var(--naranja)}
+button:disabled{opacity:.45;cursor:default}
+input[type=range]{flex:1;min-width:190px;accent-color:var(--naranja)}
+.sal{font-family:var(--mono);font-size:13px;background:var(--papel-2);border:1px solid var(--linea-suave);border-radius:2px;padding:11px 13px;white-space:pre-wrap;word-break:break-word;min-height:42px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.dos,.tres{grid-template-columns:1fr}}
+.imgs{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:8px}
+.imgs figure{margin:0;text-align:center}
+.imgs img{width:230px;height:230px;image-rendering:pixelated;border:1px solid var(--linea)}
+.imgs figcaption{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);margin-top:8px;line-height:1.5}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:8px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--azul);padding:7px 9px;font-weight:700}
+td{padding:6px 9px;border-bottom:1px solid var(--linea-suave);color:var(--tinta-2);vertical-align:top}
+td b{color:var(--tinta)}
+.leyenda{font-family:var(--mono);font-size:10.5px;color:var(--gris);margin-top:14px;line-height:1.7}
+.ok{color:var(--verde);font-weight:700}
+.mal{color:var(--naranja);font-weight:700}
+.rojo{color:var(--rojo);font-weight:700}
+details{border:1px solid var(--linea);border-radius:2px;padding:10px 14px;margin-top:12px;background:var(--papel-2)}
+summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--azul)}
+details p{margin:9px 0 0;font-size:14px;color:var(--tinta-2)}
+details p:first-of-type{margin-top:10px}
+
+/* bloque de comandos con botón de copiar */
+.cmd{position:relative;background:#15171C;border-radius:3px;padding:13px 15px;margin:11px 0;overflow-x:auto}
+.cmd pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:#E8EAED;white-space:pre}
+.cmd .c{color:#8A9199}
+.cmd .n{color:#F0A26A}
+.cmd .copiar{position:absolute;top:8px;right:8px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;background:transparent;color:#8A9199;border:1px solid #3A3F47}
+.cmd .copiar:hover{color:#fff;background:transparent;border-color:#8A9199}
+.cmd-t{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--azul);margin:16px 0 -4px}
+
+/* pasos numerados */
+ol.pasos{margin:12px 0 0;padding:0;list-style:none;counter-reset:pp}
+ol.pasos li{counter-increment:pp;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--linea-suave)}
+ol.pasos li:last-child{border-bottom:0}
+ol.pasos li::before{content:counter(pp);flex:0 0 22px;height:22px;border-radius:50%;background:var(--azul);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+ol.pasos li b{display:block;color:var(--tinta)}
+ol.pasos li span{font-size:14.5px;color:var(--tinta-2)}
+
+/* tarjetas */
+.tarj{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;background:var(--papel)}
+.tarj.fill{background:var(--papel-2)}
+.tarj.az{background:var(--azul-lav);border-color:#C6D5E0}
+.tarj.na{background:var(--naranja-lav);border-color:#F5CFBF}
+.tarj h4{margin:0 0 5px;font-size:14px}
+.tarj p{margin:0;font-size:13.5px;color:var(--tinta-2)}
+
+/* entregable */
+.ent{border:2px solid var(--tinta);border-radius:3px;padding:15px 17px;margin-top:16px}
+.ent .et{color:var(--naranja)}
+.ent ul{margin:8px 0 0;padding-left:19px;font-size:14.5px;color:var(--tinta-2)}
+.ent li{margin-bottom:5px}
+
+/* casillas de verificación */
+ul.chk{margin:10px 0 0;padding:0;list-style:none}
+ul.chk li{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--linea-suave);font-size:14.5px;color:var(--tinta-2)}
+ul.chk li:last-child{border-bottom:0}
+ul.chk li::before{content:"";flex:0 0 13px;height:13px;border:1.5px solid var(--azul);border-radius:2px;margin-top:4px}
+
+/* repaso */
+.preg{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;margin-bottom:9px}
+.preg .q{font-weight:700;margin-bottom:8px}
+.preg .ops{display:flex;gap:7px;flex-wrap:wrap}
+.preg .ops button{font-size:12px;padding:6px 11px;background:transparent;color:var(--tinta);border-color:var(--linea)}
+.preg .ops button.elegida{background:var(--azul);color:#fff;border-color:var(--azul)}
+.preg .fb{margin-top:9px;font-size:13.5px;display:none}
+
+footer{margin-top:54px;border-top:1px solid var(--linea);padding-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* ───────────────────────── impresión ─────────────────────────
+   El PDF de cada laboratorio se genera de este mismo archivo. */
+@media print{
+  @page{ size:A4; margin:15mm 14mm 14mm }
+  body{background:#fff;font-size:10.2pt;line-height:1.45}
+  .wrap{max-width:none;padding:0;background:#fff}
+  .nav{display:none}
+  button,input[type=range],.copiar{display:none!important}
+  h1{font-size:25pt}
+  h2{font-size:15pt}
+  h3{font-size:11.5pt}
+  .lead{font-size:10.6pt;max-width:none}
+  section{margin-top:18pt;page-break-inside:auto}
+  .sec-h{page-break-after:avoid}
+  .panel,.tarj,.ent,.preg,.adv,.aviso,details,.cmd{page-break-inside:avoid}
+  .cmd{background:#F4F4F4;border:.7pt solid var(--linea)}
+  .cmd pre{color:#15171C;font-size:8.6pt}
+  .cmd .c{color:#6A7078}
+  .cmd .n{color:#A8321B}
+  .sal{min-height:0;font-size:8.6pt}
+  .inter .sal{display:none}
+  .inter::after{content:"Panel interactivo · ábralo en el navegador para ejecutarlo";display:block;font-family:var(--mono);font-size:8.4pt;letter-spacing:.06em;color:var(--gris);border-top:.7pt solid var(--linea-suave);margin-top:8px;padding-top:7px}
+  details{background:#fff}
+  details summary{list-style:none;color:var(--azul)}
+  details summary::-webkit-details-marker{display:none}
+  table{font-size:9pt}
+  th{padding:5px 7px;font-size:7.4pt}
+  td{padding:4.5px 7px}
+  .imgs img{width:150px;height:150px}
+  footer{margin-top:20pt;font-size:8pt}
+  a{color:inherit;text-decoration:none}
+}
+
+</style>
+</head>
+<body>
+<script>
+/* Utilidades comunes de los laboratorios (heredadas de SIO0010, usadas en SIO0013).
+   Todo ocurre en el navegador: no hay peticiones de red. Cada laboratorio guarda su avance en el almacenamiento local. */
+
+const $  = id => document.getElementById(id);
+const $$ = sel => Array.prototype.slice.call(document.querySelectorAll(sel));
+
+/* ---------- bytes, hexadecimal y texto ---------- */
+const UTF8 = new TextEncoder();
+const DEC  = new TextDecoder();
+
+function bytes(txt){ return UTF8.encode(txt); }
+function texto(buf){ return DEC.decode(buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf); }
+function hex(buf){
+  const b = buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf;
+  return Array.prototype.map.call(b, v => v.toString(16).padStart(2, "0")).join("");
+}
+function desdeHex(s){
+  s = (s || "").replace(/[^0-9a-fA-F]/g, "");
+  const b = new Uint8Array(s.length >> 1);
+  for (let i = 0; i < b.length; i++) b[i] = parseInt(s.substr(i * 2, 2), 16);
+  return b;
+}
+function aleatorio(n){ const b = new Uint8Array(n); crypto.getRandomValues(b); return b; }
+function bloques(h, n){ return (h.match(new RegExp(".{1," + (n * 2) + "}", "g")) || []).join(" "); }
+
+/* ---------- copiar bloques de comandos ---------- */
+function montarCopias(){
+  $$(".cmd").forEach(function(caja){
+    if (caja.querySelector(".copiar")) return;
+    const b = document.createElement("button");
+    b.className = "copiar"; b.type = "button"; b.textContent = "copiar";
+    b.addEventListener("click", function(){
+      const t = caja.querySelector("pre").innerText;
+      const listo = function(){ b.textContent = "copiado"; setTimeout(function(){ b.textContent = "copiar"; }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(listo, function(){ manual(t, listo); });
+      } else { manual(t, listo); }
+    });
+    caja.appendChild(b);
+  });
+  function manual(t, listo){          // sin permiso de portapapeles: selección manual
+    const a = document.createElement("textarea");
+    a.value = t; a.style.position = "fixed"; a.style.opacity = "0";
+    document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); listo(); } catch (e) {}
+    document.body.removeChild(a);
+  }
+}
+
+/* ---------- repaso de opción múltiple ----------
+   preguntas: [[enunciado, respuesta, explicación], ...]   ·   opciones: ["A", "B", ...] */
+function montarQuiz(cont, preguntas, opciones, idVer, idReset, idMarca){
+  const caja = $(cont);
+  const elegido = {};
+
+  function pinta(){
+    caja.innerHTML = "";
+    preguntas.forEach(function(p, i){
+      const d = document.createElement("div"); d.className = "preg";
+      const q = document.createElement("div"); q.className = "q"; q.textContent = (i + 1) + ". " + p[0];
+      const ops = document.createElement("div"); ops.className = "ops";
+      opciones.forEach(function(o){
+        const b = document.createElement("button"); b.type = "button"; b.textContent = o;
+        if (elegido[i] === o) b.className = "elegida";
+        b.addEventListener("click", function(){ elegido[i] = o; pinta(); marca(); });
+        ops.appendChild(b);
+      });
+      const fb = document.createElement("div"); fb.className = "fb"; fb.id = cont + "-fb" + i;
+      d.appendChild(q); d.appendChild(ops); d.appendChild(fb);
+      caja.appendChild(d);
+    });
+  }
+  function marca(){
+    const n = Object.keys(elegido).length;
+    if (idMarca) $(idMarca).textContent = n ? n + " de " + preguntas.length + " respondidas" : "";
+  }
+  function ver(){
+    preguntas.forEach(function(p, i){
+      const fb = $(cont + "-fb" + i);
+      const bien = elegido[i] === p[1];
+      fb.style.display = "block";
+      fb.innerHTML = '<span class="' + (bien ? "ok" : "mal") + '">' + (bien ? "Correcto" : "Respuesta: " + p[1]) +
+                     '</span> · <span style="color:var(--tinta-2)">' + p[2] + "</span>";
+    });
+  }
+  function reinicia(){ for (const k in elegido) delete elegido[k]; pinta(); marca(); }
+
+  if (idVer)   $(idVer).addEventListener("click", ver);
+  if (idReset) $(idReset).addEventListener("click", reinicia);
+  pinta();
+}
+
+/* ---------- cronómetro ---------- */
+async function cronometra(fn){
+  const t = performance.now();
+  const r = await fn();
+  return { ms: performance.now() - t, r: r };
+}
+function ms(v){ return v >= 1000 ? (v / 1000).toFixed(2) + " s" : v.toFixed(1) + " ms"; }
+
+/* ---------- impresión: los desplegables salen abiertos ---------- */
+function abreTodo(){ $$("details").forEach(function(d){ d.open = true; }); }
+window.addEventListener("beforeprint", abreTodo);
+if (window.matchMedia) {
+  const mq = window.matchMedia("print");
+  if (mq.addEventListener) mq.addEventListener("change", function(e){ if (e.matches) abreTodo(); });
+}
+
+document.addEventListener("DOMContentLoaded", montarCopias);
+
+</script>
+<style>
+section, #res1b{scroll-margin-top:104px}
+#res1, #res2, #res3{scroll-margin-top:150px}
+.tg{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border-radius:2px;border:1px solid;white-space:nowrap;vertical-align:middle}
+.tg.med{color:var(--verde);background:var(--verde-lav);border-color:#B9D9C8}
+.tg.cal,.tg.cot{color:var(--azul);background:var(--azul-lav);border-color:#C6D5E0}
+.tg.sup{color:#9A3F00;background:var(--naranja-lav);border-color:#F5CFBF}
+.tg.fal{color:var(--rojo);background:#fff;border-color:var(--rojo)}
+.tg.opc{color:var(--gris);background:var(--papel-2);border-color:var(--linea)}
+.sem{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.sem.v{background:var(--verde)} .sem.a{background:#C98A00} .sem.r{background:var(--rojo)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.c{font-family:var(--mono);font-size:12.5px;color:var(--tinta)}
+td small,.peq{font-size:12px;color:var(--gris);line-height:1.4;display:block;margin-top:2px}
+table.comp input[type=number], table.ed select, table.ed input[type=number], .mini{width:auto;min-width:74px;max-width:120px;padding:5px 7px;font-size:12.5px}
+table.ed select{max-width:150px}
+table.ed td, table.comp td{vertical-align:middle}
+table.comp input[data-o]{min-width:0;width:64px}
+tr.ref td{background:var(--azul-lav)}
+tr.gr td{background:var(--papel-2);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);font-weight:700}
+.rojo-f{color:var(--rojo);font-weight:700}
+.barra{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 2px}
+.barra > div{display:flex;flex-direction:column;gap:4px}
+.barra label, .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);font-weight:700}
+.barra select, .barra input{width:auto;min-width:120px}
+input[type=datetime-local], input[type=date]{font-family:var(--mono);font-size:13px;padding:8px 10px;border:1px solid var(--linea);border-radius:2px;background:var(--papel);color:var(--tinta)}
+.fmsg{font-size:12.5px;color:var(--rojo);font-weight:700;align-self:center}
+.conf{font-size:13px;color:var(--verde);font-weight:700;align-self:center}
+.chk2{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--tinta-2);padding:5px 0}
+.chk2 input{margin-top:4px;accent-color:var(--naranja)}
+.cifra{font-family:var(--titular);font-size:26px;line-height:1.1;color:var(--tinta)}
+.cifra.n{color:var(--naranja)}
+.espera{border:1px dashed var(--linea);padding:16px;color:var(--gris);font-family:var(--mono);font-size:12.5px;text-align:center;border-radius:3px}
+svg.lt{width:100%;height:auto;display:block;margin-top:10px;border:1px solid var(--linea-suave);background:var(--papel)}
+svg.lt text{font-family:Arial,Helvetica,sans-serif}
+.scroll{overflow-x:auto}
+code{font-family:var(--mono);font-size:.92em;background:var(--papel-2);padding:1px 4px;border-radius:2px}
+#csvtxt{display:none;min-height:180px;font-size:11.5px;margin-top:8px}
+@media print{
+  .noimp{display:none!important}
+  select,input[type=number],input[type=text],input[type=datetime-local],input[type=date],textarea{border:.6pt solid var(--linea);font-size:8.6pt;padding:2px 4px}
+  .scroll{overflow:visible}
+  svg.lt{page-break-inside:avoid}
+  tr{page-break-inside:avoid}
+}
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="marca"><img src="data:image/png;base64,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" alt="Institución Universitaria de Envigado"></div>
+  <div class="regla"></div>
+  <div class="kicker">SIO0013 · Continuidad del negocio y recuperación de desastres · Laboratorio 3 · Sesión 4 · jueves 22 de octubre de 2026</div>
+  <h1>Respaldar, perder, restaurar y medir</h1>
+  <p class="lead">Noventa y cinco minutos, por equipos, en un portátil. Este archivo es un simulador: arranca configurado con el esquema de respaldo que la Universidad Pedagógica Colombiana tiene hoy (Parte 8 del caso), ustedes eligen un incidente y una fecha, y el simulador devuelve, activo por activo, <b>qué copia sobrevive, de cuándo es y cuánto tarda volver</b>. Después cambian el esquema y vuelven a disparar el mismo incidente.</p>
+  <div class="aviso"><b>Antes de empezar.</b> No se evalúa que el esquema propuesto «gane». Se evalúa que <b>declaren</b> cada decisión, <b>predigan</b> antes de disparar, <b>midan</b> y <b>expliquen</b> la diferencia con los conceptos del bloque A: frecuencia, retención, dónde vive la copia y quién puede borrarla. El simulador no muestra ningún resultado hasta que ustedes disparan, y no trae la respuesta: trae la herramienta para sostenerla.</div>
+  <div class="aviso" style="border-left-color:var(--azul);background:var(--azul-lav)"><b>Qué hace y qué no hace este archivo.</b> Funciona sin conexión y sin instalar nada. No lee, no copia y no modifica ningún archivo de su equipo: todo son cuentas sobre los datos del caso. Los incidentes están descritos por su <b>efecto</b>; son situaciones genéricas para probar un diseño, no un pronóstico. Su avance se guarda solo en este navegador y pueden borrarlo cuando quieran.</div>
+</header>
+
+<nav class="nav noimp">
+  <a href="#d1">Demo · Solo la copia</a>
+  <a href="#e1">Ronda 1 · El esquema actual</a>
+  <a href="#e2">Ronda 2 · Rediseñar</a>
+  <a href="#e3">La prueba que nadie ha hecho</a>
+  <a href="#bit">Comparación y bitácora</a>
+  <a href="#opt">Opcional · restic</a>
+  <a href="#rep">Repaso</a>
+  <a href="#ent">Qué se entrega</a>
+</nav>
+
+<section>
+  <div class="tres">
+    <div class="tarj fill"><h4>Ronda 1 · 30 minutos</h4><p>Demostración y ejercicio 1: el esquema actual frente a cinco incidentes. Predicción escrita antes de cada disparo.</p></div>
+    <div class="tarj fill"><h4>Ronda 2 · 25 minutos</h4><p>Ejercicio 2: el mismo incidente con un repositorio de solo anexar, y después un cambio por vez.</p></div>
+    <div class="tarj fill"><h4>Comparación · 25 minutos · puesta en común · 15</h4><p>Ejercicio 3, comparativo lado a lado, regla 3-2-1-1-0 y la página del informe.</p></div>
+  </div>
+  <div class="leyenda"><b>Cómo se rotula cada número</b>, igual que en la entrega 2: <span class="tg med">medido</span> dato del caso, con su parte · <span class="tg cot">cotizado</span> cotización de la Parte 11 · <span class="tg sup">supuesto</span> lo declaran ustedes o lo propone el simulador, y se puede discutir · <span class="tg fal">sin declarar</span> falta, y el total es incompleto. El simulador añade <span class="tg cal">calculado</span> para una división hecha con un dato medido, como tamaño ÷ velocidad.</div>
+</section>
+
+<!-- ───────────── DEMO ───────────── -->
+<section id="d1">
+  <div class="sec-h"><div class="sec-n">Demostración · 5 minutos, dentro de la ronda 1</div><h2>Cuánto tarda solo la copia</h2></div>
+  <p class="lead">La Parte 8 da el dato: en 2022 se midió la lectura desde el equipo de respaldo, <b>95 MB por segundo</b> en promedio. Con el tamaño de la copia completa de cada trabajo, el tiempo es una división. Cambien la velocidad y miren qué pasa con la tabla.</p>
+  <div class="panel">
+    <div class="et">Calculadora de tiempo de copia · tiempo = tamaño ÷ velocidad · 1 GB = 1.000 MB · 1 TB = 1.000 GB</div>
+    <div class="barra noimp">
+      <div><label for="dgb">Tamaño libre (GB)</label><input type="number" id="dgb" min="1" step="1" class="mini"></div>
+      <div><label for="dv">Velocidad (MB/s)</label><input type="number" id="dv" min="1" step="1" class="mini"></div>
+      <div><button class="sec" id="d95">95 · lectura del equipo de respaldo</button></div>
+      <div><button class="sec" id="d140">140 · escritura del disco externo</button></div>
+    </div>
+    <div class="scroll"><table id="dtab"></table></div>
+    <div class="leyenda">Fuente de los tamaños y de las dos velocidades: Parte 8 («Para hacer cuentas»). Los tamaños son los de una copia completa, ya comprimida.</div>
+  </div>
+  <div class="panel">
+    <div class="et">Agosto de 2022 · la única restauración completa que ha hecho la universidad (Parte 8)</div>
+    <div id="d2022"></div>
+  </div>
+  <details><summary>Lo que esta cuenta supone, y por qué es un piso</summary>
+    <p>Supone que el equipo de respaldo sobrevivió, que hay un servidor sano donde escribir, que la cadena de incrementales está completa y que nada más compite por el disco. Es el tiempo de <b>leer</b> la copia, no el tiempo de recuperación. La Parte 8 lo dice sin rodeos: la copia nunca es lo que más tarda.</p>
+    <p>El tiempo real es una suma de seis componentes: detección, decisión, plataforma, restauración, validación y reconexión. El ejercicio 1 los pone uno por uno, cada cual con su origen.</p>
+  </details>
+</section>
+
+<!-- ───────────── EJERCICIO 1 ───────────── -->
+<section id="e1">
+  <div class="sec-h"><div class="sec-n">Ejercicio 1 · Ronda 1 · 30 minutos con la demostración</div><h2>El esquema actual frente a cinco incidentes</h2></div>
+  <p class="lead">Esto es lo que hay hoy, tal como lo reconstruyó el equipo asesor con Robinson Guarnizo. No hay procedimiento escrito: es lo que él hace.</p>
+
+  <h3>Qué se copia, cuándo y cuánto se conserva</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Activo en el simulador</th><th>Trabajo</th><th>Cuándo, y cuánto tarda en terminar</th><th class="num">Copia completa</th><th>Retención</th><th>Copia fuera del cuarto</th></tr></thead>
+    <tbody>
+      <tr><td><b>Base de datos de SIGA</b> · S1</td><td class="c">T2</td><td>Completo los domingos a la 1:00 a.m.; incremental diario a las 11:30 p.m.<small><span class="tg med">medido</span> el incremental tardó 44 minutos (evidencia B).</small></td><td class="num">480 GB</td><td>14 días</td><td>Disco mensual a Honda: el último volcado completo</td></tr>
+      <tr><td><b>Financiero y nómina</b> · S5<small>Dos de las ocho máquinas de T1. Tamaño del sistema: Parte 6.</small></td><td class="c">T1</td><td>Incremental diario a las 10:00 p.m.; completo sintético los domingos<small><span class="tg med">medido</span> el trabajo tardó 1 h 48 min (evidencia B).</small></td><td class="num">190 GB</td><td>14 días</td><td>Disco mensual a Honda: <b>solo la base de datos</b>, no las dos máquinas</td></tr>
+      <tr><td><b>Directorio y demás máquinas críticas</b> · S7, S1, S12, S13<small>Las otras seis máquinas de T1: aplicación de SIGA (2), directorio (2), control de acceso y telefonía.</small></td><td class="c">T1</td><td>Igual que la fila anterior</td><td class="num">1,21 TB <span class="tg sup">supuesto</span><small>1,4 TB de T1 menos los 190 GB del financiero.</small></td><td>14 días</td><td class="rojo-f">No hay</td></tr>
+      <tr><td><b>Documentos del gestor documental</b> · S6</td><td class="c">T3</td><td>Incremental diario a las 12:30 a.m.<small>Evidencia B: falló 44 veces seguidas; último punto válido, 1 de abril de 2026. <span class="tg sup">supuesto</span> cuando corre, tarda una hora: el caso no lo mide.</small></td><td class="num">3,6 TB</td><td>14 días</td><td class="rojo-f">No hay</td></tr>
+      <tr><td><b>Resto de máquinas</b> (53), con la del gestor documental y la wiki</td><td class="c">T4</td><td>Semanal, los sábados a las 8:00 p.m.<small><span class="tg sup">supuesto</span> tarda 4 h 52 min: el caso no lo mide.</small></td><td class="num">5,7 TB</td><td>Dos copias<small><span class="tg sup">supuesto</span> se tratan como 14 días en todo el periodo; el caso dice que la retención de T4 se redujo tras el informe de junio, no cuánta era antes.</small></td><td class="rojo-f">No hay</td></tr>
+      <tr class="gr"><td colspan="6">Lo que cubre un tercero y lo que no cubre nadie · Parte 8</td></tr>
+      <tr><td><b>Aula virtual</b> · S3</td><td>EduNube</td><td>Copia diaria del proveedor, en la misma región de nube</td><td class="num">1,9 TB</td><td>7 días</td><td>La universidad no tiene copia propia ni ha pedido nunca una restauración</td></tr>
+      <tr><td><b>Correo y archivos en nube</b> · S4</td><td class="rojo-f">Nadie</td><td>Solo la papelera del servicio</td><td class="num">—</td><td>30 días</td><td class="rojo-f">No hay</td></tr>
+      <tr><td><b>Almacenamiento de investigación</b> · S9<small>Nueve equipos en las oficinas de los grupos.</small></td><td class="rojo-f">Nadie</td><td>Dos de los nueve grupos copian a cuentas personales de nube</td><td class="num">38 TB</td><td>—</td><td class="rojo-f">No hay, institucionalmente</td></tr>
+      <tr><td><b>Configuración de red y equipos</b></td><td class="rojo-f">Nadie</td><td>El administrador de red guarda copias en su portátil «cuando hace cambios»</td><td class="num">—</td><td>—</td><td class="rojo-f">No hay</td></tr>
+      <tr><td><b>Sistema del Instituto Pedagógico</b> · S10<small>No entra al simulador.</small></td><td>El proveedor</td><td>Se desconocen las condiciones. El contrato lo firmó el rector del colegio</td><td class="num">—</td><td>—</td><td>Se desconoce</td></tr>
+      <tr><td><b>Sitio web</b> · S11<small>No entra al simulador.</small></td><td>El proveedor de alojamiento</td><td>Copia semanal incluida en el plan</td><td class="num">22 GB</td><td>—</td><td>Se desconoce dónde reside</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="dos" style="margin-top:14px">
+    <div class="tarj na"><h4>Dónde vive la copia y quién puede tocarla</h4><p>Un solo equipo de respaldo de 60 TB, de 2020, <b>en el mismo bastidor</b> que los servidores y <b>unido al dominio</b>. Los trabajos escriben con la cuenta de servicio <b>svc_respaldo</b>, que es <b>administradora del dominio</b>; su contraseña no cambia desde 2020. Ocupación en septiembre de 2026: 91 %. Los informes llegan al buzón respaldos@, que nadie revisa desde 2024. Verificación de restauración: «nunca ejecutada» (evidencia B).</p></div>
+    <div class="tarj na"><h4>La copia fuera del cuarto</h4><p>El primer viernes de cada mes se copia a un disco externo de 8 TB: el último volcado completo de la base de SIGA y la base del financiero. <b>Nada más.</b> Sin cifrar. Dos discos que se alternan. Robinson lo lleva a Honda en su carro, unas tres horas de carretera, y lo deja en el armario de la directora de sede. Nunca se ha restaurado desde esos discos (Parte 16).</p></div>
+  </div>
+
+  <h3>El cuaderno de salida del disco</h3>
+  <div class="scroll"><table id="cuad"></table></div>
+  <div class="leyenda">De enero a septiembre de 2026, el cuaderno es <b>dato del caso</b> (Parte 8). De octubre en adelante el caso no tiene registros: esas filas son <b>supuestos del simulador</b>, que ustedes pueden cambiar y deben declarar. Reglas de lectura, las mismas de la presentación: una copia cuenta como «fuera» desde el cierre del día en que viaja; cada viaje deja un disco y trae el otro; el disco que está en Girardot no cuenta como copia fuera del sitio.</div>
+  <div class="fila noimp"><label for="rean">T3 volvió a correr el</label><input type="date" id="rean" min="2026-06-25" max="2026-12-31"><span class="tg sup">supuesto</span><span class="peq" style="display:inline">El caso solo dice que se liberó espacio «tras el informe de Control Interno» del 24 de junio de 2026. Se aplica al salir del campo.</span><span class="fmsg" id="reanmsg"></span></div>
+
+  <h3>El incidente</h3>
+  <div class="panel">
+    <div class="et">Elijan por su efecto · anoten la predicción · disparen</div>
+    <div class="barra" id="inc1"></div>
+    <div class="leyenda" id="incdesc" style="margin-top:8px"></div>
+    <div class="barra" style="margin-top:12px">
+      <div><label for="ref1">Activo de referencia</label><select id="ref1" data-k="ref"></select></div>
+      <div><label for="p1p">Predicción · datos perdidos (horas)</label><input type="number" id="p1p" class="mini" min="0" step="any" data-k="pred.p1"></div>
+      <div><label for="p1t">Predicción · tiempo de recuperación (horas)</label><input type="number" id="p1t" class="mini" min="0" step="any" data-k="pred.t1"></div>
+      <div class="noimp"><button id="go1">Disparar el incidente</button></div>
+      <div class="noimp"><button class="sec" id="reg1">Registrar esta corrida</button></div>
+      <span class="conf" id="conf1" role="status"></span>
+    </div>
+  </div>
+
+  <h3>Resultado · esquema actual</h3>
+  <div id="res1"></div>
+
+  <h3>Los seis componentes del tiempo real de recuperación</h3>
+  <p style="color:var(--tinta-2);margin:0 0 6px">El tiempo real es la <b>suma</b> de los seis. El simulador solo pone por su cuenta lo que el caso midió o lo que se calcula con un dato medido. Lo demás lo estiman y lo declaran ustedes: mientras esté vacío, el total es un <b>piso</b> y el simulador dice cuántos componentes faltan. Cambiar un valor aquí recalcula el resultado al instante.</p>
+  <div class="scroll"><table class="comp">
+    <thead><tr><th>Componente</th><th>Qué incluye</th><th>De dónde sale el número</th><th>Su valor</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Detección</b></td><td>De la falla a que alguien competente se entere</td><td><span class="tg med">medido</span> 2 h 45 min fuera de horario (Parte 17: un sábado de mayo de 2026). El simulador lo aplica a toda fecha fuera de lunes a viernes de 7:00 a 12:00 y de 2:00 a 6:00 (Parte 9), incluidas las vacaciones colectivas, donde es un piso optimista. No descuenta festivos. En horario de oficina el caso no lo mide.</td><td><span class="lab">En horario (h)</span><br><input type="number" min="0" step="any" data-k="par.det" placeholder="sin declarar"></td></tr>
+      <tr><td><b>2 · Decisión</b></td><td>Evaluar el daño, declarar, autorizar el gasto y el camino</td><td><span class="tg fal">sin dato</span> Nadie tiene esa autoridad definida (H5). Referencia: mover una fecha del calendario tomó 3 días (Parte 17).</td><td><span class="lab">Horas</span><br><input type="number" min="0" step="any" data-k="par.dec" placeholder="sin declarar"></td></tr>
+      <tr><td><b>3 · Plataforma</b></td><td>Tener dónde restaurar: repuesto, servidor, licencia, sitio</td><td><span class="tg med">medido</span> Repuesto de servidor: 10 días hábiles. Servidor nuevo: 45 a 60 días. Licencia del financiero en otro servidor: 2 días hábiles (Partes 10 y 17). Días hábiles sin festivos. Si se pierde el cuarto o la sede y no hay otro sitio contratado, el simulador usa «servidor nuevo». <span class="tg fal">sin dato</span> En (c) y (d) los equipos no sufren daño físico, pero dejarlos listos para restaurar toma un tiempo que el caso no mide.</td><td><span class="lab">Si falla un equipo</span><br><select data-k="par.platA"><option value="repuesto">Llega un repuesto · 10 días hábiles</option><option value="nuevo">Servidor nuevo · 45 a 60 días</option><option value="sano">Hay equipo sano · 0 h · supuesto del equipo</option></select><br><span class="lab">En (c) y (d): equipos listos (h)</span><br><input type="number" min="0" step="any" data-k="par.platCD" placeholder="sin declarar"><br><span class="lab">Activar un sitio alterno (h)</span><br><input type="number" min="0" step="any" data-k="par.act" placeholder="sin declarar"></td></tr>
+      <tr><td><b>4 · Restauración</b></td><td>Leer la copia y reconstruir sistemas y datos</td><td><span class="tg cal">calculado</span> Tamaño ÷ velocidad. Equipo de respaldo: 95 MB/s <span class="tg med">medido</span>. Disco de Honda: tres horas de carretera <span class="tg med">medido</span> más la lectura; el caso da 140 MB/s al <i>escribir</i> ese disco, la lectura no está medida <span class="tg sup">supuesto</span>. Nube: el caso no da velocidad. Con el enlace principal de Girardot, 1 Gbps, el techo teórico son 125 MB/s; en (b) y (e) ese enlace no existe: el de Honda es de 100 Mbps, unos 12,5 MB/s (Parte 7).</td><td><span class="lab">Equipo de respaldo (MB/s)</span><br><input type="number" min="1" step="any" data-k="par.vLocal"><br><span class="lab">Disco externo (MB/s)</span><br><input type="number" min="1" step="any" data-k="par.vDisco"><br><span class="lab">Nube, desde Girardot (MB/s)</span><br><input type="number" min="0.1" step="any" data-k="par.vNube" placeholder="sin declarar"><br><span class="lab">Nube, en (b) y (e) (MB/s)</span><br><input type="number" min="0.1" step="any" data-k="par.vNubeAlt" placeholder="sin declarar"></td></tr>
+      <tr><td><b>5 · Validación</b></td><td>Que el dueño del proceso confirme que el dato es correcto y completo</td><td><span class="tg fal">sin dato</span> El 16 de mayo la base arrancó en modo de recuperación; en 2022 quedó corrupta.</td><td><span class="lab">Horas</span><br><input type="number" min="0" step="any" data-k="par.val" placeholder="sin declarar"></td></tr>
+      <tr><td><b>6 · Reconexión</b></td><td>Directorio, red, sedes, terceros; y reingresar lo perdido</td><td><span class="tg fal">sin dato</span> En 2022 los docentes volvieron a digitar 2.300 notas parciales (Parte 13).</td><td><span class="lab">Horas</span><br><input type="number" min="0" step="any" data-k="par.rec" placeholder="sin declarar"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="leyenda">Referencia medida para calibrar sus supuestos: en agosto de 2022, restaurar <b>solo</b> la base de SIGA tomó 31 horas de la falla al servicio, con cerca de una hora de copia; y volver de un apagado completo sin daño, el 16 de mayo de 2026, tomó 9 h 15 min.</div>
+  <div id="res1b"></div>
+
+  <div class="ent">
+    <div class="et">Qué se anota de esta ronda</div>
+    <ul>
+      <li>Al menos <b>tres corridas registradas</b> con incidentes distintos, cada una con su predicción escrita antes de disparar.</li>
+      <li>Para el incidente que más les preocupe: qué copia quedó, de qué fecha, y cuáles de los seis componentes tuvieron que suponer.</li>
+      <li>Una fecha del calendario del caso en la que el mismo incidente duele más que el 16 de mayo, y por qué (Partes 2 y 17).</li>
+    </ul>
+  </div>
+  <details><summary>Cómo decide el simulador qué copia sobrevive</summary>
+    <p><b>(a) Falla de un equipo o del almacenamiento central.</b> Se pierde lo que estaba en producción en el cuarto de servidores; el equipo de respaldo y el disco de Honda siguen ahí. No alcanza lo que vive en nube, en las oficinas de los grupos ni en los equipos de red. <b>(b) Pérdida del cuarto de servidores completo.</b> Se pierden producción y equipo de respaldo, que comparten bastidor; queda lo que esté fuera. <b>(c) Error o abuso de una cuenta con privilegios.</b> Se pierde o se daña todo lo que esa cuenta puede escribir, incluidos los repositorios de respaldo que estén en el mismo dominio; sobrevive lo que está fuera del dominio, lo que es de solo anexar o inmutable y lo que está aislado sin conexión. <b>(d) Corrupción silenciosa detectada tarde.</b> Toda copia tomada después del inicio del daño lo contiene; sirve la última anterior, si la retención todavía la conserva el día en que se detecta. Aquí el simulador mira también el disco alterno que está en Girardot, y lo rotula así. <b>(e) Pérdida de la sede o de su acceso.</b> Como (b), y además lo que esté en las oficinas de Girardot.</p>
+    <p>Datos perdidos es el tiempo entre la copia que sirve y el incidente (en (d), hasta la detección: todo lo hecho en ese intervalo se pierde o queda en duda). <b>Una copia en curso no cuenta:</b> el punto de cada copia es la hora de inicio del trabajo, pero solo sirve si el trabajo ya había terminado. En las rondas 1 y 2 el simulador supone que toda copia que sobrevive <b>se puede leer</b>. Esa hipótesis se pone a prueba en el ejercicio 3.</p>
+  </details>
+  <details><summary>Supuestos del simulador que no son datos del caso</summary>
+    <p>Duración de T3 (una hora) y de T4 (4 h 52 min). Retención de T4 tratada como 14 días todo el año. Filas del cuaderno desde octubre. La base del financiero que va al disco se toma con la fecha de la copia; la copia diaria de EduNube, a medianoche. En el esquema propuesto: la copia en nube corre a las 2:00 a.m. (la semanal, los domingos) y se cuenta desde su inicio; el disco «con calendario que se cumple» sale todos los viernes o el primer viernes del mes aunque sea festivo, y por eso el primer viernes fijo puede dar un resultado peor que el cuaderno real en algunas fechas; una copia nueva nunca tarda más que su intervalo. Capacidad: al equipo actual le queda libre el 9 % de 60 TB, unos 5,4 TB, y lo que se agregue debe caber ahí; con el repositorio de 80 TB debe caber una copia completa de todo; en el disco, 8 TB; en la nube cotizada, 15 TB. Lo que no cabe no se cuenta como copia. Más frecuencia o más retención también ocupan espacio, y eso el simulador no lo calcula.</p>
+  </details>
+</section>
+
+<!-- ───────────── EJERCICIO 2 ───────────── -->
+<section id="e2">
+  <div class="sec-h"><div class="sec-n">Ejercicio 2 · Ronda 2 · 25 minutos</div><h2>Rediseñar, un cambio por vez</h2></div>
+  <p class="lead">Primero repitan el mismo incidente con un <b>repositorio de solo anexar</b>: la cuenta que respalda puede agregar copias, pero no borrar ni modificar las anteriores. Dejen todo lo demás igual. Después agreguen cambios de a uno, registrando cada corrida, para saber qué produjo cada diferencia.</p>
+
+  <div class="panel">
+    <div class="et">Esquema propuesto</div>
+    <div class="fila noimp"><button id="solo">Dejar un solo cambio: repositorio de solo anexar</button><button class="sec" id="igual">Volver al esquema actual</button></div>
+    <div class="dos" style="margin-top:6px">
+      <div>
+        <div class="et">Repositorio local (equipo de respaldo en el cuarto)</div>
+        <label class="chk2"><input type="checkbox" data-p="repoLocal.soloAnexar"><span><b>De solo anexar / inmutable</b>: nadie borra ni modifica una copia antes de que venza su retención.</span></label>
+        <label class="chk2"><input type="checkbox" data-p="repoLocal.fueraDominio"><span><b>Fuera del dominio</b>: identidades propias; la cuenta de respaldo deja de ser administradora del dominio.</span></label>
+        <label class="chk2"><input type="checkbox" data-p="informes"><span><b>Informes revisados cada mañana, con suplente</b>, y destino con espacio. <span class="tg sup">supuesto</span> El simulador asume que con esto la racha de fallas de T3 no habría pasado inadvertida.</span></label>
+        <label class="chk2"><input type="checkbox" data-p="verif"><span><b>Verificación periódica de restauración</b> de todas las copias propias, con acta.</span></label>
+        <label class="chk2"><input type="checkbox" data-p="soporte"><span><b>Renovar el soporte de la herramienta</b>, tres años.</span></label>
+      </div>
+      <div>
+        <div class="et">Copia fuera del sitio</div>
+        <div class="barra">
+          <div><label for="exttipo">Destino</label><select data-p="ext.tipo" id="exttipo"><option value="ninguna">Ninguna</option><option value="honda-cuaderno">Disco a Honda, como hoy (según el cuaderno)</option><option value="honda-fijo">Disco a Honda, con calendario que se cumple</option><option value="nube">Nube, copia inmutable</option></select></div>
+          <div><label for="extfrec">Frecuencia</label><select data-p="ext.frec" id="extfrec"></select></div>
+        </div>
+        <label class="chk2"><input type="checkbox" data-p="ext.cifrada"><span><b>Cifrar la copia externa</b>, con la llave custodiada fuera de lo que se respalda.</span></label>
+        <div class="et" style="margin-top:12px"><label for="plat">Dónde se restaura si el cuarto no está</label></div>
+        <select data-p="plataforma" id="plat" style="max-width:100%"><option value="ninguna">No hay otro sitio: esperar un servidor nuevo</option><option value="C6">Cuarto técnico de Honda como sitio alterno mínimo</option><option value="C4">Recuperación como servicio en nube para las ocho máquinas críticas y la base de SIGA</option></select>
+      </div>
+    </div>
+    <div class="leyenda" id="extinfo" style="margin-top:8px"></div>
+  </div>
+
+  <h3>El mismo incidente, lado a lado</h3>
+  <div class="panel">
+    <div class="barra" id="inc2"></div>
+    <div class="barra" style="margin-top:12px">
+      <div><label for="ref2">Activo de referencia</label><select id="ref2" data-k="ref"></select></div>
+      <div><label for="p2p">Predicción · datos perdidos (horas)</label><input type="number" id="p2p" class="mini" min="0" step="any" data-k="pred.p2"></div>
+      <div><label for="p2t">Predicción · tiempo de recuperación (horas)</label><input type="number" id="p2t" class="mini" min="0" step="any" data-k="pred.t2"></div>
+      <div class="noimp"><button id="go2">Disparar con el esquema propuesto</button></div>
+      <div class="noimp"><button class="sec" id="reg2">Registrar esta corrida</button></div>
+      <span class="conf" id="conf2" role="status"></span>
+    </div>
+  </div>
+  <div id="res2"></div>
+
+  <h3>Regla 3-2-1-1-0</h3>
+  <p style="color:var(--tinta-2);margin:0 0 6px">Tres copias del dato contando producción, en dos medios distintos, una fuera del sitio, una inmutable o aislada, y cero errores al verificar la restauración. El simulador cuenta; ustedes deciden si lo que cuenta alcanza.</p>
+  <div class="scroll"><table id="regla"></table></div>
+  <div class="leyenda"><span class="sem v"></span>cumple · <span class="sem a"></span>cumple a medias · <span class="sem r"></span>no cumple. «Medios» cuenta equipos o tecnologías distintas: el equipo de respaldo suma un medio aunque comparta bastidor con producción; que esté o no fuera del sitio se mide en la columna siguiente. El disco de Honda como está hoy cuenta a medias en «fuera» y en «aislada»: es parcial, irregular y va sin cifrar. «Fuera del dominio» no cuenta como inmutable ni como aislada. La copia de EduNube suma una copia, pero no un medio ni un sitio distinto, porque vive en la misma región. Una copia que no cabe en su destino no se cuenta.</div>
+
+  <h3>Los cinco incidentes en la fecha elegida</h3>
+  <div class="scroll"><table id="matriz"></table></div>
+  <div class="leyenda">Cada columna aparece cuando hay al menos una corrida registrada con ese esquema: primero se predice, después se mira. «Sin copia» cuenta los activos que el incidente alcanza y para los que no queda ninguna copia que sirva. «Peor pérdida» es la mayor entre los activos que sí tienen copia. En (c) se cuentan también los activos que no se sabe si esa cuenta alcanza.</div>
+
+  <h3>Activo por activo: frecuencia, retención y lo que hoy nadie respalda <span class="tg opc">si alcanza el tiempo</span></h3>
+  <div class="scroll"><table class="ed" id="edact"></table></div>
+
+  <h3>Lo que cuesta y lo que tarda en estar operando <span class="tg opc">si alcanza el tiempo</span></h3>
+  <div class="scroll"><table id="costos"></table></div>
+  <div class="leyenda" id="costosnota"></div>
+
+  <div class="ent">
+    <div class="et">Qué se anota de esta ronda</div>
+    <ul>
+      <li>La corrida con <b>solo</b> el repositorio de solo anexar frente a la misma corrida de la ronda 1: qué incidente cambió de resultado, cuáles no, y por qué.</li>
+      <li>Al menos una corrida más con un único cambio adicional, y qué movió ese cambio: ¿los datos perdidos, el tiempo, ambos, ninguno?</li>
+      <li>Si alcanza el tiempo: una opción que cuesta dinero y <b>no cambió ningún resultado</b> del simulador. ¿La comprarían igual? ¿Con qué argumento?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────── EJERCICIO 3 ───────────── -->
+<section id="e3">
+  <div class="sec-h"><div class="sec-n">Ejercicio 3 · dentro de los 25 minutos de comparación</div><h2>La prueba que nadie ha hecho</h2></div>
+  <p class="lead">Hasta aquí el simulador creyó que toda copia que sobrevive se puede leer. La universidad no lo sabe: nunca ha restaurado una máquina virtual completa, ni el directorio, ni el financiero, ni un disco de Honda, y la verificación de restauración figura como «nunca ejecutada». Ahora lancen la restauración de verdad.</p>
+  <div class="panel">
+    <div class="et">Lanzar la restauración sobre el incidente y la fecha elegidos</div>
+    <div class="barra">
+      <div><label for="sem">Semilla</label><input type="text" id="sem" class="mini" data-k="sem" maxlength="16"></div>
+      <div><label for="prob">Una copia nunca verificada resulta ilegible (%)</label><input type="number" id="prob" class="mini" min="0" max="100" step="1" data-k="prob"></div>
+      <div class="noimp"><button id="go3">Lanzar la restauración</button></div>
+      <div class="noimp"><button class="sec" id="otra">Otra semilla</button></div>
+      <div class="noimp"><button class="sec" id="reg3">Registrar este resultado</button></div>
+      <span class="conf" id="conf3" role="status"></span>
+    </div>
+    <div class="leyenda"><span class="tg sup">supuesto</span> El porcentaje <b>no es un dato del caso ni una estadística</b>: es la perilla con la que ustedes exploran qué pasa si una copia falla. Con la misma semilla, el mismo porcentaje y el mismo esquema, el resultado es idéntico en cualquier equipo: anoten los tres en el informe para que se pueda reproducir. Regla del simulador: una copia propia bajo verificación periódica se lee, porque una falla se habría visto en la prueba y no el día del incidente. La copia del proveedor no queda cubierta por la verificación de la universidad.</div>
+  </div>
+  <div id="res3"></div>
+  <div class="ent">
+    <div class="et">Qué se anota de este ejercicio</div>
+    <ul>
+      <li>Semilla y porcentaje usados; qué activos cambiaron de punto de recuperación o quedaron sin copia, en cada esquema.</li>
+      <li>El argumento para el «0» de 3-2-1-1-0, en dos frases, con un dato de la Parte 8 o de la evidencia B.</li>
+    </ul>
+  </div>
+  <details><summary>Cinco niveles de prueba, y qué demuestra cada uno</summary>
+    <p><b>1 · El trabajo terminó sin error:</b> que algo se escribió. <b>2 · Verificación de integridad:</b> que la copia se lee completa y no está dañada. <b>3 · Restaurar un elemento:</b> que se recupera un archivo o una carpeta (marzo de 2023: cuarenta minutos). <b>4 · Restaurar un sistema completo:</b> que el sistema arranca en otro equipo y el dueño del proceso lo valida (agosto de 2022: 31 horas). <b>5 · Recuperar el conjunto, con cronómetro:</b> el tiempo real de recuperación, con dependencias y en orden. Nunca se ha hecho.</p>
+  </details>
+</section>
+
+<!-- ───────────── BITÁCORA ───────────── -->
+<section id="bit">
+  <div class="sec-h"><div class="sec-n">Comparación · 25 minutos</div><h2>Bitácora de corridas y comparativo</h2></div>
+  <p class="lead">Cada corrida registrada queda aquí con el esquema declarado, los supuestos vigentes en ese momento, la predicción y la medición. La distancia entre lo predicho y lo medido es el aprendizaje; explíquenla.</p>
+  <div class="scroll"><table id="bitac"></table></div>
+  <div class="scroll"><table id="bitac3"></table></div>
+  <h3>Sus conclusiones</h3>
+  <textarea id="notas" data-k="notas" aria-label="Sus conclusiones" style="min-height:120px;font-family:var(--sans);font-size:14px" placeholder="Qué cambió con el repositorio de solo anexar y por qué. Qué decisión del esquema explica su mejor y su peor medición. Una conclusión sobre el esquema de la Pedagógica, atada a un dato de la Parte 8."></textarea>
+  <div class="fila noimp">
+    <button id="csv">Descargar CSV</button>
+    <button class="sec" id="csvver">Ver el CSV como texto</button>
+    <button class="sec" id="imp">Imprimir o guardar como PDF</button>
+    <button class="sec" id="borra">Borrar el avance guardado</button>
+    <span class="leyenda" style="margin:0" id="guardado" role="status"></span>
+  </div>
+  <div class="leyenda noimp">Si su navegador bloquea la descarga, usen «Ver el CSV como texto»: seleccionen todo, copien y peguen en un archivo con extensión .csv o directamente en la hoja de cálculo.</div>
+  <textarea id="csvtxt" class="noimp" readonly aria-label="Contenido del CSV para copiar"></textarea>
+</section>
+
+<!-- ───────────── OPCIONAL ───────────── -->
+<section id="opt">
+  <div class="sec-h"><div class="sec-n">Parte opcional · fuera de clase · no suma puntos</div><h2>Para hacerlo de verdad en su máquina, con restic</h2></div>
+  <p class="lead">restic es una herramienta libre de respaldo que se maneja desde la terminal. Con ella pueden medir con cronómetro lo que aquí se simuló. Da un número propio: un tiempo de restauración medido con sus manos.</p>
+  <div class="adv"><b>Solo sobre la carpeta de práctica.</b> Creen una carpeta vacía, entren en ella y trabajen únicamente ahí, con archivos ficticios que ustedes mismos fabriquen. No apunten estos comandos a sus documentos, a carpetas del trabajo ni a datos de terceros. Nada de lo que sigue cifra, mueve ni borra archivos fuera de esa carpeta, salvo una caché propia que restic crea en el perfil del usuario para ir más rápido y que se puede borrar sin perder nada. El único borrado es el de un archivo de práctica que ustedes eliminan a mano para comprobar que la restauración lo devuelve.</div>
+  <ol class="pasos">
+    <li><div><b>Instalar</b><span>Sigan la página de instalación de la documentación oficial (restic.readthedocs.io) para su sistema. El servidor REST es un programa aparte: se descarga de la página de versiones del proyecto (github.com/restic/rest-server).</span></div></li>
+    <li><div><b>Preparar la carpeta de práctica</b><span>Una carpeta nueva, por ejemplo <code>practica-lab3</code>, y dentro una subcarpeta <code>datos-ficticios</code> con algunos archivos inventados: textos, una hoja de cálculo de mentiras, unas fotos sin importancia. Abran la terminal dentro de <code>practica-lab3</code>, no en otra parte.</span></div></li>
+  </ol>
+  <div class="cmd-t">Cinco órdenes · respaldar, listar, verificar y restaurar</div>
+  <div class="cmd"><pre>restic init --repo ./repo                                <span class="c"># crea el repositorio y pide una contraseña</span>
+restic -r ./repo --verbose backup ./datos-ficticios      <span class="c"># primera copia; repítanla tras cambiar archivos</span>
+restic -r ./repo snapshots                               <span class="c"># lista las copias, cada una con su identificador</span>
+restic -r ./repo check --read-data                       <span class="c"># verifica la estructura y relee todos los datos</span>
+restic -r ./repo restore latest --target ./restaurado    <span class="c"># restaura la más reciente en otra carpeta</span></pre></div>
+  <div class="cmd-t">Solo anexar · servidor REST de restic, en dos terminales</div>
+  <div class="cmd"><pre>rest-server --path ./repo-servidor --append-only --no-auth --listen 127.0.0.1:8000   <span class="c"># terminal 1: solo anexar, solo para este equipo</span>
+restic -r rest:http://localhost:8000/ init                       <span class="c"># terminal 2: el cliente crea el repositorio en ese servidor</span>
+restic -r rest:http://localhost:8000/ backup ./datos-ficticios   <span class="c"># agregar copias funciona</span>
+restic -r rest:http://localhost:8000/ snapshots</pre></div>
+  <ul class="chk">
+    <li><span>Midan con un cronómetro cuánto tarda <code>restore</code> y cuánto <code>check --read-data</code>. Comparen la carpeta restaurada con la original.</span></li>
+    <li><span>Cambien un archivo, borren a mano otro de la carpeta de práctica, respalden de nuevo y restauren la copia anterior usando su identificador en lugar de <code>latest</code>.</span></li>
+    <li><span>Contra el servidor de solo anexar, intenten quitar una copia con <code>restic -r rest:http://localhost:8000/ forget</code> seguido del identificador: el servidor debe rechazarlo. Anoten el mensaje.</span></li>
+  </ul>
+  <details><summary>Cuatro observaciones antes de sacar conclusiones</summary>
+    <p><b>La contraseña es la llave.</b> El repositorio va cifrado; la documentación de restic advierte que perder la contraseña es perder los datos de forma irrecuperable. Es el tema de la custodia de la llave, en pequeño.</p>
+    <p><b><code>--no-auth</code> solo vale para una práctica local, y por eso va con <code>--listen 127.0.0.1:8000</code>.</b> Sin <code>--listen</code>, el servidor atiende en el puerto 8000 de todas las interfaces de red del equipo; con esa opción solo responde al propio portátil. Sin <code>--no-auth</code>, exige un archivo de usuarios y contraseñas y se niega a arrancar si no lo encuentra. Un servidor real lleva autenticación y cifrado en tránsito.</p>
+    <p><b>Solo anexar protege del cliente, no de quien administra el servidor.</b> Según la documentación del proyecto, el modo permite crear copias nuevas e impide borrar o modificar las existentes. Quien tenga acceso al disco del servidor puede borrar la carpeta. Es la misma pregunta del simulador: ¿quién administra el equipo que impone la regla?</p>
+    <p><b><code>check --read-data</code> es el nivel 2 de cinco.</b> Relee todos los datos del repositorio y confirma que no están dañados. No prueba que un sistema arranque ni cuánto tarda en volver.</p>
+  </details>
+</section>
+
+<!-- ───────────── REPASO ───────────── -->
+<section id="rep">
+  <div class="sec-h"><div class="sec-n">Repaso · 5 minutos</div><h2>¿De qué se está hablando?</h2></div>
+  <p class="lead">Seis descripciones. Elijan el concepto que corresponde a cada una.</p>
+  <div id="quiz"></div>
+  <div class="fila noimp"><button id="qver">Ver respuestas</button><button class="sec" id="qreset">Reiniciar</button><span id="qmarca" class="leyenda" style="margin:0"></span></div>
+</section>
+
+<!-- ───────────── ENTREGA ───────────── -->
+<section id="ent">
+  <div class="sec-h"><div class="sec-n">Cierre</div><h2>Qué se entrega y cómo se califica</h2></div>
+  <p class="lead">Un informe <b>de una página por equipo</b>, al cierre del bloque B. Vale el <b>7 %</b> de la nota del módulo, dentro de la evaluación de desempeño. Pueden adjuntar el CSV o la impresión de este archivo como soporte; la página es de ustedes.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Criterio</th><th>Cómo se ve bien hecho</th></tr></thead>
+    <tbody>
+      <tr><td><b>Esquema declarado</b></td><td>Cada corrida dice qué se copió, cada cuánto, cuánto se conservó y dónde quedó la copia.</td></tr>
+      <tr><td><b>Medición</b></td><td>Tiempo de recuperación y datos perdidos de al menos dos corridas, con la predicción previa al lado.</td></tr>
+      <tr><td><b>Comparación</b></td><td>Explica qué cambió con el repositorio de solo anexar y por qué, sin atribuirlo a la herramienta.</td></tr>
+      <tr><td><b>Aplicación al caso</b></td><td>Una conclusión sobre el esquema de la Pedagógica, atada a un dato de la Parte 8.</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="chk">
+    <li>Las corridas de la bitácora, con incidente, fecha, esquema, predicción y medición.</li>
+    <li>Los supuestos que declararon: componentes del tiempo, filas del cuaderno posteriores a septiembre, velocidad de lectura, fecha en que T3 volvió a correr.</li>
+    <li>Semilla y porcentaje del ejercicio 3, y lo que mostró.</li>
+    <li>La explicación de la diferencia entre rondas, y la conclusión sobre el caso.</li>
+  </ul>
+  <div class="adv"><b>El simulador no es la Pedagógica.</b> Es un modelo simplificado montado sobre los datos del caso, con reglas y supuestos que están a la vista. Sus números no se copian a la entrega 2: lo que se lleva es el <b>método</b> de declarar, predecir, medir y explicar, y la costumbre de rotular cada tiempo como medido, cotizado o supuesto. La parte opcional con restic no suma puntos.</div>
+</section>
+
+<footer>
+  <span>Institución Universitaria de Envigado · Facultad de Ingeniería</span>
+  <span>SIO0013 · Continuidad del negocio · Laboratorio 3</span>
+</footer>
+</div>
+
+<script>
+/*MOTOR-INICIO*/
+/* ═════════ Motor de cálculo · sin acceso a la página ═════════
+   Las fechas son «hora de pared» de Colombia guardadas como milisegundos UTC, para que
+   las diferencias no dependan del huso horario del portátil. */
+const HORA = 3600000, DIA = 86400000, MIN = 60000;
+function F(a, m, d, h, mi){ return Date.UTC(a, m - 1, d, h || 0, mi || 0); }
+function dsem(t){ return new Date(t).getUTCDay(); }          // 0 = domingo
+function ini(t){ return Math.floor(t / DIA) * DIA; }
+function segCopia(gb, mbs){ return gb * 1000 / mbs; }         // 1 GB = 1.000 MB
+function hmin(seg){ const m = Math.round(seg / 60); return Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " min"; }
+function dur(h){
+  if (h == null) return "—";
+  if (h < 48) return hmin(h * 3600);
+  let d = Math.floor(h / 24), r = Math.round(h - d * 24);
+  if (r === 24){ d++; r = 0; }
+  return d + " d " + r + " h";
+}
+function sumaHabiles(t, n){ let x = t; while (n > 0){ x += DIA; const w = dsem(x); if (w !== 0 && w !== 6) n--; } return x; }
+/* Parte 9: lunes a viernes, 7:00–12:00 y 2:00–6:00. Parte 2: vacaciones colectivas del 21 de diciembre al 8 de enero. Sin festivos. */
+function enHorario(t){
+  const d = new Date(t), w = d.getUTCDay(), h = d.getUTCHours() + d.getUTCMinutes() / 60;
+  if (w === 0 || w === 6) return false;
+  if (t >= F(2026, 12, 21) && t < F(2027, 1, 9)) return false;
+  return (h >= 7 && h < 12) || (h >= 14 && h < 18);
+}
+
+/* Activos · Partes 6 y 8 */
+const ACTIVOS = [
+  { id: "sigabd", n: "Base de datos de SIGA", corto: "Base de SIGA", gb: 480, lugar: "cuarto" },
+  { id: "fin", n: "Financiero y nómina", corto: "Financiero", gb: 190, lugar: "cuarto", licencia: true },
+  { id: "t1", n: "Directorio y demás máquinas críticas", corto: "Directorio y críticas", gb: 1210, lugar: "cuarto" },
+  { id: "docs", n: "Documentos del gestor documental", corto: "Documentos", gb: 3600, lugar: "cuarto" },
+  { id: "t4", n: "Resto de máquinas, con la wiki", corto: "Resto de máquinas", gb: 5700, lugar: "cuarto" },
+  { id: "aula", n: "Aula virtual", corto: "Aula virtual", gb: 1900, lugar: "nube", prov: 7 },
+  { id: "correo", n: "Correo y archivos en nube", corto: "Correo", gb: null, lugar: "nube" },
+  { id: "inv", n: "Almacenamiento de investigación", corto: "Investigación", gb: 38000, lugar: "oficinas" },
+  { id: "red", n: "Configuración de red y equipos", corto: "Config. de red", gb: null, lugar: "red" }
+];
+const TRABAJOS = [["T2 · Base de datos de SIGA", 480], ["T1 · Máquinas críticas", 1400], ["T3 · Documentos", 3600], ["T4 · Resto de máquinas", 5700]];
+/* ¿El incidente alcanza al activo, según dónde vive? (a) solo alcanza lo que está en el cuarto de servidores. */
+const EFECTO = {
+  cuarto:   { a: "si", b: "si", c: "si",     d: "si", e: "si" },
+  nube:     { a: "no", b: "no", c: "nosabe", d: "si", e: "no" },
+  oficinas: { a: "no", b: "no", c: "nosabe", d: "si", e: "si" },
+  red:      { a: "no", b: "si", c: "nosabe", d: "si", e: "si" }
+};
+/* Cuaderno de salida del disco, 2026 · Parte 8. c = fecha de copia, v = día en que viajó a Honda. */
+const CUADERNO = [
+  { mes: "Enero", c: F(2026, 1, 9), v: F(2026, 1, 13), nota: "—" },
+  { mes: "Febrero", c: F(2026, 2, 6), v: F(2026, 2, 6), nota: "—" },
+  { mes: "Marzo", c: F(2026, 3, 6), v: F(2026, 3, 10), nota: "—" },
+  { mes: "Abril", c: null, v: null, nota: "«Semana Santa»" },
+  { mes: "Mayo", c: F(2026, 5, 8), v: F(2026, 5, 8), nota: "—" },
+  { mes: "Junio", c: F(2026, 6, 5), v: null, nota: "«Disco en mi escritorio. Carro en taller»" },
+  { mes: "Julio", c: F(2026, 7, 3), v: F(2026, 7, 7), nota: "«Copié sobre el mismo disco de junio. Lo llevé y traje el otro»" },
+  { mes: "Agosto", c: null, v: null, nota: "«Vacaciones»" },
+  { mes: "Septiembre", c: F(2026, 9, 4), v: F(2026, 9, 4), nota: "—" }
+];
+/* Después de septiembre el caso no tiene registros: fechas que el simulador propone como supuesto. */
+const CUAD_SUP = [
+  { mes: "Octubre", c: F(2026, 10, 2) }, { mes: "Noviembre", c: F(2026, 11, 6) },
+  { mes: "Diciembre", c: F(2026, 12, 4) }, { mes: "Enero de 2027", c: F(2027, 1, 8) }
+];
+function armaCuaderno(sup){
+  const out = CUADERNO.filter(e => e.c != null).map(e => ({ c: e.c, v: e.v }));
+  CUAD_SUP.forEach(function(e, i){ const s = (sup || [])[i]; if (s && s.h) out.push({ c: e.c, v: s.v ? e.c : null, sup: true }); });
+  return out;
+}
+const FALLA_T3 = F(2026, 4, 1, 0, 30);       // evidencia B: último punto válido, 01/04/2026
+/* Capacidades · Partes 7, 8 y 11 */
+const CAP = { libreHoy: 5400, c2: 80000, disco: 8000, nube: 15000 };   // GB · 9 % de 60 TB; C2; disco externo; C1
+
+/* dur = minutos que tarda el trabajo. T2 44 y T1 108: evidencia B. T3 60 y T4 292: supuestos rotulados. */
+function esquemaActual(){
+  return {
+    activos: {
+      sigabd: { loc: { on: true, frec: "diaria", hora: [23, 30], ret: 14, dur: 44 }, ext: true },
+      fin:    { loc: { on: true, frec: "diaria", hora: [22, 0], ret: 14, dur: 108 }, ext: true },
+      t1:     { loc: { on: true, frec: "diaria", hora: [22, 0], ret: 14, dur: 108 }, ext: false },
+      docs:   { loc: { on: true, frec: "diaria", hora: [0, 30], ret: 14, dur: 60 }, ext: false },
+      t4:     { loc: { on: true, frec: "semanal", hora: [20, 0], dia: 6, ret: 14, dur: 292 }, ext: false },
+      aula:   { loc: { on: false, frec: "diaria", hora: [23, 0], ret: 14, dur: 60 }, ext: false },
+      correo: { loc: { on: false, frec: "diaria", hora: [23, 0], ret: 14, dur: 60 }, ext: false },
+      inv:    { loc: { on: false, frec: "diaria", hora: [23, 0], ret: 14, dur: 60 }, ext: false },
+      red:    { loc: { on: false, frec: "diaria", hora: [23, 0], ret: 14, dur: 60 }, ext: false }
+    },
+    repoLocal: { fueraDominio: false, soloAnexar: false },
+    ext: { tipo: "honda-cuaderno", frec: "mensual", cifrada: false },
+    verif: false, informes: false, soporte: false, plataforma: "ninguna"
+  };
+}
+/* Añade al esquema la racha de fallas de T3 (salvo que los informes se revisen a diario). */
+function conFalla(esq, reanuda){
+  const e = JSON.parse(JSON.stringify(esq));
+  e.activos.docs.loc.falla = e.informes ? null : [FALLA_T3, reanuda];
+  return e;
+}
+
+/* Inicio de la última corrida que ya había TERMINADO en L: una copia en curso no cuenta. */
+const INTERVALO = { hora: 60, "4h": 240, diaria: 1440, semanal: 10080 };
+function ultimaCorrida(cfg, L){
+  const Lf = L - Math.min(cfg.dur || 0, INTERVALO[cfg.frec] || 1440) * MIN;
+  if (cfg.frec === "hora") return Math.floor(Lf / HORA) * HORA;
+  if (cfg.frec === "4h") return Math.floor(Lf / (4 * HORA)) * 4 * HORA;
+  const hm = cfg.hora || [23, 0];
+  let t = ini(Lf) + hm[0] * HORA + hm[1] * MIN;
+  if (t > Lf) t -= DIA;
+  if (cfg.frec === "semanal"){ const dia = cfg.dia == null ? 6 : cfg.dia; while (dsem(t) !== dia) t -= DIA; }
+  return t;
+}
+function corridaBuena(cfg, L){
+  const p = ultimaCorrida(cfg, L);
+  return (cfg.falla && p > cfg.falla[0] && p < cfg.falla[1]) ? cfg.falla[0] : p;
+}
+/* Punto de la copia local que sirve: el último anterior a L que aún exista en R. */
+function puntoLocal(cfg, L, R){
+  if (!cfg || !cfg.on) return null;
+  const p = corridaBuena(cfg, L), ult = corridaBuena(cfg, R);
+  const vencida = (R - p) > cfg.ret * DIA;
+  if (vencida && ult > p) return null;                 // una copia posterior la sacó de la retención
+  return { t: p, fuera: vencida };                     // vencida y sin copias posteriores: sigue listada, en duda
+}
+/* Disco que está en Honda en el instante R: el de la copia más reciente que ya llegó. */
+function hondaEn(cuad, R){
+  let m = null;
+  cuad.forEach(function(e){ if (e.v != null && e.v + DIA <= R && (!m || e.c > m.c)) m = e; });
+  return m;
+}
+/* Copia hecha y aún no llegada a Honda en T (está en el otro disco, en Girardot). */
+function pendienteEn(cuad, T, honda){
+  let m = null;
+  cuad.forEach(function(e){ if (e.c <= T && (!honda || e.c > honda.c) && (e.v == null || e.v + DIA > T) && (!m || e.c > m.c)) m = e; });
+  return m;
+}
+/* Disco alterno, en Girardot, en el instante R: la copia nueva si ya se hizo y no ha llegado;
+   si no, la copia anterior a la que está en Honda, que volvió con el último viaje. */
+function alternoEn(cuad, R){
+  const h = hondaEn(cuad, R), p = pendienteEn(cuad, R, h);
+  if (p) return p;
+  if (!h) return null;
+  let m = null;
+  cuad.forEach(function(e){ if (e.v != null && e.c < h.c && (!m || e.c > m.c)) m = e; });
+  return m;
+}
+function hondaFijo(frec, R){
+  let d = ini(R) - DIA;
+  for (;;){ if (dsem(d) === 5 && (frec === "semanal" || new Date(d).getUTCDate() <= 7)) return { c: d, v: d }; d -= DIA; }
+}
+function domingoAntes(c){ let t = ini(c) + HORA; while (dsem(t) !== 0) t -= DIA; return t; }   // volcado completo: domingo 1:00
+function puntoDisco(id, ent){ return id === "sigabd" ? domingoAntes(ent.c) : ent.c; }
+function puntoExterno(esq, id, L, R, cuad){
+  const e = esq.ext;
+  if (e.tipo === "ninguna" || !esq.activos[id].ext) return null;
+  if (e.tipo === "nube"){
+    const p = puntoLocal({ on: true, frec: e.frec === "semanal" ? "semanal" : "diaria", hora: [2, 0], dia: 0, ret: 30 }, L, R);
+    return p ? { src: "nube", t: p.t } : null;
+  }
+  const ent = e.tipo === "honda-cuaderno" ? hondaEn(cuad, R) : hondaFijo(e.frec, R);
+  if (!ent) return null;
+  const t = puntoDisco(id, ent);
+  if (t > L) return null;
+  return { src: "honda", t: t, copia: ent.c, sup: !!ent.sup };
+}
+/* Solo en (d): el otro disco, que está en Girardot y no fuera del sitio. */
+function puntoAlterno(esq, id, L, R, cuad){
+  const e = esq.ext;
+  if (!/^honda/.test(e.tipo) || !esq.activos[id].ext) return null;
+  let ent;
+  if (e.tipo === "honda-cuaderno") ent = alternoEn(cuad, R);
+  else { const h = hondaFijo(e.frec, R); ent = hondaFijo(e.frec, h.c); }
+  if (!ent) return null;
+  const t = puntoDisco(id, ent);
+  if (t > L) return null;
+  return { src: "alterno", t: t, copia: ent.c, sup: !!ent.sup };
+}
+
+/* ¿Cabe cada copia en su destino? Se llena en el orden de la tabla; lo que no cabe no se cuenta. */
+function capacidad(esq){
+  const base = esquemaActual(), r = { loc: {}, ext: {}, usoLoc: 0, capLoc: 0, usoExt: 0, capExt: 0, sinTam: 0 };
+  const c2 = esq.repoLocal.fueraDominio;
+  r.capLoc = c2 ? CAP.c2 : CAP.libreHoy;
+  r.capExt = esq.ext.tipo === "nube" ? CAP.nube : esq.ext.tipo === "ninguna" ? 0 : CAP.disco;
+  ACTIVOS.forEach(function(a){
+    const c = esq.activos[a.id], nuevo = !base.activos[a.id].loc.on;
+    if (c.loc.on){
+      if (!c2 && !nuevo) r.loc[a.id] = true;                    // lo que ya se copia hoy ya está en el equipo
+      else if (a.gb == null){ r.loc[a.id] = true; r.sinTam++; }
+      else { r.loc[a.id] = r.usoLoc + a.gb <= r.capLoc; if (r.loc[a.id]) r.usoLoc += a.gb; }
+    }
+    if (c.ext && esq.ext.tipo !== "ninguna"){
+      if (a.gb == null){ r.ext[a.id] = true; r.sinTam++; }
+      else { r.ext[a.id] = r.usoExt + a.gb <= r.capExt; if (r.ext[a.id]) r.usoExt += a.gb; }
+    }
+  });
+  return r;
+}
+
+function componentes(a, esq, inc, T, par, copia){
+  const n = inc === "d" ? (par.n || 0) : 0, c = [];
+  const decl = function(v, nota){ return v == null ? { min: null, max: null, tag: "fal", nota: nota } : { min: v, max: v, tag: "sup", nota: "supuesto del equipo · " + nota }; };
+  const soloBase = a.licencia && copia && (copia.src === "honda" || copia.src === "alterno");
+  /* 1 · detección */
+  if (inc === "d") c.push({ min: n * 24, max: n * 24, tag: "sup", nota: "los " + n + " días que eligieron" });
+  else if (!enHorario(T)) c.push({ min: 2.75, max: 2.75, tag: "med", nota: "fuera de horario · Parte 17" });
+  else c.push(decl(par.det, "en horario de oficina el caso no lo mide"));
+  /* 2 · decisión */
+  c.push(decl(par.dec, "nadie tiene la autoridad definida (H5)"));
+  /* 3 · plataforma */
+  const t0 = T + ((c[0].min || 0) + (c[1].min || 0)) * HORA;
+  const lic = a.licencia ? (sumaHabiles(t0, 2) - t0) / HORA : 0;
+  let pl;
+  if (a.lugar !== "cuarto") pl = { min: null, max: null, tag: "fal", nota: a.prov && copia && copia.src === "prov" ? "la plataforma es del proveedor" : "el caso no dice dónde se restauraría" };
+  else if (inc === "c" || inc === "d") pl = decl(par.platCD, "equipos sin daño físico, pero dejarlos listos para restaurar no está medido" + (soloBase ? "; el disco trae solo la base: hay que reinstalar la aplicación (en otro servidor, licencia de 2 días hábiles, Parte 10)" : ""));
+  else if (inc === "a" && par.platA === "sano") pl = { min: 0, max: 0, tag: "sup", nota: "supuesto del equipo: hay equipo sano" };
+  else if (inc === "a" && par.platA === "repuesto"){ const h = (sumaHabiles(t0, 10) - t0) / HORA; pl = { min: h, max: h, tag: "med", nota: "repuesto en 10 días hábiles · Partes 10 y 17" }; }
+  else if (inc !== "a" && (esq.plataforma === "C6" || (esq.plataforma === "C4" && ["sigabd", "fin", "t1"].indexOf(a.id) >= 0))){
+    pl = par.act == null ? { min: null, max: null, tag: "fal", nota: "activar el sitio alterno (" + esq.plataforma + "): la cotización no trae ese tiempo" + (lic ? "; sumen la licencia, 2 días hábiles" : "") }
+                         : { min: par.act + lic, max: par.act + lic, tag: "sup", nota: "activación supuesta por el equipo (" + esq.plataforma + ")" + (lic ? " + licencia, 2 días hábiles" : "") };
+  } else pl = { min: 45 * 24 + lic, max: 60 * 24 + lic, tag: "med", nota: "servidor nuevo, 45 a 60 días · Parte 17" + (lic ? " + licencia, 2 días hábiles" : "") + (inc === "a" ? "" : "; y un lugar donde instalarlo, que hoy no existe") };
+  c.push(pl);
+  /* 4 · restauración */
+  let rs;
+  const vn = inc === "b" || inc === "e" ? par.vNubeAlt : par.vNube;
+  if (!copia) rs = { min: null, max: null, tag: "fal", nota: "no hay copia que restaurar" };
+  else if (copia.src === "prov") rs = { min: null, max: null, tag: "fal", nota: "la hace EduNube «en el menor tiempo posible» (evidencia C)" };
+  else if (a.gb == null) rs = { min: null, max: null, tag: "fal", nota: "el caso no da el tamaño" };
+  else if (copia.src === "local"){ const h = segCopia(a.gb, par.vLocal) / 3600; rs = { min: h, max: h, tag: par.vLocal === 95 ? "cal" : "sup", nota: a.gb + " GB ÷ " + par.vLocal + " MB/s" }; }
+  else if (copia.src === "honda" || copia.src === "alterno"){
+    const via = copia.src === "alterno" || (esq.plataforma === "C6" && (inc === "b" || inc === "e")) ? 0 : 3, h = via + segCopia(a.gb, par.vDisco) / 3600;
+    rs = { min: h, max: h, tag: "sup", nota: (via ? "3 h de carretera + " : "") + a.gb + " GB ÷ " + par.vDisco + " MB/s de lectura supuesta" + (soloBase ? "; solo la base de datos: la aplicación se reinstala aparte" : "") };
+  }
+  else rs = vn == null ? { min: null, max: null, tag: "fal", nota: "declaren la velocidad de bajada desde la nube" + (inc === "b" || inc === "e" ? " sin el enlace de Girardot" : "") }
+                       : { min: segCopia(a.gb, vn) / 3600, max: segCopia(a.gb, vn) / 3600, tag: "sup", nota: a.gb + " GB ÷ " + vn + " MB/s supuestos" };
+  c.push(rs);
+  /* 5 y 6 */
+  c.push(decl(par.val, "lo valida el dueño del proceso"));
+  c.push(decl(par.rec, "directorio, red, sedes, terceros y reingreso"));
+  let min = 0, max = 0, faltan = 0;
+  c.forEach(function(x){ if (x.min == null) faltan++; else { min += x.min; max += x.max; } });
+  return { c: c, min: min, max: max, faltan: faltan };
+}
+
+/* Evalúa un esquema frente a un incidente. par.n = días hasta detectar, solo en (d). */
+function evalua(esq, inc, T, par, cuad){
+  const n = inc === "d" ? (par.n || 0) : 0, L = T, R = T + n * DIA, cap = capacidad(esq);
+  const localVive = inc === "a" || inc === "d" || (inc === "c" && (esq.repoLocal.fueraDominio || esq.repoLocal.soloAnexar));
+  const honda = hondaEn(cuad, R);
+  const filas = ACTIVOS.map(function(a){
+    const cf = esq.activos[a.id], ef = EFECTO[a.lugar][inc];
+    const r = { id: a.id, efecto: ef, copias: [], copia: null, perdidoH: null, t: null,
+                noCabe: (cf.loc.on && cap.loc[a.id] === false ? "L" : "") + (cf.ext && cap.ext[a.id] === false ? "E" : "") };
+    if (ef === "no") return r;
+    if (localVive && cap.loc[a.id]){ const p = puntoLocal(cf.loc, L, R); if (p) r.copias.push({ src: "local", t: p.t, fuera: p.fuera }); }
+    if (cap.ext[a.id]){
+      const x = puntoExterno(esq, a.id, L, R, cuad); if (x) r.copias.push(x);
+      if (inc === "d"){ const y = puntoAlterno(esq, a.id, L, R, cuad); if (y) r.copias.push(y); }
+    }
+    if (a.prov){ const p = puntoLocal({ on: true, frec: "diaria", hora: [0, 0], ret: a.prov }, L, R); if (p) r.copias.push({ src: "prov", t: p.t }); }
+    r.copias.sort(function(u, v){ return v.t - u.t; });
+    r.copia = r.copias[0] || null;
+    if (r.copia) r.perdidoH = (R - r.copia.t) / HORA;
+    r.t = componentes(a, esq, inc, T, par, r.copia);
+    return r;
+  });
+  return { filas: filas, T: T, R: R, honda: honda, pendiente: esq.ext.tipo === "honda-cuaderno" && inc !== "d" ? pendienteEn(cuad, T, honda) : null };
+}
+
+/* Regla 3-2-1-1-0, activo por activo. Una copia que no cabe en su destino no se cuenta. */
+function regla(esq, id){
+  const a = ACTIVOS.filter(function(x){ return x.id === id; })[0], c = esq.activos[id], cap = capacidad(esq);
+  const r = { copias: 1, medios: 1, fuera: 0, inm: 0, resp: 0, propias: 0, verif: 0, debil: false, inmFuerte: 0 };
+  if (c.loc && c.loc.on && cap.loc[id]){ r.copias++; r.resp++; r.propias++; r.medios++; if (esq.repoLocal.soloAnexar){ r.inm++; r.inmFuerte++; } }
+  if (c.ext && esq.ext.tipo !== "ninguna" && cap.ext[id]){
+    r.copias++; r.resp++; r.propias++; r.medios++; r.fuera++; r.inm++;
+    r.debil = !esq.ext.cifrada || esq.ext.tipo === "honda-cuaderno";      // parcial, irregular o sin cifrar
+    if (!r.debil) r.inmFuerte++;
+  }
+  if (a.prov){ r.copias++; r.resp++; }
+  r.verif = esq.verif ? r.propias : 0;
+  return r;
+}
+function semaforo(esq, r){
+  return [r.copias >= 3 ? "v" : r.copias === 2 ? "a" : "r", r.medios >= 2 ? "v" : "r", r.fuera >= 1 ? (r.debil ? "a" : "v") : "r",
+          r.inm >= 1 ? (r.inmFuerte ? "v" : "a") : "r", r.resp > 0 && r.verif === r.resp ? "v" : r.verif > 0 ? "a" : "r"];
+}
+
+/* Ejercicio 3 · número reproducible en [0, 1) a partir de la semilla y de la copia */
+function azar(sem, clave){
+  const s = String(sem) + "|" + clave; let h = 2166136261;
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  let t = (h + 0x6D2B79F5) >>> 0;
+  t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+function restaura(esq, ev, sem, prob){
+  return ev.filas.map(function(r){
+    const out = { id: r.id, efecto: r.efecto, intentos: [], copia: null, perdidoH: null };
+    for (let i = 0; i < r.copias.length; i++){
+      const c = r.copias[i];
+      const ok = (esq.verif && c.src !== "prov") || azar(sem, r.id + "|" + c.src) >= prob;
+      out.intentos.push({ src: c.src, t: c.t, legible: ok });
+      if (ok){ out.copia = c; out.perdidoH = (ev.R - c.t) / HORA; break; }
+    }
+    return out;
+  });
+}
+/* Activos alcanzados que quedan sin ninguna copia legible, incluidos los que no tenían copia. */
+function sinLegible(res){ return res.filter(function(x){ return x.efecto !== "no" && !x.copia; }).length; }
+function promedioSinLegible(esq, ev, prob){
+  let k = 0; for (let s = 1; s <= 100; s++) k += sinLegible(restaura(esq, ev, "serie-" + s, prob));
+  return k / 100;
+}
+/*MOTOR-FIN*/
+
+/* ═════════ Estado y almacenamiento local ═════════ */
+const CLAVE = "sio0013-lab3-v2", FMIN = F(2026, 1, 14), FMAX = F(2027, 1, 31, 23, 59);
+function inicial(){
+  return { inc: "a", fecha: "2026-05-16T06:05", n: 20, ref: "sigabd",
+    par: { det: null, dec: null, platA: "repuesto", platCD: null, act: null, vLocal: 95, vDisco: 140, vNube: null, vNubeAlt: null, val: null, rec: null },
+    sup: [{ h: true, v: true }, { h: true, v: true }, { h: true, v: true }, { h: false, v: false }],
+    reanuda: "2026-06-25", prop: esquemaActual(), obj: {}, pred: { p1: null, t1: null, p2: null, t2: null },
+    corridas: [], e3: [], sem: "2026", prob: 25, notas: "", demo: { gb: 310, v: 95 }, v1: false, v2: false, v3: false };
+}
+let st = inicial(), almacen = true;
+try { const g = localStorage.getItem(CLAVE); if (g){ const o = JSON.parse(g); if (o && o.prop && o.par){ st = Object.assign(inicial(), o); st.par = Object.assign(inicial().par, o.par); } } } catch (e) { almacen = false; }
+function guarda(){
+  if (!almacen) { $("guardado").textContent = "Este navegador no permite guardar el avance: descarguen el CSV."; return; }
+  try { localStorage.setItem(CLAVE, JSON.stringify(st)); $("guardado").textContent = "Avance guardado en este navegador."; } catch (e) { almacen = false; }
+}
+
+/* ═════════ Utilidades de presentación ═════════ */
+const DS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"], MS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+function fd(t){ const d = new Date(t); return DS[d.getUTCDay()] + " " + d.getUTCDate() + " " + MS[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
+function fdh(t){ const d = new Date(t); return fd(t) + ", " + String(d.getUTCHours()).padStart(2, "0") + ":" + String(d.getUTCMinutes()).padStart(2, "0"); }
+function fcorta(t){ const d = new Date(t); return d.getUTCDate() + " " + MS[d.getUTCMonth()]; }
+function leeFecha(s){ const m = /^(\d{4})-(\d\d)-(\d\d)(?:T(\d\d):(\d\d))?/.exec(s || ""); return m ? F(+m[1], +m[2], +m[3], +(m[4] || 0), +(m[5] || 0)) : null; }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function num(v, d){ return v == null ? "—" : Number(v).toLocaleString("es-CO", { maximumFractionDigits: d == null ? 1 : d }); }
+function act(id){ return ACTIVOS.filter(function(a){ return a.id === id; })[0]; }
+const TAG = { med: "medido", cal: "calculado", sup: "supuesto", fal: "sin declarar" };
+const INC = {
+  a: ["(a) Falla de un equipo o del almacenamiento central", "Se pierde lo que estaba en producción en el cuarto de servidores. El equipo de respaldo y lo que esté fuera siguen disponibles. No alcanza lo que vive en nube, en las oficinas de los grupos ni en los equipos de red."],
+  b: ["(b) Pérdida del cuarto de servidores completo", "Incendio, agua del tercer piso o calor. Se pierden los servidores, el almacenamiento y el equipo de respaldo, que comparten bastidor."],
+  c: ["(c) Error o abuso de una cuenta con privilegios", "Borra o daña los datos y todo lo que esa cuenta puede escribir, incluidos los repositorios de respaldo que estén en el mismo dominio."],
+  d: ["(d) Corrupción silenciosa detectada tarde", "El daño empieza en la fecha elegida y se detecta n días después. Toda copia tomada en ese intervalo lo contiene."],
+  e: ["(e) Pérdida de la sede o de su acceso", "Río o bloqueo. Nada de lo que está en Girardot se puede usar. Si es un bloqueo y no una destrucción, la alternativa es esperar: ese tiempo no lo da el caso."]
+};
+const FECHAS = [
+  ["2026-05-16T06:05", "Sáb 16 may 2026 · 6:05 a.m. · sábado de tutoría (Parte 14)"],
+  ["2026-05-07T18:00", "Jue 7 may 2026 · 6:00 p.m. · víspera de que llegue un disco a Honda"],
+  ["2026-06-20T10:00", "Sáb 20 jun 2026 · 10:00 a.m. · con el disco de junio sin viajar"],
+  ["2026-12-11T15:00", "Vie 11 dic 2026 · 3:00 p.m. · día del cierre de notas (Parte 2)"],
+  ["2027-01-21T09:00", "Jue 21 ene 2027 · 9:00 a.m. · primer día de matrícula de antiguos (Parte 2)"]
+];
+const FUENTE = { local: "Equipo de respaldo, en el cuarto", honda: "Disco en Honda", alterno: "Disco alterno, en Girardot · no fuera del sitio", nube: "Nube, copia inmutable", prov: "Copia de EduNube, misma región" };
+const SINCOPIA = { correo: "Solo la papelera del servicio, treinta días: sirve para un borrado reciente, no es un respaldo.", inv: "Dos de los nueve grupos copian a cuentas personales de nube; los otros siete, nada.", red: "Lo que haya en el portátil del administrador de red, de fecha desconocida.", aula: "La copia del proveedor ya no cubre esa fecha: retiene siete días." };
+
+function T(){ return leeFecha(st.fecha); }
+function PAR(){ return Object.assign({}, st.par, { n: st.n }); }
+function esqA(){ return conFalla(esquemaActual(), leeFecha(st.reanuda)); }
+function esqP(){ return conFalla(st.prop, leeFecha(st.reanuda)); }
+function cuad(){ return armaCuaderno(st.sup); }
+function tTexto(t){
+  if (!t) return "—";
+  if (t.faltan >= 5) return "sin estimar";
+  const base = t.min === t.max ? dur(t.min) : "de " + dur(t.min) + " a " + dur(t.max);
+  return (t.faltan ? "al menos " : "") + base;
+}
+
+/* ═════════ Demostración ═════════ */
+function pintaDemo(){
+  const v = st.demo.v > 0 ? st.demo.v : 95;
+  let h = "<thead><tr><th>Qué se copia</th><th class='num'>Tamaño</th><th class='num'>En MB</th><th class='num'>Segundos</th><th class='num'>A " + num(v) + " MB/s</th></tr></thead><tbody>";
+  let tot = 0;
+  TRABAJOS.forEach(function(t){ tot += t[1]; h += "<tr><td><b>" + t[0] + "</b></td><td class='num'>" + num(t[1]) + " GB</td><td class='num'>" + num(t[1] * 1000, 0) + "</td><td class='num'>" + num(segCopia(t[1], v), 0) + "</td><td class='num c'>" + hmin(segCopia(t[1], v)) + "</td></tr>"; });
+  h += "<tr><td><b>Todo, en serie</b></td><td class='num'>" + num(tot) + " GB</td><td class='num'>" + num(tot * 1000, 0) + "</td><td class='num'>" + num(segCopia(tot, v), 0) + "</td><td class='num c'><b>" + hmin(segCopia(tot, v)) + "</b></td></tr>";
+  const g = st.demo.gb > 0 ? st.demo.gb : 0;
+  h += "<tr class='ref'><td><b>Tamaño libre</b></td><td class='num'>" + num(g) + " GB</td><td class='num'>" + num(g * 1000, 0) + "</td><td class='num'>" + num(segCopia(g, v), 0) + "</td><td class='num c'><b>" + hmin(segCopia(g, v)) + "</b></td></tr></tbody>";
+  $("dtab").innerHTML = h;
+  const s = segCopia(310, 95), pct = s / (31 * 3600) * 100, w = 900, x = Math.max(4, w * pct / 100);
+  $("d2022").innerHTML =
+    "<div class='tres'><div><div class='cifra n'>31 h</div><div class='lab'>de la falla al servicio</div></div>" +
+    "<div><div class='cifra'>" + hmin(s) + "</div><div class='lab'>310 GB ÷ 95 MB/s = " + num(s, 0) + " s</div></div>" +
+    "<div><div class='cifra'>" + num(pct, 1) + " %</div><div class='lab'>de las 31 horas fue copiar</div></div></div>" +
+    "<svg class='lt' viewBox='0 0 940 64' role='img' aria-label='Proporción de la copia dentro de las 31 horas'>" +
+    "<rect x='20' y='14' width='" + w + "' height='22' fill='#E9EBEE'/><rect x='20' y='14' width='" + x.toFixed(1) + "' height='22' fill='#F36406'/>" +
+    "<text x='20' y='54' font-size='12' fill='#15171C'>copia: cerca de una hora</text>" +
+    "<text x='920' y='54' font-size='12' fill='#5C5C5C' text-anchor='end'>diagnóstico, reinstalación y verificación: el resto · se perdió un día de datos</text></svg>";
+}
+
+/* ═════════ Controles que se construyen una sola vez ═════════ */
+const FINMES = [F(2026, 2, 1), F(2026, 3, 1), F(2026, 4, 1), F(2026, 5, 1), F(2026, 6, 1), F(2026, 7, 1), F(2026, 8, 1), F(2026, 9, 1), F(2026, 10, 1), F(2026, 11, 1), F(2026, 12, 1), F(2027, 1, 1), F(2027, 2, 1)];
+function armaControles(){
+  /* cuaderno */
+  let h = "<thead><tr><th>Mes</th><th>Fecha de copia</th><th>¿Viajó a Honda?</th><th>Anotación</th><th>Lo más reciente que había en Honda al final del mes</th></tr></thead><tbody>";
+  CUADERNO.forEach(function(e, i){
+    h += "<tr><td><b>" + e.mes + "</b></td><td>" + (e.c ? fd(e.c) : "<span class='rojo-f'>No se hizo</span>") + "</td><td>" + (e.c ? (e.v ? "Sí, el " + new Date(e.v).getUTCDate() : "<span class='rojo-f'>No</span>") : "—") + "</td><td>" + e.nota + "</td><td id='cq" + i + "'></td></tr>";
+  });
+  h += "<tr class='gr'><td colspan='5'>Sin registro en el caso · supuestos editables del simulador</td></tr>";
+  CUAD_SUP.forEach(function(e, i){
+    h += "<tr><td><b>" + e.mes + "</b> <span class='tg sup'>supuesto</span></td><td><label><input type='checkbox' data-sup='" + i + "' data-c='h'> se hizo el " + fd(e.c) + "</label></td>" +
+         "<td><label><input type='checkbox' data-sup='" + i + "' data-c='v'> viajó el mismo día</label></td><td>" + (i === 3 ? "El primer viernes es 1 de enero, en vacaciones colectivas" : "—") + "</td><td id='cq" + (9 + i) + "'></td></tr>";
+  });
+  $("cuad").innerHTML = h + "</tbody>";
+  /* incidente: dos barras iguales, sincronizadas */
+  ["inc1", "inc2"].forEach(function(id){
+    $(id).innerHTML =
+      "<div><label for='" + id + "i'>Incidente</label><select id='" + id + "i' data-k='inc'>" + Object.keys(INC).map(function(k){ return "<option value='" + k + "'>" + INC[k][0] + "</option>"; }).join("") + "</select></div>" +
+      "<div><label for='" + id + "p'>Fecha del calendario del caso</label><select id='" + id + "p' data-pre='1'>" + FECHAS.map(function(f){ return "<option value='" + f[0] + "'>" + f[1] + "</option>"; }).join("") + "<option value='otra'>Otra fecha…</option></select></div>" +
+      "<div><label for='" + id + "f'>Fecha y hora</label><input type='datetime-local' id='" + id + "f' data-fecha='1' min='2026-01-14T00:00' max='2027-01-31T23:59'></div>" +
+      "<div class='noimp'><button class='sec' type='button' data-aplica='" + id + "f'>Aplicar fecha</button></div>" +
+      "<div data-nbox='1'><label for='" + id + "n'>Se detecta n días después</label><input type='number' id='" + id + "n' class='mini' data-k='n' min='1' max='120' step='1'></div>" +
+      "<span class='fmsg' role='alert'></span>";
+  });
+  ["ref1", "ref2"].forEach(function(id){ $(id).innerHTML = ACTIVOS.map(function(a){ return "<option value='" + a.id + "'>" + a.n + "</option>"; }).join(""); });
+  /* editor por activo */
+  const FR = [["hora", "Cada hora"], ["4h", "Cada 4 horas"], ["diaria", "Diaria"], ["semanal", "Semanal"]], RT = [7, 14, 30, 60, 90], base = esquemaActual();
+  h = "<thead><tr><th>Activo</th><th>Copia local</th><th>Frecuencia</th><th>Retención</th><th>En la copia externa</th><th>Hoy</th></tr></thead><tbody>";
+  ACTIVOS.forEach(function(a){
+    const b = base.activos[a.id];
+    h += "<tr><td><b>" + a.n + "</b><small>" + (a.gb ? num(a.gb) + " GB" : "tamaño no dado en el caso") + "</small></td>" +
+      "<td><input type='checkbox' data-a='" + a.id + "' data-f='on' aria-label='Copia local de " + a.corto + "'></td>" +
+      "<td><select data-a='" + a.id + "' data-f='frec' aria-label='Frecuencia de " + a.corto + "'>" + FR.map(function(f){ return "<option value='" + f[0] + "'>" + f[1] + "</option>"; }).join("") + "</select></td>" +
+      "<td><select data-a='" + a.id + "' data-f='ret' aria-label='Retención de " + a.corto + "'>" + RT.map(function(d){ return "<option value='" + d + "'>" + d + " días</option>"; }).join("") + "</select></td>" +
+      "<td><input type='checkbox' data-a='" + a.id + "' data-f='ext' aria-label='" + a.corto + " en la copia externa'></td>" +
+      "<td><small>" + (b.loc.on ? (b.loc.frec === "semanal" ? "semanal, dos copias" : "diaria, 14 días") + (b.ext ? "; va en el disco" : "; no sale del cuarto") : a.prov ? "solo la copia del proveedor" : "sin respaldo") + "</small></td></tr>";
+  });
+  $("edact").innerHTML = h + "</tbody>";
+  /* etiquetas accesibles para lo que no tiene <label for> */
+  $$("table.comp tbody input, table.comp tbody select").forEach(function(el){
+    if (el.getAttribute("aria-label")) return;
+    let p = el.previousElementSibling; while (p && !(p.classList && p.classList.contains("lab"))) p = p.previousElementSibling;
+    el.setAttribute("aria-label", el.closest("tr").querySelector("td b").textContent + " · " + (p ? p.textContent : ""));
+  });
+}
+/* Pone en los controles los valores del estado, sin tocar el que tiene el foco. */
+function valores(){
+  const foco = document.activeElement;
+  $$("[data-k]").forEach(function(el){
+    if (el === foco) return;
+    const p = el.getAttribute("data-k").split("."), v = p.length === 2 ? st[p[0]][p[1]] : st[p[0]];
+    el.value = v == null ? "" : v;
+  });
+  const pre = FECHAS.some(function(f){ return f[0] === st.fecha; }) ? st.fecha : "otra";
+  $$("[data-pre]").forEach(function(el){ if (el !== foco) el.value = pre; });
+  $$("[data-fecha]").forEach(function(el){ if (el !== foco) el.value = st.fecha; });
+  $$("[data-nbox]").forEach(function(el){ el.style.display = st.inc === "d" ? "" : "none"; });
+  if ($("dgb") !== foco) $("dgb").value = st.demo.gb;
+  if ($("dv") !== foco) $("dv").value = st.demo.v;
+  if ($("rean") !== foco) $("rean").value = st.reanuda;
+  $$("[data-sup]").forEach(function(el){ const s = st.sup[+el.getAttribute("data-sup")], c = el.getAttribute("data-c"); el.checked = !!s[c]; if (c === "v") el.disabled = !s.h; });
+  const c = cuad(); for (let i = 0; i < 13; i++){ const e = hondaEn(c, FINMES[i]); $("cq" + i).textContent = e ? "Copia del " + fcorta(e.c) : "—"; }
+  $$("[data-p]").forEach(function(el){
+    if (el.id === "extfrec") return;
+    const p = el.getAttribute("data-p").split("."), v = p.length === 2 ? st.prop[p[0]][p[1]] : st.prop[p[0]];
+    if (el.type === "checkbox") el.checked = !!v; else if (el !== foco) el.value = v;
+  });
+  $$("[data-a]").forEach(function(el){
+    const cc = st.prop.activos[el.getAttribute("data-a")], f = el.getAttribute("data-f");
+    if (f === "on") el.checked = cc.loc.on; else if (f === "ext") el.checked = cc.ext;
+    else { if (el !== foco) el.value = f === "ret" ? cc.loc.ret : cc.loc.frec; el.disabled = !cc.loc.on; }
+  });
+  const t = st.prop.ext.tipo, ops = t === "nube" ? [["diaria", "Diaria, 2:00 a.m."], ["semanal", "Semanal, domingos"]] : t === "honda-fijo" ? [["semanal", "Cada viernes"], ["mensual", "Primer viernes del mes"]] : [["mensual", t === "ninguna" ? "—" : "Mensual, cuando viaja"]];
+  if (!ops.some(function(o){ return o[0] === st.prop.ext.frec; })) st.prop.ext.frec = ops[0][0];
+  const ef = $("extfrec"), sig = ops.map(function(o){ return o[0] + o[1]; }).join("|");
+  if (ef.getAttribute("data-sig") !== sig){ ef.innerHTML = ops.map(function(o){ return "<option value='" + o[0] + "'>" + o[1] + "</option>"; }).join(""); ef.setAttribute("data-sig", sig); }
+  if (ef !== foco) ef.value = st.prop.ext.frec;
+  ef.disabled = ops.length < 2;
+}
+function pintaInfo(){
+  const R = T() + (st.inc === "d" ? st.n * DIA : 0);
+  $("incdesc").innerHTML = "<b>" + INC[st.inc][0] + ".</b> " + INC[st.inc][1] + " Fecha: <b>" + fdh(T()) + "</b>, " + (st.inc === "d" ? "y se detecta el " + fd(R) + "." : (enHorario(T()) ? "en horario de oficina." : "fuera de horario de oficina.")) +
+    (R > FMAX ? " <span class='rojo-f'>La detección cae después de enero de 2027: el simulador no tiene cuaderno para esos meses y supone que no hubo más viajes a Honda.</span>" : "");
+  const cap = capacidad(st.prop), t = st.prop.ext.tipo;
+  let s = "<b>Capacidad.</b> ";
+  s += "Copia local: " + (st.prop.repoLocal.fueraDominio ? "una copia completa de lo marcado pesa " + num(cap.usoLoc) + " GB de los 80 TB del repositorio nuevo" : "lo que se agrega pesa " + num(cap.usoLoc) + " GB; al equipo actual le quedan unos 5,4 TB (9 % de 60 TB, Parte 8)") + ". ";
+  if (t !== "ninguna") s += "Copia externa: " + num(cap.usoExt) + " GB de " + (t === "nube" ? "15 TB (cotización C1, retención de 30 días, inmutable)" : "8 TB por disco (Parte 8); el disco guarda solo la última copia y, desconectado, es una copia aislada") + ". ";
+  const no = ACTIVOS.filter(function(a){ return (st.prop.activos[a.id].loc.on && cap.loc[a.id] === false) || (st.prop.activos[a.id].ext && cap.ext[a.id] === false); });
+  s += no.length ? "<span class='rojo-f'>No cabe: " + no.map(function(a){ return a.corto + (st.prop.activos[a.id].loc.on && cap.loc[a.id] === false ? " (local)" : "") + (st.prop.activos[a.id].ext && cap.ext[a.id] === false ? " (externa)" : ""); }).join(", ") + ".</span> Esas copias no se cuentan en ningún resultado." : "<span class='ok'>Todo lo marcado cabe.</span>";
+  if (cap.sinTam) s += " Hay " + cap.sinTam + " copia(s) de activos sin tamaño en el caso: no se puede comprobar si caben.";
+  $("extinfo").innerHTML = s + " Más frecuencia o más retención también ocupan espacio; eso el simulador no lo calcula.";
+}
+
+/* ═════════ Resultado por activo ═════════ */
+function celdaCopia(r, ev){
+  if (r.efecto === "no") return ["<span class='ok'>El incidente no lo alcanza</span>", "—", "—"];
+  const cabe = r.noCabe ? " La copia " + (r.noCabe === "LE" ? "local y la externa no caben" : r.noCabe === "L" ? "local no cabe en el equipo" : "externa no cabe en su destino") + ": no se cuenta." : "";
+  if (!r.copia) return ["<span class='rojo-f'>Ninguna</span><small>" + (SINCOPIA[r.id] || "No queda copia que sirva.") + cabe + "</small>", "—", "<span class='rojo-f'>Todo</span>"];
+  let n = "";
+  const c = r.copia;
+  if (c.src === "honda" || c.src === "alterno") n = "Copia del " + fcorta(c.copia) + (c.sup ? " · fila supuesta del cuaderno" : "") + ". " + (c.src === "alterno" ? "Es el disco que volvió de Honda y aún no se ha sobrescrito: está en Girardot, no fuera del sitio. " : "") + "Nunca se ha leído uno de estos discos (Parte 16)." + (r.id === "sigabd" ? " Lleva el último volcado completo, el del domingo anterior." : r.id === "fin" ? " <b>Trae solo la base de datos</b>: las dos máquinas no están en el disco y la aplicación hay que reinstalarla; en otro servidor, la licencia tarda dos días hábiles (Parte 10). El caso no dice de cuándo es la base que se copia: se toma el día de la copia." : "");
+  if (c.src === "local" && c.fuera) n = "Fuera de la retención de 14 días. El informe aún lo lista como último punto válido (evidencia B); nadie ha probado restaurarlo. No hay ninguna copia dentro de la retención.";
+  if (c.src === "prov") n = "Nunca se ha pedido una restauración (Parte 8). El contrato no fija la hora de la copia: se toma la medianoche.";
+  return ["<b>" + FUENTE[c.src] + "</b>" + (n || cabe ? "<small>" + n + cabe + "</small>" : ""), fdh(c.t), "<b>" + dur(r.perdidoH) + "</b>"];
+}
+function tablaRes(ev){
+  let h = "<div class='scroll'><table><thead><tr><th>Activo</th><th>Copia que sobrevive</th><th>De qué fecha es</th><th class='num'>Datos perdidos</th><th class='num'>Tiempo real de recuperación</th><th>Faltan</th></tr></thead><tbody>";
+  ev.filas.forEach(function(r){
+    const a = act(r.id), cc = celdaCopia(r, ev);
+    const tt = r.efecto === "no" ? "—" : !r.copia ? "<span class='rojo-f'>No recuperable</span>" : tTexto(r.t);
+    h += "<tr" + (r.id === st.ref ? " class='ref'" : "") + "><td><b>" + a.n + "</b>" + (r.efecto === "nosabe" ? "<small>No se sabe si esa cuenta lo alcanza (Parte 16). Se muestra lo que pasaría si lo alcanza.</small>" : "") + "</td><td>" + cc[0] + "</td><td>" + cc[1] + "</td><td class='num'>" + cc[2] + "</td><td class='num'>" + tt + "</td><td>" + (r.t && r.copia && r.t.faltan ? "<span class='tg fal'>" + r.t.faltan + " de 6</span>" : "—") + "</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  if (ev.pendiente) h += "<div class='adv'><b>Una copia que el simulador no cuenta.</b> El " + fd(ev.T) + " había una copia más reciente, la del " + fcorta(ev.pendiente.c) + ", en un disco que el simulador todavía no da por llegado a Honda (cuenta desde el cierre del día del viaje). ¿La contarían ustedes? ¿Dónde estaba ese disco y quién respondía por él?</div>";
+  return h;
+}
+function detalle(r, ev, titulo){
+  const a = act(r.id);
+  if (r.efecto === "no") return "<div class='panel'><div class='et'>" + titulo + " · " + esc(a.n) + "</div>El incidente no alcanza a este activo. Elijan otro activo de referencia.</div>";
+  const nom = ["1 · Detección", "2 · Decisión", "3 · Plataforma", "4 · Restauración", "5 · Validación", "6 · Reconexión"];
+  let h = "<div class='panel'><div class='et'>" + titulo + " · " + esc(a.n) + " · los seis componentes</div><div class='scroll'><table><thead><tr><th>Componente</th><th class='num'>Tiempo</th><th>Origen</th><th>Nota</th></tr></thead><tbody>";
+  r.t.c.forEach(function(x, i){
+    h += "<tr><td><b>" + nom[i] + "</b></td><td class='num'>" + (x.min == null ? "—" : x.min === x.max ? dur(x.min) : "de " + dur(x.min) + " a " + dur(x.max)) + "</td><td><span class='tg " + x.tag + "'>" + TAG[x.tag] + "</span></td><td>" + esc(x.nota) + "</td></tr>";
+  });
+  h += "<tr class='ref'><td><b>Suma</b></td><td class='num'><b>" + (r.copia ? tTexto(r.t) : "No recuperable") + "</b></td><td colspan='2'>" + (r.copia ? (r.t.faltan >= 5 ? "Faltan " + r.t.faltan + " de 6 componentes: no hay base para estimar." : r.t.faltan ? "Es un piso: faltan " + r.t.faltan + " componentes por declarar." : "Los seis componentes están declarados.") : "Sin copia no hay de dónde restaurar: el dato se vuelve a crear o se pierde.") + "</td></tr></tbody></table></div>";
+  return h + linea(r, ev) + "</div>";
+}
+/* Línea de tiempo en SVG. La escala está comprimida (logarítmica) para que quepan horas y meses. */
+function linea(r, ev){
+  const det = r.t.c[0].min, tot = r.copia ? r.t.max : null, incompleto = r.t.faltan > 0;
+  const seg = [r.copia ? (ev.T - r.copia.t) / HORA : null, det, tot != null && det != null ? Math.max(0, tot - det) : null];
+  const an = seg.map(function(h){ return h == null ? 120 : 50 + 75 * Math.log10(1 + h); });
+  const k = 820 / (an[0] + an[1] + an[2]); let x = 60; const xs = [x];
+  an.forEach(function(w){ x += w * k; xs.push(x); });
+  const colV = tot == null ? "#A8321B" : incompleto ? "#5C5C5C" : "#1B6B47";
+  const pts = [
+    ["Última copia válida", r.copia ? fdh(r.copia.t) : "no hay", r.copia ? "#154361" : "#A8321B"],
+    [ev.R > ev.T ? "Empieza el daño" : "Incidente", fdh(ev.T), "#A8321B"],
+    ["Detección", det == null ? "sin declarar" : fdh(ev.T + det * HORA), "#C98A00"],
+    ["Vuelta al servicio", tot == null ? "no recuperable" : r.t.faltan >= 5 ? "sin estimar" : (incompleto ? "no antes del " : "") + fd(ev.T + r.t.min * HORA), colV]
+  ];
+  const et = [r.copia ? (ev.R > ev.T ? "copia sana, " + dur(seg[0]) + " antes" : "datos perdidos: " + dur(seg[0])) : "sin copia", det == null ? "¿?" : dur(det), tot == null ? "—" : r.t.faltan >= 5 ? "¿?" : (incompleto ? "al menos " : "") + dur(Math.max(0, r.t.min - (det || 0)))];
+  let s = "<svg class='lt' viewBox='0 0 940 150' role='img' aria-label='Línea de tiempo del incidente'>";
+  for (let i = 0; i < 3; i++){
+    const col = i === 0 ? "#A8321B" : i === 1 ? "#C98A00" : colV, dash = seg[i] == null || (i === 2 && incompleto) ? " stroke-dasharray='5 5'" : "";
+    s += "<line x1='" + xs[i].toFixed(1) + "' y1='75' x2='" + xs[i + 1].toFixed(1) + "' y2='75' stroke='" + col + "' stroke-width='5'" + dash + "/>";
+    s += "<text x='" + ((xs[i] + xs[i + 1]) / 2).toFixed(1) + "' y='66' font-size='11.5' font-weight='700' text-anchor='middle' fill='" + col + "'>" + esc(et[i]) + "</text>";
+  }
+  pts.forEach(function(p, i){
+    const arriba = i % 2 === 0, anc = i === 0 ? "start" : i === 3 ? "end" : "middle", px = i === 0 ? xs[i] - 8 : i === 3 ? xs[i] + 8 : xs[i];
+    s += "<circle cx='" + xs[i].toFixed(1) + "' cy='75' r='7' fill='" + p[2] + "' stroke='#fff' stroke-width='2'/>";
+    s += "<text x='" + px.toFixed(1) + "' y='" + (arriba ? 28 : 108) + "' font-size='12' font-weight='700' text-anchor='" + anc + "' fill='#15171C'>" + esc(p[0]) + "</text>";
+    s += "<text x='" + px.toFixed(1) + "' y='" + (arriba ? 43 : 123) + "' font-size='11' text-anchor='" + anc + "' fill='#4A505C'>" + esc(p[1]) + "</text>";
+  });
+  return s + "<text x='470' y='144' font-size='10' text-anchor='middle' fill='#5C5C5C'>" + (ev.R > ev.T && r.copia ? "datos perdidos hasta la detección: " + dur(r.perdidoH) + " · " : "") + "escala comprimida · una línea punteada es un tramo sin dato o incompleto</text></svg>";
+}
+
+function pintaR1(){
+  if (!st.v1){
+    $("res1").innerHTML = "<div class='espera'>Todavía no hay resultado. Elijan incidente y fecha, escriban su predicción y pulsen «Disparar el incidente».</div>";
+    $("res1b").innerHTML = ""; return;
+  }
+  const ev = evalua(esqA(), st.inc, T(), PAR(), cuad());
+  const r = ev.filas.filter(function(f){ return f.id === st.ref; })[0];
+  $("res1").innerHTML = "<div class='leyenda' style='margin-top:0'>" + INC[st.inc][0] + " · " + fdh(T()) + (st.inc === "d" ? " · detectado " + st.n + " días después" : "") + "</div>" + tablaRes(ev);
+  $("res1b").innerHTML = detalle(r, ev, "Esquema actual");
+}
+
+/* ═════════ Costos · Parte 11 ═════════ */
+function costos(esq){
+  const b = esquemaActual(), f = [], SC = "sin cotización en el caso";
+  if (esq.repoLocal.fueraDominio) f.push(["Repositorio fuera del dominio", "C2 · Repositorio de respaldo endurecido en sitio, fuera del dominio, 80 TB", 185, 0, "Ocho semanas"]);
+  if (esq.repoLocal.soloAnexar) f.push(["Repositorio de solo anexar / inmutable", SC + " · C2 dice «endurecido» y «fuera del dominio»; no dice si incluye solo anexar: hay que preguntarlo", null, null, "—"]);
+  if (esq.ext.tipo === "nube") f.push(["Copia fuera del sitio en nube", "C1 · Copia de respaldo inmutable en nube, 15 TB, con retención de 30 días", 12, 6.8, "Tres semanas"]);
+  if (esq.ext.tipo === "honda-fijo") f.push(["Disco a Honda con calendario que se cumple", SC + " · cada entrega son unas tres horas de carretera (Parte 17)", null, null, "—"]);
+  if (esq.ext.cifrada && esq.ext.tipo !== "ninguna") f.push(["Cifrar la copia externa", SC, null, null, "—"]);
+  if (esq.verif) f.push(["Verificación periódica de restauración", SC, null, null, "—"]);
+  if (esq.informes) f.push(["Revisión diaria de los informes, con suplente", SC, null, null, "—"]);
+  if (esq.soporte) f.push(["Soporte de la herramienta de respaldo", "C3 · Renovar el soporte de la herramienta de respaldo, tres años", 74, 0, "Dos semanas"]);
+  if (esq.plataforma === "C6") f.push(["Sitio alterno en Honda", "C6 · Adecuar el cuarto técnico de Honda como sitio alterno mínimo: un servidor, almacenamiento, aire y energía", 540, 4, "Cuatro meses"]);
+  if (esq.plataforma === "C4") f.push(["Recuperación como servicio", "C4 · Recuperación como servicio en nube para las ocho máquinas críticas y la base de SIGA, en espera tibia", 95, 46, "Diez semanas"]);
+  ACTIVOS.forEach(function(a){
+    const c = esq.activos[a.id], o = b.activos[a.id];
+    if (c.loc.on && !o.loc.on) f.push(["Incluir en la copia local: " + a.corto, SC + (a.id === "aula" ? " · el contrato con EduNube no prevé entrega periódica de copias (evidencia C)" : ""), null, null, "—"]);
+    if (c.loc.on && o.loc.on && (c.loc.frec !== o.loc.frec || c.loc.ret !== o.loc.ret)) f.push(["Cambiar frecuencia o retención: " + a.corto, SC + " · el equipo actual está al 91 % (Parte 8)", null, null, "—"]);
+    if (c.ext && !o.ext && esq.ext.tipo !== "ninguna") f.push(["Incluir en la copia externa: " + a.corto, SC + " · revisen la capacidad", null, null, "—"]);
+  });
+  return f;
+}
+function modalidad(m){ return m == null ? "—" : m <= 130 ? "Directa, con tres cotizaciones · 10 a 15 días hábiles" : m <= 650 ? "Invitación pública · 35 a 45 días hábiles" : m <= 1300 ? "Invitación pública · 45 a 60 días hábiles" : "Invitación pública con autorización previa · 60 a 90 días hábiles"; }
+function pintaCostos(){
+  const f = costos(st.prop); let inv = 0, men = 0;
+  let h = "<thead><tr><th>Decisión</th><th>Cotización de la Parte 11</th><th class='num'>Inversión</th><th class='num'>Mensual</th><th>Puesta en marcha</th><th>Contratación · cuantía supuesta: inversión más doce meses</th></tr></thead><tbody>";
+  if (!f.length) h += "<tr><td colspan='6'>El esquema propuesto es idéntico al actual: no hay nada que comprar ni que cambiar.</td></tr>";
+  f.forEach(function(x){
+    if (x[2] != null){ inv += x[2]; men += x[3]; }
+    h += "<tr><td><b>" + x[0] + "</b></td><td>" + (x[2] == null ? "<span class='tg fal'>sin cotización</span> " + x[1].replace("sin cotización en el caso", "").replace(/^ · /, "") : "<span class='tg cot'>cotizado</span> " + x[1]) + "</td><td class='num'>" + (x[2] == null ? "—" : "$" + num(x[2]) + " M") + "</td><td class='num'>" + (x[3] ? "$" + num(x[3]) + " M" : "—") + "</td><td>" + x[4] + "</td><td><small>" + modalidad(x[2] == null ? null : x[2] + 12 * x[3]) + "</small></td></tr>";
+  });
+  h += "<tr class='ref'><td colspan='2'><b>Suma de lo cotizado</b></td><td class='num'><b>$" + num(inv) + " M</b></td><td class='num'><b>" + (men ? "$" + num(men) + " M" : "—") + "</b></td><td colspan='2'>" + (inv > 450 ? "<span class='rojo-f'>Supera los $450 millones libres de 2027</span> (Parte 18): necesita adición y argumento." : "Dentro de los $450 millones libres de 2027 (Parte 18), sin contar el costo mensual.") + "</td></tr>";
+  $("costos").innerHTML = h + "</tbody>";
+  $("costosnota").innerHTML = "Precios indicativos, sin negociar (Parte 11). A cada plazo de puesta en marcha se le suma el tiempo de contratación; la modalidad se muestra para una cuantía igual a la inversión más doce mensualidades, que es un supuesto del simulador: el caso no dice a cuántos meses se contrataría cada servicio. Lo que no esté operando el 18 de enero de 2027 no protege la matrícula. «Sin cotización» no significa gratis: significa que el caso no trae el precio y que les toca estimarlo o pedirlo.";
+}
+
+/* ═════════ Comparativo ═════════ */
+function evs(){ const p = PAR(), c = cuad(); return [evalua(esqA(), st.inc, T(), p, c), evalua(esqP(), st.inc, T(), p, c)]; }
+function mini(r){
+  if (r.efecto === "no") return ["no lo alcanza", "—", "—"];
+  if (!r.copia) return ["<span class='rojo-f'>ninguna</span>", "<span class='rojo-f'>todo</span>", "<span class='rojo-f'>no recuperable</span>"];
+  return [FUENTE[r.copia.src].split(/[,·]/)[0] + "<small>" + fdh(r.copia.t) + "</small>", "<b>" + dur(r.perdidoH) + "</b>", tTexto(r.t) + (r.t.faltan ? "<small>faltan " + r.t.faltan + " de 6</small>" : "")];
+}
+function cumple(rp, o){
+  if (rp.efecto === "no" || (o.rpo == null && o.rto == null)) return "—";
+  const okP = o.rpo == null ? null : rp.copia != null && rp.perdidoH <= o.rpo;
+  const okT = o.rto == null ? null : !rp.copia ? false : rp.t.max > o.rto ? false : rp.t.faltan ? "piso" : true;
+  const tx = function(b, n){ return b == null ? "" : "<span class='" + (b === true ? "ok" : b === "piso" ? "mal" : "rojo") + "'>" + n + ": " + (b === true ? "sí" : b === "piso" ? "no se sabe, faltan componentes" : "no") + "</span>"; };
+  return [tx(okP, "punto"), tx(okT, "tiempo")].filter(Boolean).join("<br>");
+}
+function pintaR2(){
+  if (!st.v2){ $("res2").innerHTML = "<div class='espera'>Todavía no hay resultado con el esquema propuesto. Escriban su predicción y pulsen «Disparar con el esquema propuesto».</div>"; return; }
+  const e = evs();
+  let h = "<div class='scroll'><table class='comp'><thead><tr><th rowspan='2'>Activo</th><th colspan='3'>Esquema actual</th><th colspan='3'>Esquema propuesto</th><th colspan='2'>Objetivos de su entrega 1, en horas · si alcanza el tiempo</th><th rowspan='2'>¿El propuesto cumple?</th></tr>" +
+    "<tr><th>Copia</th><th class='num'>Perdido</th><th class='num'>Tiempo</th><th>Copia</th><th class='num'>Perdido</th><th class='num'>Tiempo</th><th>Punto</th><th>Tiempo</th></tr></thead><tbody>";
+  ACTIVOS.forEach(function(a, i){
+    const x = mini(e[0].filas[i]), y = mini(e[1].filas[i]), o = st.obj[a.id] || {};
+    h += "<tr" + (a.id === st.ref ? " class='ref'" : "") + "><td><b>" + a.corto + "</b></td><td>" + x[0] + "</td><td class='num'>" + x[1] + "</td><td class='num'>" + x[2] + "</td><td>" + y[0] + "</td><td class='num'>" + y[1] + "</td><td class='num'>" + y[2] + "</td>" +
+      "<td><input type='number' min='0' step='any' data-o='" + a.id + "' data-c='rpo' aria-label='Punto objetivo de " + a.corto + ", en horas' value='" + (o.rpo == null ? "" : o.rpo) + "' placeholder='—'></td><td><input type='number' min='0' step='any' data-o='" + a.id + "' data-c='rto' aria-label='Tiempo objetivo de " + a.corto + ", en horas' value='" + (o.rto == null ? "" : o.rto) + "' placeholder='—'></td><td id='cu-" + a.id + "'>" + cumple(e[1].filas[i], o) + "</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  const i = ACTIVOS.findIndex(function(a){ return a.id === st.ref; });
+  $("res2").innerHTML = h + "<div class='leyenda'>Incidente: " + INC[st.inc][0] + " · " + fdh(T()) + (st.inc === "d" ? " · detectado " + st.n + " días después" : "") + ". Cambios del esquema propuesto: " + esc(describe(st.prop)) + "</div>" +
+    detalle(e[0].filas[i], e[0], "Esquema actual") + detalle(e[1].filas[i], e[1], "Esquema propuesto");
+}
+function resumenEv(ev){
+  let sin = 0, peor = null;
+  ev.filas.forEach(function(r){ if (r.efecto === "no") return; if (!r.copia) sin++; else if (peor == null || r.perdidoH > peor) peor = r.perdidoH; });
+  return [sin, peor];
+}
+function pintaMatriz(){
+  const p = PAR(), c = cuad();
+  const verA = st.corridas.length > 0, verP = st.v2 && st.corridas.some(function(x){ return x.esq === "propuesto"; });
+  let h = "<thead><tr><th rowspan='2'>Incidente · " + fdh(T()) + "</th><th colspan='2'>Esquema actual</th><th colspan='2'>Esquema propuesto</th></tr><tr><th class='num'>Sin copia</th><th class='num'>Peor pérdida</th><th class='num'>Sin copia</th><th class='num'>Peor pérdida</th></tr></thead><tbody>";
+  Object.keys(INC).forEach(function(k){
+    const x = verA ? resumenEv(evalua(esqA(), k, T(), p, c)) : null, y = verP ? resumenEv(evalua(esqP(), k, T(), p, c)) : null;
+    h += "<tr" + (k === st.inc ? " class='ref'" : "") + "><td><b>" + INC[k][0] + "</b>" + (k === "d" ? "<small>n = " + st.n + " días</small>" : "") + "</td><td class='num'>" + (x ? x[0] + " de 9" : "¿?") + "</td><td class='num'>" + (x ? dur(x[1]) : "¿?") + "</td><td class='num'>" + (y ? y[0] + " de 9" : "¿?") + "</td><td class='num'>" + (y ? dur(y[1]) : "¿?") + "</td></tr>";
+  });
+  $("matriz").innerHTML = h + "</tbody>";
+}
+function pintaRegla(){
+  const A = esquemaActual(), P = st.prop, cab = ["Copias", "Medios", "Fuera", "Inmutable o aislada", "Verificadas"];
+  let h = "<thead><tr><th rowspan='2'>Activo</th><th colspan='5'>Esquema actual</th><th colspan='5'>Esquema propuesto</th></tr><tr>" + cab.concat(cab).map(function(c){ return "<th>" + c + "</th>"; }).join("") + "</tr></thead><tbody>";
+  const tot = [0, 0];
+  ACTIVOS.forEach(function(a){
+    h += "<tr><td><b>" + a.corto + "</b></td>";
+    [A, P].forEach(function(e, j){
+      const r = regla(e, a.id), s = semaforo(e, r), v = [r.copias, r.medios, r.fuera, r.inm, r.verif + " de " + r.resp];
+      if (s.every(function(x){ return x === "v"; })) tot[j]++;
+      v.forEach(function(x, i){ h += "<td><span class='sem " + s[i] + "'></span>" + x + "</td>"; });
+    });
+    h += "</tr>";
+  });
+  h += "<tr class='ref'><td><b>Activos que cumplen los cinco</b></td><td colspan='5'><b>" + tot[0] + " de 9</b></td><td colspan='5'><b>" + tot[1] + " de 9</b></td></tr>";
+  $("regla").innerHTML = h + "</tbody>";
+}
+function describe(esq){
+  const b = esquemaActual(), d = [];
+  if (esq.repoLocal.soloAnexar) d.push("repositorio de solo anexar");
+  if (esq.repoLocal.fueraDominio) d.push("repositorio fuera del dominio");
+  if (esq.ext.tipo !== b.ext.tipo || esq.ext.frec !== b.ext.frec) d.push("copia externa: " + ({ ninguna: "ninguna", "honda-cuaderno": "disco a Honda como hoy", "honda-fijo": "disco a Honda " + (esq.ext.frec === "semanal" ? "cada viernes" : "el primer viernes"), nube: "nube inmutable " + esq.ext.frec })[esq.ext.tipo]);
+  if (esq.ext.cifrada) d.push("copia externa cifrada");
+  if (esq.verif) d.push("verificación periódica");
+  if (esq.informes) d.push("informes revisados a diario");
+  if (esq.soporte) d.push("soporte renovado");
+  if (esq.plataforma !== "ninguna") d.push("plataforma " + esq.plataforma);
+  ACTIVOS.forEach(function(a){
+    const c = esq.activos[a.id], o = b.activos[a.id], FRT = { hora: "cada hora", "4h": "cada 4 h", diaria: "diaria", semanal: "semanal" };
+    if (c.loc.on !== o.loc.on) d.push(a.corto + (c.loc.on ? ": copia local " + FRT[c.loc.frec] + ", " + c.loc.ret + " días" : ": sin copia local"));
+    else if (c.loc.on && (c.loc.frec !== o.loc.frec || c.loc.ret !== o.loc.ret)) d.push(a.corto + ": " + FRT[c.loc.frec] + ", " + c.loc.ret + " días");
+    if (c.ext !== o.ext) d.push(a.corto + (c.ext ? ": entra a" : ": sale de") + " la copia externa");
+  });
+  return d.length ? d.join("; ") : "ninguno (igual al actual)";
+}
+
+/* ═════════ Ejercicio 3 ═════════ */
+function probabilidad(){ return Math.min(100, Math.max(0, +st.prob || 0)) / 100; }
+function calcE3(){
+  const e = evs(), pr = probabilidad();
+  return { e: e, pr: pr, ra: restaura(esqA(), e[0], st.sem, pr), rp: restaura(esqP(), e[1], st.sem, pr), ma: promedioSinLegible(esqA(), e[0], pr), mp: promedioSinLegible(esqP(), e[1], pr) };
+}
+function pintaR3(){
+  if (!st.v3){ $("res3").innerHTML = "<div class='espera'>Fijen la semilla y el porcentaje, y pulsen «Lanzar la restauración».</div>"; return; }
+  const x = calcE3();
+  const cel = function(r){
+    if (r.efecto === "no") return "<td>no lo alcanza</td><td class='num'>—</td>";
+    if (!r.intentos.length) return "<td><span class='rojo-f'>no había copia</span></td><td class='num'><span class='rojo-f'>todo</span></td>";
+    const t = r.intentos.map(function(i){ return FUENTE[i.src].split(/[,·]/)[0] + " del " + fcorta(i.t) + ": <span class='" + (i.legible ? "ok'>se lee" : "rojo'>ilegible") + "</span>"; }).join("<br>");
+    return "<td>" + t + "</td><td class='num'>" + (r.copia ? "<b>" + dur(r.perdidoH) + "</b>" : "<span class='rojo-f'>todo</span>") + "</td>";
+  };
+  let h = "<div class='scroll'><table><thead><tr><th rowspan='2'>Activo</th><th colspan='2'>Esquema actual</th><th colspan='2'>Esquema propuesto</th></tr><tr><th>Intentos de restauración</th><th class='num'>Datos perdidos</th><th>Intentos de restauración</th><th class='num'>Datos perdidos</th></tr></thead><tbody>";
+  ACTIVOS.forEach(function(a, i){ h += "<tr><td><b>" + a.corto + "</b></td>" + cel(x.ra[i]) + cel(x.rp[i]) + "</tr>"; });
+  h += "<tr class='ref'><td><b>Activos sin ninguna copia legible</b></td><td colspan='2'><b>" + sinLegible(x.ra) + " de 9</b> con esta semilla</td><td colspan='2'><b>" + sinLegible(x.rp) + " de 9</b> con esta semilla</td></tr></tbody></table></div>";
+  h += "<div class='leyenda'>Semilla <b>" + esc(st.sem) + "</b> · " + num(x.pr * 100, 0) + " % · " + INC[st.inc][0] + " · " + fdh(T()) + ". Verificación periódica en el propuesto: <b>" + (st.prop.verif ? "activada" : "no activada") + "</b>. " +
+       "Repetido con las cien semillas fijas «serie-1» a «serie-100», quedan sin ninguna copia legible, en promedio, <b>" + num(x.ma, 2) + "</b> activos con el esquema actual y <b>" + num(x.mp, 2) + "</b> con el propuesto. La cuenta incluye los activos que el incidente alcanza y que no tenían copia.</div>";
+  $("res3").innerHTML = h;
+}
+
+/* ═════════ Bitácora, CSV e impresión ═════════ */
+function supuestos(){ return { par: Object.assign({}, st.par), sup: st.sup.map(function(s){ return (s.h ? "1" : "0") + (s.v ? "1" : "0"); }).join(" "), reanuda: st.reanuda }; }
+function supTexto(s){
+  if (!s) return "";
+  const p = s.par, v = function(x){ return x == null ? "—" : num(x); };
+  return "detección en horario " + v(p.det) + " h; decisión " + v(p.dec) + " h; plataforma: " + p.platA + ", (c)/(d) " + v(p.platCD) + " h, sitio alterno " + v(p.act) + " h; validación " + v(p.val) + " h; reconexión " + v(p.rec) + " h; velocidades " + v(p.vLocal) + " / " + v(p.vDisco) + " / nube " + v(p.vNube) + " y " + v(p.vNubeAlt) + " MB/s; T3 vuelve el " + s.reanuda + "; cuaderno oct–ene (hecha, viajó): " + s.sup;
+}
+function registra(cual){
+  const prop = cual === "propuesto", ev = evalua(prop ? esqP() : esqA(), st.inc, T(), PAR(), cuad());
+  const r = ev.filas.filter(function(f){ return f.id === st.ref; })[0];
+  st.corridas.push({ esq: cual, cambios: prop ? describe(st.prop) : "esquema actual (Parte 8)", inc: st.inc, fecha: st.fecha, n: st.inc === "d" ? st.n : null, act: st.ref,
+    pp: prop ? st.pred.p2 : st.pred.p1, pt: prop ? st.pred.t2 : st.pred.t1, s: supuestos(),
+    copia: r.efecto === "no" ? "no lo alcanza" : r.copia ? FUENTE[r.copia.src] + " · " + fdh(r.copia.t) : "ninguna",
+    perd: r.copia ? Math.round(r.perdidoH * 100) / 100 : null, tmin: r.copia ? Math.round(r.t.min * 100) / 100 : null, tmax: r.copia ? Math.round(r.t.max * 100) / 100 : null, faltan: r.t ? r.t.faltan : null });
+  if (prop){ st.pred.p2 = st.pred.t2 = null; } else { st.pred.p1 = st.pred.t1 = null; }
+  guarda(); todo();
+  const c = $(prop ? "conf2" : "conf1"); c.textContent = "Corrida " + st.corridas.length + " registrada en la bitácora."; setTimeout(function(){ c.textContent = ""; }, 5000);
+}
+function registra3(){
+  const x = calcE3();
+  st.e3.push({ sem: st.sem, prob: Math.round(x.pr * 100), inc: st.inc, fecha: st.fecha, n: st.inc === "d" ? st.n : null, cambios: describe(st.prop), sa: sinLegible(x.ra), sp: sinLegible(x.rp), ma: x.ma, mp: x.mp,
+    det: ACTIVOS.map(function(a, i){ const f = function(r){ return r.efecto === "no" ? "no lo alcanza" : !r.intentos.length ? "sin copia" : r.intentos.map(function(q){ return q.src + (q.legible ? ": se lee" : ": ilegible"); }).join(", "); }; return a.corto + " — actual: " + f(x.ra[i]) + " · propuesto: " + f(x.rp[i]); }) });
+  guarda(); pintaBit();
+  const c = $("conf3"); c.textContent = "Resultado " + st.e3.length + " registrado."; setTimeout(function(){ c.textContent = ""; }, 5000);
+}
+function pintaBit(){
+  let h = "<thead><tr><th>#</th><th>Esquema, cambios y supuestos vigentes</th><th>Incidente y fecha</th><th>Activo</th><th class='num'>Predicho: perdido · tiempo</th><th>Copia que quedó</th><th class='num'>Medido: perdido</th><th class='num'>Medido: tiempo</th><th class='noimp'></th></tr></thead><tbody>";
+  if (!st.corridas.length) h += "<tr><td colspan='9'>Todavía no hay corridas registradas. Usen «Registrar esta corrida» en las rondas 1 y 2.</td></tr>";
+  st.corridas.forEach(function(c, i){
+    h += "<tr><td class='c'>" + (i + 1) + "</td><td><b>" + c.esq + "</b><small>" + esc(c.cambios) + "</small><small>Supuestos: " + esc(supTexto(c.s)) + "</small></td><td>" + INC[c.inc][0].slice(0, 3) + " " + fdh(leeFecha(c.fecha)) + (c.n ? "<small>detectado " + c.n + " días después</small>" : "") + "</td><td>" + act(c.act).corto + "</td>" +
+      "<td class='num'>" + (c.pp == null ? "<span class='rojo-f'>sin predicción</span>" : num(c.pp) + " h") + " · " + (c.pt == null ? "<span class='rojo-f'>sin predicción</span>" : num(c.pt) + " h") + "</td><td>" + esc(c.copia) + "</td>" +
+      "<td class='num'>" + (c.perd == null ? "—" : dur(c.perd)) + "</td><td class='num'>" + (c.tmin == null ? "—" : c.faltan >= 5 ? "sin estimar" : (c.faltan ? "al menos " : "") + (c.tmin === c.tmax ? dur(c.tmin) : dur(c.tmin) + " a " + dur(c.tmax))) + (c.faltan ? "<small>faltan " + c.faltan + " de 6</small>" : "") + "</td><td class='noimp'><button class='sec' data-del='" + i + "' aria-label='Quitar la corrida " + (i + 1) + "'>quitar</button></td></tr>";
+  });
+  $("bitac").innerHTML = h + "</tbody>";
+  h = "";
+  if (st.e3.length){
+    h = "<thead><tr><th>Ejercicio 3</th><th>Semilla y %</th><th>Incidente y fecha</th><th>Esquema propuesto</th><th class='num'>Sin copia legible · actual</th><th class='num'>· propuesto</th><th class='num'>Promedio en cien semillas</th><th class='noimp'></th></tr></thead><tbody>";
+    st.e3.forEach(function(c, i){
+      h += "<tr><td class='c'>" + (i + 1) + "</td><td>" + esc(c.sem) + " · " + c.prob + " %</td><td>" + INC[c.inc][0].slice(0, 3) + " " + fdh(leeFecha(c.fecha)) + (c.n ? "<small>detectado " + c.n + " días después</small>" : "") + "</td><td><small>" + esc(c.cambios) + "</small></td><td class='num'>" + c.sa + " de 9</td><td class='num'>" + c.sp + " de 9</td><td class='num'>" + num(c.ma, 2) + " · " + num(c.mp, 2) + "</td><td class='noimp'><button class='sec' data-del3='" + i + "' aria-label='Quitar el resultado " + (i + 1) + "'>quitar</button></td></tr>";
+    });
+    h += "</tbody>";
+  }
+  $("bitac3").innerHTML = h;
+}
+function csv(){
+  const L = [], q = function(v){ return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }, fila = function(){ L.push(Array.prototype.map.call(arguments, q).join(";")); };
+  const hh = function(v){ return v == null ? "" : String(Math.round(v * 100) / 100).replace(".", ","); };
+  const PK = ["det", "dec", "platA", "platCD", "act", "vLocal", "vDisco", "vNube", "vNubeAlt", "val", "rec"];
+  const PN = ["Detección en horario (h)", "Decisión (h)", "Plataforma si falla un equipo", "Equipos listos en (c) y (d) (h)", "Activación del sitio alterno (h)", "Lectura del equipo de respaldo (MB/s)", "Lectura del disco externo (MB/s)", "Bajada de nube desde Girardot (MB/s)", "Bajada de nube en (b) y (e) (MB/s)", "Validación (h)", "Reconexión (h)"];
+  const pv = function(p, k){ return typeof p[k] === "number" ? hh(p[k]) : (p[k] == null ? "" : p[k]); };
+  fila("SIO0013 · Laboratorio 3 · Respaldar, perder, restaurar y medir"); fila("Las horas van en decimales");
+  fila(""); fila("BITÁCORA DE CORRIDAS · cada fila lleva los supuestos vigentes cuando se registró");
+  fila.apply(null, ["#", "Esquema", "Cambios", "Incidente", "Fecha", "Días hasta detectar", "Activo", "Predicción perdido (h)", "Predicción tiempo (h)", "Copia que quedó", "Perdido (h)", "Tiempo mín (h)", "Tiempo máx (h)", "Componentes sin declarar"].concat(PN, ["T3 volvió a correr el", "Cuaderno oct–ene (hecha, viajó)"]));
+  st.corridas.forEach(function(c, i){ const s = c.s || { par: {}, sup: "", reanuda: "" }; fila.apply(null, [i + 1, c.esq, c.cambios, INC[c.inc][0], fdh(leeFecha(c.fecha)), c.n, act(c.act).n, hh(c.pp), hh(c.pt), c.copia, hh(c.perd), hh(c.tmin), hh(c.tmax), c.faltan].concat(PK.map(function(k){ return pv(s.par, k); }), [s.reanuda, s.sup])); });
+  fila(""); fila("EJERCICIO 3 · RESULTADOS REGISTRADOS");
+  fila("#", "Semilla", "Porcentaje", "Incidente", "Fecha", "Días hasta detectar", "Esquema propuesto", "Sin copia legible · actual", "Sin copia legible · propuesto", "Promedio cien semillas · actual", "Promedio cien semillas · propuesto", "Detalle por activo");
+  st.e3.forEach(function(c, i){ fila(i + 1, c.sem, c.prob, INC[c.inc][0], fdh(leeFecha(c.fecha)), c.n, c.cambios, c.sa, c.sp, hh(c.ma), hh(c.mp), c.det.join(" | ")); });
+  fila(""); fila("ESTADO VIGENTE AL EXPORTAR");
+  fila("Incidente", INC[st.inc][0]); fila("Fecha y hora", fdh(T())); if (st.inc === "d") fila("Días hasta la detección", st.n);
+  PK.forEach(function(k, i){ fila(PN[i], pv(st.par, k)); }); fila("T3 volvió a correr el", st.reanuda);
+  CUAD_SUP.forEach(function(e, i){ fila("Cuaderno, supuesto · " + e.mes, st.sup[i].h ? "copia el " + fd(e.c) : "no se hizo", st.sup[i].h && st.sup[i].v ? "viajó" : "no viajó"); });
+  fila("Esquema propuesto · cambios", describe(st.prop)); fila("Semilla", st.sem); fila("Porcentaje de copias no verificadas ilegibles", st.prob);
+  if (st.v1 || st.v2){
+    fila(""); fila("COMPARATIVO PARA EL INCIDENTE Y LA FECHA VIGENTES" + (st.v2 ? "" : " · el esquema propuesto aún no se ha disparado"));
+    fila("Activo", "Actual · copia", "Actual · fecha de la copia", "Actual · perdido (h)", "Actual · tiempo mín (h)", "Actual · tiempo máx (h)", "Actual · componentes sin declarar", "Propuesto · copia", "Propuesto · fecha de la copia", "Propuesto · perdido (h)", "Propuesto · tiempo mín (h)", "Propuesto · tiempo máx (h)", "Propuesto · componentes sin declarar", "Objetivo de punto (h)", "Objetivo de tiempo (h)");
+    const e = evs(), cols = function(r, ver){ return !ver ? ["", "", "", "", "", ""] : r.efecto === "no" ? ["no lo alcanza", "", "", "", "", ""] : !r.copia ? ["ninguna", "", "todo", "", "", ""] : [FUENTE[r.copia.src], fdh(r.copia.t), hh(r.perdidoH), hh(r.t.min), hh(r.t.max), r.t.faltan]; };
+    ACTIVOS.forEach(function(a, i){ const o = st.obj[a.id] || {}; fila.apply(null, [a.n].concat(cols(e[0].filas[i], st.v1 || st.v2), cols(e[1].filas[i], st.v2), [hh(o.rpo), hh(o.rto)])); });
+  }
+  fila(""); fila("REGLA 3-2-1-1-0"); fila("Activo", "Esquema", "Copias", "Medios", "Fuera", "Inmutables o aisladas", "Verificadas", "Copias de respaldo", "Semáforo (v cumple, a a medias, r no)");
+  ACTIVOS.forEach(function(a){ [["actual", esquemaActual()], ["propuesto", st.prop]].forEach(function(p){ const r = regla(p[1], a.id); fila(a.n, p[0], r.copias, r.medios, r.fuera, r.inm, r.verif, r.resp, semaforo(p[1], r).join(" ")); }); });
+  fila(""); fila("COSTOS DEL ESQUEMA PROPUESTO · PARTE 11"); fila("Decisión", "Cotización", "Inversión ($ M)", "Mensual ($ M)", "Puesta en marcha");
+  costos(st.prop).forEach(function(x){ fila(x[0], x[1], hh(x[2]), hh(x[3]), x[4]); });
+  fila(""); fila("CONCLUSIONES"); fila(st.notas);
+  return "﻿" + L.join("\r\n");
+}
+function verCsv(){ const a = $("csvtxt"); a.value = csv().slice(1); a.style.display = "block"; a.focus(); a.select(); }
+function descarga(){
+  try {
+    const b = new Blob([csv()], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(b); a.download = "Laboratorio-3-SIO0013-resultados.csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+    $("guardado").textContent = "Descarga pedida al navegador. Si no aparece el archivo, usen «Ver el CSV como texto».";
+  } catch (e) { verCsv(); $("guardado").textContent = "El navegador no permitió la descarga: el CSV quedó abajo, listo para copiar."; }
+}
+
+/* ═════════ Pintar y escuchar · los controles no se reconstruyen nunca ═════════ */
+function todo(){ pintaDemo(); valores(); pintaInfo(); pintaR1(); pintaCostos(); pintaR2(); pintaMatriz(); pintaRegla(); pintaR3(); pintaBit(); }
+function cambiaEscenario(){ st.v1 = st.v2 = st.v3 = false; st.pred = { p1: null, t1: null, p2: null, t2: null }; }
+function cambiaEsquema(){ st.v2 = st.v3 = false; st.pred.p2 = st.pred.t2 = null; }
+function aplicaFecha(el){
+  const msg = el.closest(".barra").querySelector(".fmsg"), t = leeFecha(el.value);
+  if (el.value === st.fecha){ msg.textContent = ""; return; }
+  if (t == null){ msg.textContent = "Fecha incompleta: escriban día, mes, año, hora y minutos."; return; }
+  if (t < FMIN || t > FMAX){ msg.textContent = "El simulador cubre del 14 de enero de 2026 al 31 de enero de 2027: antes no hay cuaderno y después no hay calendario."; return; }
+  $$(".fmsg").forEach(function(m){ m.textContent = ""; });
+  st.fecha = el.value.slice(0, 16); cambiaEscenario(); guarda(); todo();
+}
+function aplicaRean(){
+  const el = $("rean"), t = leeFecha(el.value);
+  if (el.value === st.reanuda){ $("reanmsg").textContent = ""; return; }
+  if (t == null || t < F(2026, 6, 25) || t > F(2026, 12, 31)){ $("reanmsg").textContent = "Entre el 25 de junio y el 31 de diciembre de 2026."; return; }
+  $("reanmsg").textContent = ""; st.reanuda = el.value; cambiaEscenario(); guarda(); todo();
+}
+document.addEventListener("focusout", function(ev){
+  const el = ev.target;
+  if (el.hasAttribute && el.hasAttribute("data-fecha")) aplicaFecha(el);
+  else if (el.id === "rean") aplicaRean();
+});
+document.addEventListener("keydown", function(ev){
+  if (ev.key !== "Enter") return;
+  if (ev.target.hasAttribute && ev.target.hasAttribute("data-fecha")) aplicaFecha(ev.target);
+  else if (ev.target.id === "rean") aplicaRean();
+});
+document.addEventListener("change", function(ev){
+  const el = ev.target;
+  if (el.hasAttribute("data-fecha") || el.id === "rean") return;                 // se aplican al salir del campo
+  if (el.hasAttribute("data-pre")){
+    if (el.value === "otra"){ const f = el.closest(".barra").querySelector("[data-fecha]"); f.focus(); return; }
+    st.fecha = el.value; cambiaEscenario();
+  }
+  else if (el.hasAttribute("data-k")){
+    const p = el.getAttribute("data-k").split(".");
+    let v = el.value;
+    if (el.type === "number") v = v === "" || isNaN(+v) || +v < 0 ? null : +v;
+    if (p[0] === "n"){ v = Math.min(120, Math.max(1, Math.round(v || 1))); el.value = v; }
+    if (p[0] === "prob"){ v = Math.min(100, Math.max(0, Math.round(v || 0))); el.value = v; }
+    if (p[0] === "par" && /^v/.test(p[1]) && v === 0) v = null;
+    if ((p[1] === "vLocal" || p[1] === "vDisco") && v == null){ v = p[1] === "vLocal" ? 95 : 140; el.value = v; }
+    if (p.length === 2) st[p[0]][p[1]] = v; else st[p[0]] = v;
+    if (p[0] === "inc" || p[0] === "n") cambiaEscenario();
+    if (p[0] === "sem" || p[0] === "prob") st.v3 = false;
+  }
+  else if (el.hasAttribute("data-sup")){ const s = st.sup[+el.getAttribute("data-sup")]; s[el.getAttribute("data-c")] = el.checked; if (!s.h) s.v = false; cambiaEscenario(); }
+  else if (el.id === "dgb" || el.id === "dv"){ st.demo[el.id === "dgb" ? "gb" : "v"] = +el.value > 0 ? +el.value : (el.id === "dv" ? 95 : 0); }
+  else if (el.hasAttribute("data-p")){
+    const p = el.getAttribute("data-p").split("."), v = el.type === "checkbox" ? el.checked : el.value;
+    if (p.length === 2) st.prop[p[0]][p[1]] = v; else st.prop[p[0]] = v;
+    cambiaEsquema();
+  }
+  else if (el.hasAttribute("data-a")){
+    const c = st.prop.activos[el.getAttribute("data-a")], f = el.getAttribute("data-f");
+    if (f === "on") c.loc.on = el.checked; else if (f === "ext") c.ext = el.checked; else if (f === "ret") c.loc.ret = +el.value; else c.loc.frec = el.value;
+    cambiaEsquema();
+  }
+  else if (el.hasAttribute("data-o")){                                             // solo se actualiza la celda «¿cumple?»
+    const id = el.getAttribute("data-o"); st.obj[id] = st.obj[id] || {};
+    st.obj[id][el.getAttribute("data-c")] = el.value === "" || isNaN(+el.value) ? null : +el.value;
+    const i = ACTIVOS.findIndex(function(a){ return a.id === id; });
+    $("cu-" + id).innerHTML = cumple(evs()[1].filas[i], st.obj[id]);
+    guarda(); return;
+  }
+  else return;
+  guarda(); todo();
+});
+document.addEventListener("click", function(ev){
+  const el = ev.target;
+  if (!el.hasAttribute) return;
+  if (el.hasAttribute("data-del")){ st.corridas.splice(+el.getAttribute("data-del"), 1); guarda(); pintaBit(); pintaMatriz(); }
+  else if (el.hasAttribute("data-del3")){ st.e3.splice(+el.getAttribute("data-del3"), 1); guarda(); pintaBit(); }
+  else if (el.hasAttribute("data-aplica")) aplicaFecha($(el.getAttribute("data-aplica")));
+});
+function mira(id){ const e = $(id); if (e.scrollIntoView) e.scrollIntoView({ behavior: "smooth", block: "start" }); }
+$("d95").addEventListener("click", function(){ st.demo.v = 95; guarda(); todo(); });
+$("d140").addEventListener("click", function(){ st.demo.v = 140; guarda(); todo(); });
+$("go1").addEventListener("click", function(){ st.v1 = true; guarda(); todo(); mira("res1"); });
+$("go2").addEventListener("click", function(){ st.v2 = true; guarda(); todo(); mira("res2"); });
+$("go3").addEventListener("click", function(){ st.v3 = true; guarda(); todo(); mira("res3"); });
+$("otra").addEventListener("click", function(){ st.sem = String(Math.floor(1000 + Math.random() * 9000)); st.v3 = true; guarda(); todo(); mira("res3"); });
+$("reg1").addEventListener("click", function(){ if (!st.v1){ $("conf1").textContent = "Primero disparen el incidente."; return; } registra("actual"); });
+$("reg2").addEventListener("click", function(){ if (!st.v2){ $("conf2").textContent = "Primero disparen con el esquema propuesto."; return; } registra("propuesto"); });
+$("reg3").addEventListener("click", function(){ if (!st.v3){ $("conf3").textContent = "Primero lancen la restauración."; return; } registra3(); });
+$("solo").addEventListener("click", function(){ st.prop = esquemaActual(); st.prop.repoLocal.soloAnexar = true; cambiaEsquema(); guarda(); todo(); });
+$("igual").addEventListener("click", function(){ st.prop = esquemaActual(); cambiaEsquema(); guarda(); todo(); });
+$("csv").addEventListener("click", descarga);
+$("csvver").addEventListener("click", verCsv);
+$("imp").addEventListener("click", function(){ window.print(); });
+$("borra").addEventListener("click", function(){
+  if (!confirm("Se borran el esquema propuesto, los supuestos, la bitácora y las conclusiones guardados en este navegador. ¿Continuar?")) return;
+  try { localStorage.removeItem(CLAVE); } catch (e) {}
+  st = inicial(); todo(); $("guardado").textContent = "Avance borrado.";
+});
+armaControles();
+todo();
+
+/* ═════════ Repaso ═════════ */
+montarQuiz("quiz", [
+ ["Solo guarda lo que cambió desde la copia anterior. Es pequeña y rápida, pero para restaurar hace falta toda la cadena, intacta y en orden.",
+  "Copia incremental", "T2 hace un completo los domingos e incrementales cada noche: restaurar un jueves exige el completo y todos los incrementales de la semana. Un eslabón dañado corta la cadena."],
+ ["Durante su plazo de retención nadie puede modificarla ni borrarla, ni siquiera el administrador. Pero si se pierde el sitio donde reside, se pierde con él.",
+  "Copia inmutable", "Protege del borrado y la sobrescritura con cualquier cuenta. No protege de copiar datos ya dañados, de un plazo mal configurado ni de la pérdida del sitio. El repositorio de solo anexar es su versión sencilla."],
+ ["No hay camino lógico ni físico hasta ella desde la red de producción. Su riesgo no es que la borren: es que esté desactualizada, se pierda o ya nadie la pueda leer.",
+  "Copia aislada", "El disco de Honda es aislado, pero parcial, irregular y sin cifrar. Las 34 cintas de la caja fuerte de Tesorería también son aisladas, y ningún equipo de la universidad puede leerlas (evidencia D)."],
+ ["Un borrado hecho a las 10:00 en el sitio principal aparece en el segundo sitio un segundo después.",
+  "Replicación", "Da disponibilidad, no historia. Copia también el borrado y la corrupción, y por eso no reemplaza al respaldo: todo patrón de recuperación, incluido el activo-activo, lleva además copias con retención."],
+ ["La antigüedad de la copia más reciente que sobrevive al incidente y se deja leer. No se declara: se mide.",
+  "Punto real de recuperación", "El punto objetivo lo fija el análisis de impacto; el real lo determina el esquema. Con el cuaderno de 2026, para la base de SIGA y sin el cuarto, llegó a ser de más de dos meses."],
+ ["Demuestra que la copia se puede leer completa y que no está dañada. No demuestra que el sistema arranque, ni cuánto tarda en volver.",
+  "Verificación de integridad", "Es el nivel 2 de cinco. Que el trabajo termine «correcto» es el nivel 1 y solo prueba que algo se escribió. El tiempo real de recuperación solo lo da el nivel 5: recuperar el conjunto, con cronómetro."]
+], ["Copia completa", "Copia incremental", "Copia inmutable", "Copia aislada", "Replicación", "Punto real de recuperación", "Verificación de integridad", "Restauración del conjunto con cronómetro"], "qver", "qreset", "qmarca");
+</script>
+
+</body>
+</html>

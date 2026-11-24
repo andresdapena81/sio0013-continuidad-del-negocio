@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio 2 · SIO0013 Continuidad del negocio</title>
+<style>
+/* Hoja común de los laboratorios de SIO0010. Misma identidad del laboratorio 1.
+   Al final está la hoja de impresión: el PDF de cada laboratorio sale de este mismo archivo. */
+:root{
+  --naranja:#F36406; --naranja-lav:#FDEFE9; --azul:#154361; --azul-lav:#E9F0F5;
+  --tinta:#15171C; --tinta-2:#4A505C; --gris:#5C5C5C; --papel:#FFFFFF; --papel-2:#F4F4F4;
+  --linea:#D8DBDF; --linea-suave:#E9EBEE; --verde:#1B6B47; --verde-lav:#E1F0E8;
+  --rojo:#A8321B; --rojo-lav:#FBEAE6;
+  --mono:"Consolas","Cascadia Mono",ui-monospace,monospace;
+  --sans:Arial,Helvetica,sans-serif; --titular:"Arial Black",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel-2);color:var(--tinta);font-family:var(--sans);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 80px;background:var(--papel)}
+header.top{padding:26px 0 0}
+.marca{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.marca img{height:40px;width:auto}
+.regla{height:5px;background:var(--tinta);margin:0 0 12px}
+.kicker{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.20em;text-transform:uppercase;color:var(--gris)}
+h1{font-family:var(--titular);font-size:38px;line-height:1.1;margin:8px 0 14px;letter-spacing:-.01em}
+.lead{font-size:16px;color:var(--tinta-2);max-width:78ch}
+.aviso{border-left:4px solid var(--naranja);background:var(--naranja-lav);padding:12px 16px;margin:18px 0}
+.aviso b{color:var(--tinta)}
+.adv{border-left:4px solid var(--rojo);background:var(--rojo-lav);padding:12px 16px;margin:16px 0;font-size:14.5px;color:var(--tinta-2)}
+.adv b{color:var(--rojo)}
+section{margin-top:44px;scroll-margin-top:16px}
+.sec-h{border-top:4px solid var(--tinta);padding-top:10px;margin-bottom:16px}
+.sec-n{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--naranja)}
+h2{font-family:var(--titular);font-size:25px;margin:6px 0 0;letter-spacing:-.01em}
+h3{font-size:16px;margin:22px 0 8px}
+.nav{position:sticky;top:0;background:var(--papel);border-bottom:1px solid var(--linea);padding:10px 0;z-index:9;display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--gris);border:1px solid var(--linea);padding:5px 9px;border-radius:2px}
+.nav a:hover{color:var(--naranja);border-color:var(--naranja)}
+.panel{border:1px solid var(--linea);border-radius:3px;padding:16px;margin:14px 0;background:var(--papel)}
+.et{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--azul);margin-bottom:7px}
+textarea,input[type=text],input[type=number],select{width:100%;font-family:var(--mono);font-size:13px;padding:9px 11px;border:1px solid var(--linea);border-radius:2px;background:var(--papel);color:var(--tinta);resize:vertical}
+textarea{min-height:72px}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.fila label{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);font-weight:700}
+button{font-family:var(--sans);font-size:13px;font-weight:700;padding:8px 15px;border:1px solid var(--tinta);background:var(--tinta);color:#fff;border-radius:2px;cursor:pointer}
+button:hover{background:var(--naranja);border-color:var(--naranja)}
+button.sec{background:transparent;color:var(--tinta)}
+button.sec:hover{color:var(--naranja)}
+button:disabled{opacity:.45;cursor:default}
+input[type=range]{flex:1;min-width:190px;accent-color:var(--naranja)}
+.sal{font-family:var(--mono);font-size:13px;background:var(--papel-2);border:1px solid var(--linea-suave);border-radius:2px;padding:11px 13px;white-space:pre-wrap;word-break:break-word;min-height:42px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.dos,.tres{grid-template-columns:1fr}}
+.imgs{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:8px}
+.imgs figure{margin:0;text-align:center}
+.imgs img{width:230px;height:230px;image-rendering:pixelated;border:1px solid var(--linea)}
+.imgs figcaption{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);margin-top:8px;line-height:1.5}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:8px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--azul);padding:7px 9px;font-weight:700}
+td{padding:6px 9px;border-bottom:1px solid var(--linea-suave);color:var(--tinta-2);vertical-align:top}
+td b{color:var(--tinta)}
+.leyenda{font-family:var(--mono);font-size:10.5px;color:var(--gris);margin-top:14px;line-height:1.7}
+.ok{color:var(--verde);font-weight:700}
+.mal{color:var(--naranja);font-weight:700}
+.rojo{color:var(--rojo);font-weight:700}
+details{border:1px solid var(--linea);border-radius:2px;padding:10px 14px;margin-top:12px;background:var(--papel-2)}
+summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--azul)}
+details p{margin:9px 0 0;font-size:14px;color:var(--tinta-2)}
+details p:first-of-type{margin-top:10px}
+
+/* bloque de comandos con botón de copiar */
+.cmd{position:relative;background:#15171C;border-radius:3px;padding:13px 15px;margin:11px 0;overflow-x:auto}
+.cmd pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:#E8EAED;white-space:pre}
+.cmd .c{color:#8A9199}
+.cmd .n{color:#F0A26A}
+.cmd .copiar{position:absolute;top:8px;right:8px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;background:transparent;color:#8A9199;border:1px solid #3A3F47}
+.cmd .copiar:hover{color:#fff;background:transparent;border-color:#8A9199}
+.cmd-t{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--azul);margin:16px 0 -4px}
+
+/* pasos numerados */
+ol.pasos{margin:12px 0 0;padding:0;list-style:none;counter-reset:pp}
+ol.pasos li{counter-increment:pp;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--linea-suave)}
+ol.pasos li:last-child{border-bottom:0}
+ol.pasos li::before{content:counter(pp);flex:0 0 22px;height:22px;border-radius:50%;background:var(--azul);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+ol.pasos li b{display:block;color:var(--tinta)}
+ol.pasos li span{font-size:14.5px;color:var(--tinta-2)}
+
+/* tarjetas */
+.tarj{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;background:var(--papel)}
+.tarj.fill{background:var(--papel-2)}
+.tarj.az{background:var(--azul-lav);border-color:#C6D5E0}
+.tarj.na{background:var(--naranja-lav);border-color:#F5CFBF}
+.tarj h4{margin:0 0 5px;font-size:14px}
+.tarj p{margin:0;font-size:13.5px;color:var(--tinta-2)}
+
+/* entregable */
+.ent{border:2px solid var(--tinta);border-radius:3px;padding:15px 17px;margin-top:16px}
+.ent .et{color:var(--naranja)}
+.ent ul{margin:8px 0 0;padding-left:19px;font-size:14.5px;color:var(--tinta-2)}
+.ent li{margin-bottom:5px}
+
+/* casillas de verificación */
+ul.chk{margin:10px 0 0;padding:0;list-style:none}
+ul.chk li{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--linea-suave);font-size:14.5px;color:var(--tinta-2)}
+ul.chk li:last-child{border-bottom:0}
+ul.chk li::before{content:"";flex:0 0 13px;height:13px;border:1.5px solid var(--azul);border-radius:2px;margin-top:4px}
+
+/* repaso */
+.preg{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;margin-bottom:9px}
+.preg .q{font-weight:700;margin-bottom:8px}
+.preg .ops{display:flex;gap:7px;flex-wrap:wrap}
+.preg .ops button{font-size:12px;padding:6px 11px;background:transparent;color:var(--tinta);border-color:var(--linea)}
+.preg .ops button.elegida{background:var(--azul);color:#fff;border-color:var(--azul)}
+.preg .fb{margin-top:9px;font-size:13.5px;display:none}
+
+footer{margin-top:54px;border-top:1px solid var(--linea);padding-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* ───────────────────────── impresión ─────────────────────────
+   El PDF de cada laboratorio se genera de este mismo archivo. */
+@media print{
+  @page{ size:A4; margin:15mm 14mm 14mm }
+  body{background:#fff;font-size:10.2pt;line-height:1.45}
+  .wrap{max-width:none;padding:0;background:#fff}
+  .nav{display:none}
+  button,input[type=range],.copiar{display:none!important}
+  h1{font-size:25pt}
+  h2{font-size:15pt}
+  h3{font-size:11.5pt}
+  .lead{font-size:10.6pt;max-width:none}
+  section{margin-top:18pt;page-break-inside:auto}
+  .sec-h{page-break-after:avoid}
+  .panel,.tarj,.ent,.preg,.adv,.aviso,details,.cmd{page-break-inside:avoid}
+  .cmd{background:#F4F4F4;border:.7pt solid var(--linea)}
+  .cmd pre{color:#15171C;font-size:8.6pt}
+  .cmd .c{color:#6A7078}
+  .cmd .n{color:#A8321B}
+  .sal{min-height:0;font-size:8.6pt}
+  .inter .sal{display:none}
+  .inter::after{content:"Panel interactivo · ábralo en el navegador para ejecutarlo";display:block;font-family:var(--mono);font-size:8.4pt;letter-spacing:.06em;color:var(--gris);border-top:.7pt solid var(--linea-suave);margin-top:8px;padding-top:7px}
+  details{background:#fff}
+  details summary{list-style:none;color:var(--azul)}
+  details summary::-webkit-details-marker{display:none}
+  table{font-size:9pt}
+  th{padding:5px 7px;font-size:7.4pt}
+  td{padding:4.5px 7px}
+  .imgs img{width:150px;height:150px}
+  footer{margin-top:20pt;font-size:8pt}
+  a{color:inherit;text-decoration:none}
+}
+
+</style>
+</head>
+<body>
+<script>
+/* Utilidades comunes de los laboratorios (heredadas de SIO0010, usadas en SIO0013).
+   Todo ocurre en el navegador: no hay peticiones de red. Cada laboratorio guarda su avance en el almacenamiento local. */
+
+const $  = id => document.getElementById(id);
+const $$ = sel => Array.prototype.slice.call(document.querySelectorAll(sel));
+
+/* ---------- bytes, hexadecimal y texto ---------- */
+const UTF8 = new TextEncoder();
+const DEC  = new TextDecoder();
+
+function bytes(txt){ return UTF8.encode(txt); }
+function texto(buf){ return DEC.decode(buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf); }
+function hex(buf){
+  const b = buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf;
+  return Array.prototype.map.call(b, v => v.toString(16).padStart(2, "0")).join("");
+}
+function desdeHex(s){
+  s = (s || "").replace(/[^0-9a-fA-F]/g, "");
+  const b = new Uint8Array(s.length >> 1);
+  for (let i = 0; i < b.length; i++) b[i] = parseInt(s.substr(i * 2, 2), 16);
+  return b;
+}
+function aleatorio(n){ const b = new Uint8Array(n); crypto.getRandomValues(b); return b; }
+function bloques(h, n){ return (h.match(new RegExp(".{1," + (n * 2) + "}", "g")) || []).join(" "); }
+
+/* ---------- copiar bloques de comandos ---------- */
+function montarCopias(){
+  $$(".cmd").forEach(function(caja){
+    if (caja.querySelector(".copiar")) return;
+    const b = document.createElement("button");
+    b.className = "copiar"; b.type = "button"; b.textContent = "copiar";
+    b.addEventListener("click", function(){
+      const t = caja.querySelector("pre").innerText;
+      const listo = function(){ b.textContent = "copiado"; setTimeout(function(){ b.textContent = "copiar"; }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(listo, function(){ manual(t, listo); });
+      } else { manual(t, listo); }
+    });
+    caja.appendChild(b);
+  });
+  function manual(t, listo){          // sin permiso de portapapeles: selección manual
+    const a = document.createElement("textarea");
+    a.value = t; a.style.position = "fixed"; a.style.opacity = "0";
+    document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); listo(); } catch (e) {}
+    document.body.removeChild(a);
+  }
+}
+
+/* ---------- repaso de opción múltiple ----------
+   preguntas: [[enunciado, respuesta, explicación], ...]   ·   opciones: ["A", "B", ...] */
+function montarQuiz(cont, preguntas, opciones, idVer, idReset, idMarca){
+  const caja = $(cont);
+  const elegido = {};
+
+  function pinta(){
+    caja.innerHTML = "";
+    preguntas.forEach(function(p, i){
+      const d = document.createElement("div"); d.className = "preg";
+      const q = document.createElement("div"); q.className = "q"; q.textContent = (i + 1) + ". " + p[0];
+      const ops = document.createElement("div"); ops.className = "ops";
+      opciones.forEach(function(o){
+        const b = document.createElement("button"); b.type = "button"; b.textContent = o;
+        if (elegido[i] === o) b.className = "elegida";
+        b.addEventListener("click", function(){ elegido[i] = o; pinta(); marca(); });
+        ops.appendChild(b);
+      });
+      const fb = document.createElement("div"); fb.className = "fb"; fb.id = cont + "-fb" + i;
+      d.appendChild(q); d.appendChild(ops); d.appendChild(fb);
+      caja.appendChild(d);
+    });
+  }
+  function marca(){
+    const n = Object.keys(elegido).length;
+    if (idMarca) $(idMarca).textContent = n ? n + " de " + preguntas.length + " respondidas" : "";
+  }
+  function ver(){
+    preguntas.forEach(function(p, i){
+      const fb = $(cont + "-fb" + i);
+      const bien = elegido[i] === p[1];
+      fb.style.display = "block";
+      fb.innerHTML = '<span class="' + (bien ? "ok" : "mal") + '">' + (bien ? "Correcto" : "Respuesta: " + p[1]) +
+                     '</span> · <span style="color:var(--tinta-2)">' + p[2] + "</span>";
+    });
+  }
+  function reinicia(){ for (const k in elegido) delete elegido[k]; pinta(); marca(); }
+
+  if (idVer)   $(idVer).addEventListener("click", ver);
+  if (idReset) $(idReset).addEventListener("click", reinicia);
+  pinta();
+}
+
+/* ---------- cronómetro ---------- */
+async function cronometra(fn){
+  const t = performance.now();
+  const r = await fn();
+  return { ms: performance.now() - t, r: r };
+}
+function ms(v){ return v >= 1000 ? (v / 1000).toFixed(2) + " s" : v.toFixed(1) + " ms"; }
+
+/* ---------- impresión: los desplegables salen abiertos ---------- */
+function abreTodo(){ $$("details").forEach(function(d){ d.open = true; }); }
+window.addEventListener("beforeprint", abreTodo);
+if (window.matchMedia) {
+  const mq = window.matchMedia("print");
+  if (mq.addEventListener) mq.addEventListener("change", function(e){ if (e.matches) abreTodo(); });
+}
+
+document.addEventListener("DOMContentLoaded", montarCopias);
+
+</script>
+<style>
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:12px 0}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{border:1px solid var(--linea);border-top:3px solid var(--tinta);padding:9px 11px;background:var(--papel)}
+.kpi.na{border-top-color:var(--naranja)}
+.kpi .v{font-family:var(--titular);font-size:21px;line-height:1.15}
+.kpi .l{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-top:4px;line-height:1.45}
+.cad{display:flex;flex-wrap:wrap;align-items:center;gap:0;margin:12px 0 4px;row-gap:10px}
+.esl{border:1.6px solid var(--tinta);padding:7px 10px;min-width:104px;max-width:170px;background:var(--papel)}
+.esl .en{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);line-height:1.35}
+.esl .ev{font-family:var(--titular);font-size:16px}
+.esl.debil{border-color:var(--naranja)} .esl.debil .ev{color:var(--naranja)}
+.esl.sd{border-style:dashed} .esl.sd .ev{color:var(--rojo);font-size:13px}
+.con{width:20px;height:2px;background:var(--tinta);flex:0 0 20px}
+.par{border:1.6px dashed var(--azul);padding:5px;display:flex;flex-direction:column;gap:4px;background:var(--azul-lav)}
+.par .pt{font-family:var(--mono);font-size:9.5px;font-weight:700;color:var(--azul);letter-spacing:.06em;text-transform:uppercase;line-height:1.35;max-width:170px}
+.par.nop{border-color:var(--rojo);background:var(--rojo-lav)} .par.nop .pt{color:var(--rojo)}
+table.ed td{vertical-align:middle;padding:4px 5px}
+table.ed input[type=text]{padding:6px 8px;font-size:12.5px}
+table.ed select{padding:6px 6px;font-size:12px}
+table.ed tr.sub td{background:var(--azul-lav);border-bottom:1px solid #C6D5E0}
+table.ed .nn{font-family:var(--mono);font-weight:700;color:var(--gris);width:26px}
+button.mini{font-size:11px;padding:4px 8px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font-size:11.5px;padding:5px 9px;background:transparent;color:var(--tinta);border-color:var(--linea)}
+.chips button:hover{color:var(--naranja);border-color:var(--naranja);background:transparent}
+.tw2{overflow-x:auto}
+table.cot{font-size:12.3px}
+table.cot td,table.cot th{padding:5px 6px}
+table.cot td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.cot .peq{display:block;font-size:10.8px;color:var(--gris);line-height:1.35;margin-top:2px}
+table.cot tr.sel td{background:var(--naranja-lav)}
+table.cot input[type=text]{width:58px;padding:3px 5px;font-size:12px;display:inline-block}
+.si{color:var(--verde);font-weight:700} .no{color:var(--rojo);font-weight:700} .sdato{color:var(--rojo);font-weight:700}
+.sup{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--azul);padding:1px 6px;border-radius:2px;white-space:nowrap}
+.sup.na{background:var(--naranja)}
+.cita{border:1px solid var(--linea);border-left:4px solid var(--azul);background:var(--papel-2);padding:11px 15px;margin:12px 0;font-size:14.5px;color:var(--tinta-2)}
+.cita .et{margin-bottom:5px}
+.can label{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11.5px;margin:0 8px 4px 0;white-space:nowrap}
+.can input[type=text],.can textarea{margin-bottom:7px}
+.can .et{margin-top:8px}
+.barra{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border:2px solid var(--tinta);padding:10px 12px;margin:18px 0}
+.barra input[type=text]{width:auto;flex:1;min-width:200px}
+label.ck{display:inline-flex;gap:6px;align-items:center;font-family:var(--sans)!important;font-size:13px!important;text-transform:none!important;letter-spacing:0!important;color:var(--tinta-2)!important;font-weight:400!important}
+input[type=date]{font-family:var(--mono);font-size:13px;padding:7px 9px;border:1px solid var(--linea);border-radius:2px}
+.soloimp{display:none}
+input.inval{border-color:var(--rojo)!important;background:var(--rojo-lav)}
+.sup.rj{background:var(--rojo)}
+.cs{color:#B34A00;font-weight:700}
+.msg{font-size:12.5px;color:var(--rojo);font-weight:700}
+.tw2.alto{max-height:74vh;overflow:auto;border-bottom:1px solid var(--linea)}
+.tw2.alto thead th{position:sticky;top:0;z-index:2}
+details.opc{margin-top:8px;padding:7px 10px}
+details.opc summary{font-size:12px}
+#csvbox{display:none;margin:10px 0}
+#csvtxt{min-height:150px;font-size:11.5px;white-space:pre}
+.fijo{font-size:14.5px;color:var(--tinta-2);margin:4px 0 8px}
+.fijo b{color:var(--tinta)}
+tr[hidden]{display:none}
+@media print{
+  .noimp,.chips,details,#d1,#e4,#ent,.barra,#csvbox,#e2.vacia{display:none!important}
+  .soloimp{display:block}
+  ::placeholder{color:transparent!important}
+  header.top{padding-top:0} .marca{margin-bottom:5px} .marca img{height:24px}
+  .regla{height:2px;margin-bottom:5px} .kicker{font-size:6.6pt}
+  h1{font-size:14pt!important;margin:3px 0}
+  #imp-equipo{font-size:10pt;font-weight:700;border:.8pt solid var(--tinta);padding:4px 7px;margin:4px 0}
+  section{margin-top:7pt!important}
+  .sec-h{border-top-width:2px;padding-top:3px;margin-bottom:3px} .sec-n{font-size:6.4pt}
+  h2{font-size:10.5pt!important;margin:1px 0 0} h3{font-size:9.5pt;margin:4px 0 2px}
+  .panel{border:0;padding:0;margin:3px 0}
+  .et{font-size:6.4pt;margin:5px 0 2px!important}
+  .kpis{grid-template-columns:repeat(5,1fr);gap:4px;margin:4px 0}
+  .kpi{padding:3px 5px;border-top-width:2px} .kpi .v{font-size:10pt!important} .kpi .l{font-size:5.6pt;margin-top:1px}
+  .cad{margin:3px 0;row-gap:4px} .con{width:9px;flex-basis:9px}
+  .esl{padding:2px 5px;min-width:0} .esl .ev{font-size:9pt} .esl .en{font-size:5.6pt}
+  .par{padding:3px;gap:2px} .par .pt{font-size:5.6pt}
+  .leyenda{font-size:6.2pt;margin-top:3px;line-height:1.4}
+  .sal{font-size:7pt;padding:4px 6px;line-height:1.32;min-height:0}
+  #c1-res .adv,#c1-res .aviso{display:none}
+  .tw2,.tw2.alto{overflow:visible;max-height:none;border:0}
+  .tw2.alto thead th{position:static}
+  table.cot{font-size:7pt;margin-top:3px} table.cot td,table.cot th{padding:2px 4px} table.cot th{font-size:5.8pt}
+  table.cot .peq{font-size:6pt;line-height:1.25}
+  @page{ size:A4; margin:10mm 12mm }
+  #e2 .tw2,#e2 .kpis,#e2-sup,#e2 .sec-n,#e2 h2,#e2 .imptx,#e2 .et.j,#c1-res .kpis,#c1-dia .leyenda,.kicker,.sec-n,#e1 h3{display:none!important}
+  #e2 .sec-h{border:0;padding:0;margin:0}
+  .panel{page-break-inside:auto!important}
+  table.cot td{padding:1.5px 4px!important}
+  footer{display:none}
+  .marca img{height:18px!important}
+  .imptx{font-size:7.6pt!important;line-height:1.3!important}
+  #e3-tab th:first-child{width:26%!important}
+  .imptx{font-size:8.2pt;line-height:1.35;white-space:pre-wrap;border:.6pt solid var(--linea);padding:3px 6px;color:var(--tinta)}
+  .fijo{font-size:8pt;margin:2px 0}
+  footer{margin-top:7pt;padding-top:4px;font-size:6.4pt}
+}
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="marca"><img src="data:image/png;base64,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" alt="Institución Universitaria de Envigado"></div>
+  <div class="regla"></div>
+  <div class="kicker">SIO0013 · Continuidad del negocio y recuperación de desastres · Laboratorio 2 · Sesión 3 · martes 20 de octubre de 2026</div>
+  <h1>Disponibilidad compuesta y costo de las estrategias</h1>
+  <div class="soloimp" id="imp-equipo"></div>
+  <p class="lead noimp">Cincuenta y cinco minutos, en el bloque B: cinco de demostración, veinte para la cadena, doce para el costo, trece para las tres alternativas y cinco para exportar y entregar. Trabajan sobre la cadena de matrícula de la Universidad Pedagógica Colombiana con la disponibilidad medida de la Parte 17 y las catorce cotizaciones de la Parte 11. El archivo funciona sin red y sin instalar nada: todo se calcula en este navegador. Mínimo un portátil por equipo.</p>
+  <div class="aviso noimp"><b>Lo que el laboratorio no hace por ustedes.</b> Calcula; no decide. La topología —qué va en serie, qué va en paralelo y qué comparte causa de falla— la ponen ustedes, y es donde está la nota. Cada número que escriban y no venga del caso es un <b>supuesto</b>: se declara al lado del resultado, con su fuente.</div>
+  <div class="barra noimp">
+    <input type="text" id="equipo" placeholder="Equipo e integrantes" spellcheck="false">
+    <button id="bcsv">Exportar a CSV</button>
+    <button id="bcsvtxt" class="sec">Ver el CSV como texto</button>
+    <button id="bimp" class="sec">Imprimir o guardar como PDF</button>
+    <button id="bborra" class="sec">Borrar avance</button>
+    <span class="leyenda" style="margin:0" id="guardado">El avance se guarda solo en este navegador.</span>
+  </div>
+  <div id="csvbox" class="noimp"><div class="msg" id="csvmsg"></div><textarea id="csvtxt" readonly spellcheck="false" aria-label="Contenido del CSV para copiar"></textarea></div>
+</header>
+
+<nav class="nav">
+  <a href="#d1">Demo · Del porcentaje a las horas</a>
+  <a href="#e1">Ejercicio 1 · La cadena</a>
+  <a href="#e2">Ejercicio 2 · El costo</a>
+  <a href="#e3">Ejercicio 3 · Tres alternativas</a>
+  <a href="#e4">Repaso</a>
+  <a href="#ent">Qué se entrega</a>
+</nav>
+
+<!-- ───────────── DEMO ───────────── -->
+<section id="d1">
+  <div class="sec-h"><div class="sec-n">Demostración · 5 minutos</div><h2>Del porcentaje a las horas de caída, y al revés</h2></div>
+  <p class="lead">Caída permitida = (1 − disponibilidad) × horas del periodo. Un mes de 30 días tiene 720 horas; un año de 365 días, 8.760. Escriban un porcentaje, o escriban las horas de caída y vean qué porcentaje resulta.</p>
+
+  <div class="panel">
+    <div class="dos">
+      <div>
+        <div class="et">Del porcentaje a las horas</div>
+        <div class="fila"><label for="dp">Disponibilidad, en %</label><input type="text" id="dp" value="99,5" inputmode="decimal" style="width:110px"></div>
+        <div class="sal" id="dps">—</div>
+      </div>
+      <div>
+        <div class="et">De las horas al porcentaje</div>
+        <div class="fila"><label for="dh">Horas de caída</label><input type="text" id="dh" value="19" inputmode="decimal" style="width:90px">
+          <label for="dper">en</label><select id="dper" style="width:auto"><option value="720">un mes de 30 días</option><option value="8760">un año de 365 días</option></select></div>
+        <div class="sal" id="dhs">—</div>
+      </div>
+    </div>
+    <table id="dtab"></table>
+    <div class="leyenda">La columna «quién la promete» viene de las Partes 10 y 17 del caso. El mismo porcentaje permite más horas seguidas si la ventana es anual que si es mensual.</div>
+  </div>
+
+  <div class="cita">
+    <div class="et">Evidencia C · Contrato 031 de 2026 con EduNube S.A.S. · extracto textual del caso</div>
+    <b>Séptima. Niveles de servicio.</b> El contratista garantiza una disponibilidad mensual de la plataforma del 99,5 %, medida en sus propios sistemas de monitoreo. No se computan como indisponibilidad las ventanas de mantenimiento programadas, las fallas del proveedor de infraestructura de nube, ni las originadas en sistemas de la universidad.<br>
+    <b>Novena. Descuentos.</b> Por cada punto porcentual por debajo del nivel pactado se descontará el cinco por ciento (5 %) del valor mensual. Este descuento constituye la única compensación a favor de la universidad.
+  </div>
+  <div class="tres">
+    <div class="tarj fill"><h4>99,5 % mensual</h4><p>Son 3 horas y 36 minutos de caída al mes sin incumplir nada. Seguidas, y un sábado de exámenes finales, si así caen.</p></div>
+    <div class="tarj fill"><h4>Quién mide</h4><p>El contratista, «en sus propios sistemas de monitoreo». La universidad midió 99,6 % (Parte 17), pero esa medición no cuenta para el contrato.</p></div>
+    <div class="tarj na"><h4>Tres exclusiones</h4><p>Mantenimiento programado, fallas del proveedor de infraestructura de nube y fallas originadas en sistemas de la universidad. Pregúntense cuál aplicó en junio de 2025 y cuál el 16 de mayo de 2026.</p></div>
+  </div>
+
+  <div class="panel">
+    <div class="et">La cuenta de la cláusula novena</div>
+    <div class="fila"><label for="nh">Horas de caída en el mes</label><input type="text" id="nh" value="19" inputmode="decimal" style="width:90px">
+      <label for="nm">Mensualidad, en millones</label><input type="text" id="nm" value="44" inputmode="decimal" style="width:90px">
+      <span class="leyenda" style="margin:0">$44 millones es la mensualidad de 2026 (Parte 10), usada como referencia.</span></div>
+    <div class="sal" id="ns">—</div>
+  </div>
+  <details><summary>Qué pasó de verdad con las 19 horas de junio de 2025</summary>
+    <p>El descuento aplicado fue de <b>cero pesos</b>: EduNube invocó la exclusión por falla del proveedor de infraestructura de nube (Parte 13). Ese día se reprogramaron 212 exámenes. Aun sin exclusión, el descuento habría sido de unos $4,4 millones en un contrato de $484 millones.</p>
+    <p>Un descuento se calcula sobre lo que se paga, no sobre lo que se pierde. Y un porcentaje de disponibilidad no es un tiempo de recuperación: sobre la restauración de las copias, la cláusula octava solo dice «en el menor tiempo posible», sin número.</p>
+  </details>
+</section>
+
+<!-- ───────────── EJERCICIO 1 ───────────── -->
+<section id="e1">
+  <div class="sec-h"><div class="sec-n">Ejercicio 1 · 20 minutos</div><h2>La cadena de matrícula, eslabón por eslabón</h2></div>
+  <p class="lead noimp">La cadena viene precargada con la disponibilidad medida entre octubre de 2025 y septiembre de 2026 (Parte 17). Pueden cambiar valores, agregar o quitar eslabones y poner un componente en paralelo. Decidan qué va en serie y qué en paralelo, y <b>justifíquenlo</b>.</p>
+
+  <div class="dos noimp">
+    <div class="tarj az"><h4>En serie: todos tienen que funcionar</h4><p>Se multiplican las disponibilidades: d = d1 × d2 × … × dn. Dos al 99 % dan 98,01 %. Una cadena siempre es peor que su peor eslabón.</p></div>
+    <div class="tarj az"><h4>En paralelo: basta con que funcione uno</h4><p>Se multiplican las indisponibilidades: d = 1 − (1 − d1) × (1 − d2). Dos al 99 % dan 99,99 %. Solo vale si las fallas son independientes.</p></div>
+  </div>
+  <div class="adv noimp"><b>Multiplicar supone independencia.</b> Las dos fórmulas suponen que la falla de un componente no dice nada sobre la del otro. Dos componentes que comparten causa de falla —el mismo poste, el mismo clúster, el mismo cuarto— no están en paralelo: están en serie con lo que comparten. Y la causa común también afecta la serie: directorio, SIGA y financiero cayeron juntos el 16 de mayo, y cada porcentaje medido ya incluye esas horas. El número sirve para comparar alternativas y encontrar el eslabón débil. <b>No es un pronóstico:</b> es una aproximación con supuestos que hay que escribir al lado del resultado.</div>
+
+  <h3>Cadena 1 · Matrícula académica y financiera (P2)</h3>
+  <div class="panel">
+    <div class="et noimp">Eslabones</div>
+    <div id="c1-ed" class="noimp"></div>
+    <div class="et noimp" style="margin-top:12px">Agregar un eslabón</div>
+    <div class="chips noimp" id="c1-pal"></div>
+    <div class="fila noimp"><label for="c1-ven">Horas de la ventana crítica</label><input type="text" id="c1-ven" inputmode="decimal" style="width:90px">
+      <span class="leyenda" style="margin:0">Matrícula 2027-1: del 18 al 29 de enero, 12 días × 24 horas = 288 horas (Parte 2).</span></div>
+    <div class="et" style="margin-top:12px">Diagrama</div>
+    <div id="c1-dia"></div>
+    <div id="c1-res"></div>
+    <div class="et" style="margin-top:14px">Justificación de la topología y supuestos declarados</div>
+    <div class="soloimp imptx" id="imp-c1just"></div>
+    <textarea class="noimp" id="c1-just" placeholder="Qué pusieron en serie y qué en paralelo, y por qué. Qué valor usaron para el banco, de dónde sale y a quién se le pide el dato real." spellcheck="false"></textarea>
+  </div>
+  <details><summary>El banco no tiene dato: qué se hace</summary>
+    <p>El recaudo del banco no se mide y el convenio no promete nada (Parte 17). Un dato faltante no se rellena con optimismo ni se omite en silencio. Se <b>nombra</b> («sin dato», con la persona a quien se le pide: el tesorero, con el gerente de cuenta del banco). Se <b>acota</b>: el resultado sin el banco es un techo, porque con cualquier valor real la cadena solo puede ser igual o peor. Y se <b>calcula con escenarios declarados</b>: una buena decisión no cambia según cuál de ellos se cumpla.</p>
+    <p>Antes que el número, miren la topología. Según la Parte 6 (S2) se puede pagar por la pasarela o en ventanilla del banco con el recibo impreso. ¿Eso es serie o paralelo? ¿Y quién genera el recibo?</p>
+  </details>
+
+  <div class="noimp">
+  <h3>Cadena 2 · Docencia virtual de un sábado (P6), desde cero <span class="sup na">Si alcanza el tiempo, o para la entrega 2</span></h3>
+  <p class="lead">No es parte del entregable de hoy. Ármenla ustedes. El dueño del proceso declaró que depende del aula virtual, el directorio, el correo y el internet de los centros de tutoría (Parte 5). Usen los datos medidos de la Parte 17 y decidan qué eslabones entran. El internet del centro de tutoría es el del colegio anfitrión (Parte 1) y nadie lo mide: sin dato.</p>
+  <div class="panel">
+    <div class="et">Eslabones</div>
+    <div id="c2-ed"></div>
+    <div class="et noimp" style="margin-top:12px">Agregar un eslabón</div>
+    <div class="chips noimp" id="c2-pal"></div>
+    <div class="fila"><label for="c2-ven">Horas de la ventana crítica</label><input type="text" id="c2-ven" inputmode="decimal" style="width:90px">
+      <span class="leyenda" style="margin:0">Un sábado de encuentro: de 7:00 a. m. a 1:00 p. m., 6 horas (Parte 14). Cámbienla si defienden otra ventana.</span></div>
+    <div class="et" style="margin-top:12px">Diagrama</div>
+    <div id="c2-dia"></div>
+    <div id="c2-res"></div>
+    <div class="et" style="margin-top:14px">Justificación de la topología y supuestos declarados</div>
+    <textarea id="c2-just" placeholder="Qué eslabones entran y por qué. ¿El ingreso al aula virtual depende de algo que está en Girardot? ¿Qué supuesto usan para el internet del centro y a quién se le pide el dato?" spellcheck="false"></textarea>
+  </div>
+
+  </div>
+  <div class="ent noimp">
+    <div class="et">Qué se entrega de este ejercicio</div>
+    <ul>
+      <li>El diagrama de la cadena de matrícula, con serie y paralelo marcados, y su justificación.</li>
+      <li>El cálculo paso a paso, con el supuesto usado para el banco y el nombre de quien debe dar el dato real.</li>
+      <li>El eslabón más débil y lo que dice la tabla de sensibilidad: ¿dónde rinde más un punto de mejora?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────── EJERCICIO 2 ───────────── -->
+<section id="e2">
+  <div class="sec-h"><div class="sec-n">Ejercicio 2 · 12 minutos</div><h2>El costo de las alternativas</h2></div>
+  <p class="lead noimp">Las catorce cotizaciones de referencia de la Parte 11, tal como las trae el caso: precios indicativos, sin negociar. La herramienta calcula el costo anual (a 12 meses) y a 36 meses, les asigna modalidad y ordenador del gasto según las cuantías del Acuerdo 014 de 2019, y estima cuándo estarían operando. Marquen las que comprarían: la canasta se suma abajo.</p>
+
+  <div class="panel">
+    <div class="et noimp">Supuestos del calendario · cámbienlos y declaren cuál usaron</div>
+    <div class="fila noimp">
+      <label for="e2-rad">La necesidad se radica el</label><input type="date" id="e2-rad" min="2026-10-01" max="2027-12-31">
+      <label for="e2-rango">Contratación</label><select id="e2-rango" style="width:auto"><option value="min">mínimo del rango (mejor caso)</option><option value="max">máximo del rango</option></select>
+      <label for="e2-base">Cuantía sobre</label><select id="e2-base" style="width:auto"><option value="12">el costo a 12 meses</option><option value="36">el costo a 36 meses</option></select>
+    </div>
+    <div class="msg noimp" id="e2-radmsg" role="alert"></div>
+    <div class="fila noimp"><label class="ck"><input type="checkbox" id="e2-pausa"> No contar las vacaciones colectivas (21 de diciembre a 8 de enero, Parte 2) ni para contratar ni para instalar</label></div>
+    <div class="leyenda" id="e2-sup"></div>
+    <div class="tw2 alto"><table class="cot" id="e2-tab"></table></div>
+    <div class="leyenda noimp">Costo a N meses = inversión inicial + N × costo mensual. En C14 los $58 millones son por año. C13 está cotizado solo a doce meses. Valores en millones de pesos.</div>
+  </div>
+
+  <div class="panel">
+    <div class="et">Ejercicio 2 · La canasta frente a los $450 millones libres de 2027 (Parte 18)</div>
+    <div class="soloimp leyenda" id="imp-e2sup"></div>
+    <div id="e2-can"></div>
+    <div class="et j" style="margin-top:14px">Por qué esta canasta, y qué dejan sin cubrir</div>
+    <div class="soloimp imptx" id="imp-e2just"></div>
+    <textarea class="noimp" id="e2-just" placeholder="Qué proceso protege cada compra, qué queda por fuera, cuánto costaría cubrirlo y quién debería aceptar ese riesgo." spellcheck="false"></textarea>
+  </div>
+
+  <details><summary>Cómo se cuenta el plazo, y con qué festivos</summary>
+    <p><b>Contratación.</b> Días hábiles contados desde el día siguiente a la radicación: lunes a viernes, sin festivos. El rango de cada modalidad es el «tiempo real, de la necesidad a la firma» de la Parte 11. <b>Puesta en marcha.</b> Arranca al día siguiente de la firma y corre en semanas o meses calendario, sin parar en vacaciones, salvo que marquen la casilla. Se cuenta como «llega» lo que queda operando <b>antes</b> del lunes 18 de enero de 2027. Son los supuestos de la presentación de la sesión; son generosos, y hay que declararlos.</p>
+    <p><b>Festivos que caen en el periodo</b> (Ley 51 de 1983, que traslada algunos al lunes siguiente): lunes 2 de noviembre de 2026 (Todos los Santos), lunes 16 de noviembre de 2026 (Independencia de Cartagena), martes 8 de diciembre de 2026 (Inmaculada Concepción), viernes 25 de diciembre de 2026 (Navidad), viernes 1 de enero de 2027 (Año Nuevo) y lunes 11 de enero de 2027 (Reyes Magos). En febrero de 2027 no hay festivos. Para fechas posteriores la herramienta aplica la Ley 51 de 1983 (incluidos el 22 de marzo y el Jueves y Viernes Santos, 25 y 26 de marzo de 2027); verifiquen los festivos de fechas posteriores a junio de 2027, por si una ley más reciente los cambió. Fuentes: Ley 51 de 1983, artículos 1 y 2, en el Gestor Normativo de Función Pública (funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4954); calendarios de 2026 y 2027 consultados en calendariodecolombia.com y portafolio.co, octubre de 2026.</p>
+    <p><b>Cuantía.</b> Supuesto que deben declarar: la cuantía es el valor total del contrato. Por defecto se toma el costo a doce meses; cambien a 36 y miren qué cotizaciones cambian de modalidad y de firma. <b>C10</b> es un otrosí al contrato de EduNube y <b>C13</b> no es un contrato, es un acuerdo del Consejo Superior: el caso no dice cuánto tarda ninguno de los dos, así que la herramienta no les pone fecha hasta que ustedes escriban un supuesto en días hábiles, y entonces la marca «con supuesto», nunca como un «sí» firme. En C13 la fecha es la del acuerdo más los 12 días hábiles que toma vincular a una persona (Parte 17); el Consejo Superior sesiona una vez al mes (Parte 3) y la vicerrectora pidió no contar con gente nueva antes de febrero (Parte 18). En C10, el contrato de EduNube vence el 31 de diciembre de 2026 y en 2025 y 2026 el nuevo se firmó el 3 de febrero y el 30 de enero (Parte 10): un otrosí al contrato vigente no cubre enero de 2027 salvo que el contrato nuevo lo incluya.</p>
+    <p><b>Una pregunta que el caso no responde.</b> Los $450 millones son de la vigencia 2027; para 2026 la respuesta fue «no hay disponibilidad» (evidencia F). ¿Con qué vigencia se contrata antes de enero? Se le pregunta a Planeación.</p>
+  </details>
+</section>
+
+<!-- ───────────── EJERCICIO 3 ───────────── -->
+<section id="e3">
+  <div class="sec-h"><div class="sec-n">Ejercicio 3 · 13 minutos</div><h2>Tres alternativas para mejorar la cadena de matrícula</h2></div>
+  <p class="lead noimp">Definan tres alternativas, A, B y C: tres formas de mejorar la cadena de matrícula con cotizaciones de la Parte 11. Para cada una marquen las cotizaciones y escriban el tiempo y el punto de recuperación que esperan lograr, <b>con su fuente</b>. La herramienta las pone lado a lado contra el objetivo que ustedes fijaron en la entrega 1. Lo obligatorio hoy son esos cuatro datos y la recomendación.</p>
+  <div class="adv noimp"><b>Lo que el caso no trae.</b> Ninguna cotización dice en cuánto tiempo recupera, salvo C10: «conmutación en cuatro horas» (Parte 11). Todo otro tiempo que escriban es una <b>estimación declarada del equipo</b>: digan en qué se apoya (un tiempo medido de la Parte 17, una promesa de contrato de la Parte 10) y a quién se le exige el número real. El calendario usa los supuestos del ejercicio 2.</div>
+
+  <div class="panel">
+    <div class="et">El proceso y su objetivo, según su entrega 1</div>
+    <div class="fijo noimp"><b>Proceso:</b> P2 · Matrícula académica y financiera, en la ventana del 18 al 29 de enero de 2027. Por eso todo se juzga contra el 18 de enero.</div>
+    <div class="soloimp fijo" id="imp-obj"></div>
+    <div class="fila noimp">
+      <label for="e3-rto">Tiempo objetivo de recuperación (RTO), en horas</label><input type="text" id="e3-rto" inputmode="decimal" style="width:90px">
+      <label for="e3-rpo">Punto objetivo de recuperación (RPO), en horas</label><input type="text" id="e3-rpo" inputmode="decimal" style="width:90px">
+    </div>
+    <div class="fila noimp"><button class="sec mini" id="e3-copia">Copiar la canasta del ejercicio 2 en la alternativa A</button></div>
+    <div class="tres noimp" id="e3-cans"></div>
+    <div class="et" style="margin-top:16px">Lado a lado</div>
+    <div class="tw2"><table class="cot" id="e3-tab"></table></div>
+    <div class="et" style="margin-top:14px">Recomendación · cinco líneas</div>
+    <div class="soloimp imptx" id="imp-rec"></div>
+    <textarea class="noimp" id="e3-rec" style="min-height:110px" placeholder="Cuál escogen y por qué se deduce de los números. Qué eslabón sigue siendo el más débil después de comprar. Qué riesgo queda y quién lo acepta." spellcheck="false"></textarea>
+  </div>
+  <details><summary>Seis preguntas para escoger</summary>
+    <p>¿Cumple el tiempo y el punto objetivo del proceso en su momento crítico? ¿Cuesta menos que lo que evita, en el horizonte en que se va a pagar (Parte 17)? ¿Puede estar operando cuando se necesita, con la modalidad que le corresponde? ¿Hay quién la opere el día del evento, con seis personas entre el 15 de diciembre y el 1 de febrero? ¿Crea una dependencia nueva? ¿Qué queda sin cubrir, y quién lo acepta por escrito?</p>
+    <p>La vicerrectora administrativa ordena el gasto hasta $650 millones; por encima, la rectora, y por más de $1.300 millones con autorización del Consejo Superior (Parte 11). Aceptar el riesgo es una opción si la firma alguien con autoridad.</p>
+  </details>
+</section>
+
+<!-- ───────────── REPASO ───────────── -->
+<section id="e4">
+  <div class="sec-h"><div class="sec-n">Repaso · fuera de los 55 minutos</div><h2>¿Cuál es el error en cada caso?</h2></div>
+  <p class="lead">Para después de entregar, o en casa. Seis situaciones: elijan la idea que las explica. El repaso no se guarda ni se entrega.</p>
+  <div id="quiz"></div>
+  <div class="fila"><button id="qver">Ver respuestas</button><button class="sec" id="qreset">Reiniciar</button><span id="qmarca" class="leyenda" style="margin:0"></span></div>
+</section>
+
+<!-- ───────────── ENTREGA ───────────── -->
+<section id="ent">
+  <div class="sec-h"><div class="sec-n">Cierre</div><h2>Qué se entrega y cómo se evalúa</h2></div>
+  <p class="lead">Una página por equipo. Se recoge al terminar el bloque y vuelve como insumo de la entrega 2. En el aula no hay impresora: escriban el nombre del equipo arriba, pulsen «Imprimir o guardar como PDF», elijan «Guardar como PDF» y entreguen ese archivo por el medio que indique el docente. Sale una hoja de entrega con el diagrama, el cálculo, la tabla lado a lado y la recomendación; lo demás no se imprime. Si no pueden generar el PDF, entreguen el CSV, o su texto copiado.</p>
+  <ul class="chk">
+    <li>El diagrama de la cadena, con serie y paralelo marcados.</li>
+    <li>El cálculo paso a paso, con el supuesto usado para el banco.</li>
+    <li>La tabla comparativa de las tres alternativas: costo anual (a 12 meses), tiempo de recuperación y plazo de puesta en marcha.</li>
+    <li>Una recomendación de cinco líneas, con el riesgo que queda.</li>
+  </ul>
+  <div class="dos" style="margin-top:16px">
+    <div class="tarj az"><h4>Evaluación · desempeño</h4><p>El laboratorio 2 y el taller 2 suman el 7 % de la nota del módulo. Se mira que el cálculo sea correcto y esté mostrado; que los supuestos estén declarados; que la comparación use datos del caso citando su parte; y que la recomendación se deduzca de los números. Un resultado sin procedimiento no cuenta.</p></div>
+    <div class="tarj na"><h4>Tres errores que van a aparecer</h4><p><b>Sumar o promediar porcentajes:</b> en serie se multiplica. <b>Poner en paralelo lo que comparte poste, clúster o cuarto:</b> sin independencia, la fórmula no aplica. <b>Comparar con el costo del primer mes:</b> la comparación es por costo anual, con la inversión inicial incluida.</p></div>
+  </div>
+  <div class="aviso"><b>Para la entrega 2.</b> La sección de dependencia de terceros pide la cadena de cada proceso crítico con su disponibilidad compuesta; la de estrategia, el costo a 12 y 36 meses, el plazo, la modalidad y quién ordena el gasto. Lo que hagan hoy es ese insumo.</div>
+</section>
+
+<footer>
+  <span>Institución Universitaria de Envigado · Facultad de Ingeniería</span>
+  <span>SIO0013 · Continuidad del negocio · Laboratorio 2 · Caso ficticio con fines docentes</span>
+</footer>
+</div>
+
+<script>
+/* <CALC> ═════════ Funciones de cálculo (puras; las prueba prueba_lab2.js) ═════════ */
+const CALC = (function(){
+  const H_MES = 720, H_ANIO = 8760, DIA = 86400000;
+  const LIBRES = 450;                         // millones libres en 2027 · Parte 18
+  const META = "2027-01-18";                  // inicio de la matrícula 2027-1 · Parte 2
+  const VAC = ["2026-12-21", "2027-01-08"];   // vacaciones colectivas · Parte 2
+  const VINCULA = 12;                         // días hábiles para vincular a una persona · Parte 17
+
+  function r(v, d){ const f = Math.pow(10, d == null ? 6 : d); return Math.round(v * f) / f; }
+  function num(s){
+    if (typeof s === "number") return isFinite(s) ? s : null;
+    if (s == null) return null;
+    s = String(s).replace(/[\s%$]/g, "");
+    if (!s) return null;
+    if (s.indexOf(",") >= 0) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/^[1-9]\d{0,2}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");      // 1.000 es mil, no uno
+    const v = Number(s);
+    return isFinite(v) ? v : null;
+  }
+  function pct(s){ const v = num(s); return (v === null || v < 0 || v > 100) ? null : v / 100; }
+
+  /* ---- disponibilidad ---- */
+  function serie(ds){ return ds.reduce(function(a, d){ return a * d; }, 1); }
+  function paralelo(a, b){ return 1 - (1 - a) * (1 - b); }
+  function horasCaida(d, horas){ return (1 - d) * horas; }
+  function dispDesdeHoras(h, periodo){ return 1 - h / periodo; }
+  /* cláusula novena de la evidencia C: 5 % de la mensualidad por punto por debajo de la meta */
+  function descuento(horas, mensualidad, meta){
+    meta = meta == null ? 0.995 : meta;
+    const d = dispDesdeHoras(horas, H_MES);
+    const puntos = Math.max(0, (meta - d) * 100);
+    return { d: d, puntos: puntos,
+             porPunto: Math.min(1, Math.floor(puntos + 1e-9) * 0.05) * mensualidad,
+             prorrata: Math.min(1, puntos * 0.05) * mensualidad };
+  }
+  /* un eslabón: {d, par:{d, indep:"si"|"no"|""}} con d como fracción o null */
+  function grupo(e){
+    const a = e.d == null ? null : e.d;
+    if (!e.par) return { d: a, modo: a === null ? "sin-dato" : "simple" };
+    const b = e.par.d == null ? null : e.par.d;
+    if (a === null && b === null) return { d: null, modo: "sin-dato" };
+    if (a === null || b === null) return { d: a === null ? b : a, modo: "par-sin-dato" };
+    const indep = paralelo(a, b), comun = Math.max(a, b);
+    if (e.par.indep === "si") return { d: indep, modo: "paralelo", comun: comun, indep: indep };
+    return { d: comun, modo: e.par.indep === "no" ? "comun" : "sin-decidir", comun: comun, indep: indep };
+  }
+  function cadena(eslabones, horasVentana){
+    const gs = eslabones.map(grupo);
+    const con = [], sin = [];
+    gs.forEach(function(g, i){ (g.d === null ? sin : con).push(i); });
+    if (!con.length) return { d: null, grupos: gs, sinDato: sin, con: con };
+    const d = serie(con.map(function(i){ return gs[i].d; }));
+    let debil = con[0];
+    con.forEach(function(i){ if (gs[i].d < gs[debil].d) debil = i; });
+    const sumaInd = con.reduce(function(s, i){ return s + (1 - gs[i].d); }, 0);
+    const sens = con.map(function(i){
+      const di = gs[i].d;
+      const perfecto = serie(con.filter(function(j){ return j !== i; }).map(function(j){ return gs[j].d; }));   // producto de los demás
+      const mitad = perfecto * (1 - (1 - di) / 2);
+      return { i: i, mitad: mitad, perfecto: perfecto,
+               ganaAnio: (mitad - d) * H_ANIO, ganaVentana: (mitad - d) * (horasVentana || 0) };
+    });
+    return { d: d, ind: 1 - d, grupos: gs, sinDato: sin, con: con, debil: debil,
+             cotaInf: Math.max(0, 1 - sumaInd), cotaSup: gs[debil].d,
+             horasAnio: horasCaida(d, H_ANIO), horasVentana: horasCaida(d, horasVentana || 0), sens: sens };
+  }
+
+  /* ---- cotizaciones de la Parte 11, en millones de pesos ---- */
+  const COT = [
+    { id: "C1",  nom: "Copia de respaldo inmutable en nube, 15 TB, con retención de 30 días", iniT: "$12 M", menT: "$6,8 M", plazoT: "Tres semanas", ini: 12, men: 6.8, anual: 0, plazo: { sem: 3 }, tipo: "contrato" },
+    { id: "C2",  nom: "Repositorio de respaldo endurecido en sitio, fuera del dominio, 80 TB", iniT: "$185 M", menT: "—", plazoT: "Ocho semanas", ini: 185, men: 0, anual: 0, plazo: { sem: 8 }, tipo: "contrato" },
+    { id: "C3",  nom: "Renovar el soporte de la herramienta de respaldo, tres años", iniT: "$74 M", menT: "—", plazoT: "Dos semanas", ini: 74, men: 0, anual: 0, plazo: { sem: 2 }, tipo: "contrato" },
+    { id: "C4",  nom: "Recuperación como servicio en nube para las ocho máquinas críticas y la base de SIGA, en espera tibia", iniT: "$95 M", menT: "$46 M", plazoT: "Diez semanas", ini: 95, men: 46, anual: 0, plazo: { sem: 10 }, tipo: "contrato" },
+    { id: "C5",  nom: "Alojamiento en un centro de datos de Bogotá: medio bastidor, energía y enlace dedicado", iniT: "$1.250 M", iniN: "en equipos", menT: "$27 M", plazoT: "Cinco meses", ini: 1250, men: 27, anual: 0, plazo: { mes: 5 }, tipo: "contrato" },
+    { id: "C6",  nom: "Adecuar el cuarto técnico de Honda como sitio alterno mínimo: un servidor, almacenamiento, aire y energía", iniT: "$540 M", menT: "$4 M", plazoT: "Cuatro meses", ini: 540, men: 4, anual: 0, plazo: { mes: 4 }, tipo: "contrato" },
+    { id: "C7",  nom: "Aire de precisión redundante para el cuarto de Girardot", iniT: "$420 M", menT: "$3 M", plazoT: "Tres meses", ini: 420, men: 3, anual: 0, plazo: { mes: 3 }, tipo: "contrato" },
+    { id: "C8",  nom: "Planta eléctrica dedicada con transferencia automática", iniT: "$310 M", menT: "$1,5 M", plazoT: "Tres meses", ini: 310, men: 1.5, anual: 0, plazo: { mes: 3 }, tipo: "contrato" },
+    { id: "C9",  nom: "Llevar SIGA completo a nube pública, con rediseño de la base de datos", iniT: "$2.900 M", menT: "$38 M", plazoT: "Catorce meses", ini: 2900, men: 38, anual: 0, plazo: { mes: 14 }, tipo: "contrato" },
+    { id: "C10", nom: "Segunda región para el aula virtual, con conmutación en cuatro horas", iniT: "—", menT: "+ $14 M", plazoT: "Seis semanas, con otrosí", ini: 0, men: 14, anual: 0, plazo: { sem: 6 }, tipo: "otrosi",
+      nota: "Otrosí al contrato de EduNube, que termina el 31 de diciembre de 2026 y tiene once mensualidades (Parte 10): en la vigencia serían 11 × 14 = $154 M. Un otrosí a este contrato no cubre enero de 2027 salvo que el contrato nuevo lo incluya." },
+    { id: "C11", nom: "Segundo factor de autenticación para las 21.000 cuentas", iniT: "$0", iniN: "incluido en la licencia", menT: "—", plazoT: "Tres meses de trabajo interno", ini: 0, men: 0, anual: 0, plazo: { mes: 3 }, tipo: "interno",
+      nota: "Cero pesos y tres meses de un equipo que el 15 de diciembre pasa de catorce personas a seis (Parte 2)." },
+    { id: "C12", nom: "Segundo enlace de internet por ruta física distinta", iniT: "$38 M", menT: "$11 M", plazoT: "Seis semanas", ini: 38, men: 11, anual: 0, plazo: { sem: 6 }, tipo: "contrato" },
+    { id: "C13", nom: "Dos profesionales de planta temporal para infraestructura y SIGA, doce meses", iniT: "—", menT: "$17 M", plazoT: "Requiere acuerdo del Consejo Superior", ini: 0, men: 17, anual: 0, plazo: null, tipo: "acuerdo", maxMeses: 12,
+      nota: "No es un contrato: es un acuerdo del Consejo Superior. Cotizado solo a doce meses. Vincular a una persona toma 12 días hábiles (Parte 17) y la vicerrectora pidió no contar con gente nueva antes de febrero (Parte 18)." },
+    { id: "C14", nom: "Servicio de respuesta a incidentes por anticipado, con horas prepagadas", iniT: "$58 M", iniN: "al año", menT: "—", plazoT: "Tres semanas", ini: 0, men: 0, anual: 58, plazo: { sem: 3 }, tipo: "contrato" }
+  ];
+  function cot(id){ for (let i = 0; i < COT.length; i++) if (COT[i].id === id) return COT[i]; return null; }
+  function costo(c, meses){
+    if (typeof c === "string") c = cot(c);
+    if (c.maxMeses && meses > c.maxMeses) return null;
+    return r(c.ini + c.men * meses + c.anual * Math.ceil(meses / 12), 4);
+  }
+  /* cuantías del Acuerdo 014 de 2019 · Parte 11 */
+  function modalidad(v){
+    if (v <= 130)  return { tramo: "Hasta $130 M", mod: "Directa, con tres cotizaciones", ord: "Vicerrectora administrativa", min: 10, max: 15 };
+    if (v <= 650)  return { tramo: "De $130 a $650 M", mod: "Invitación pública", ord: "Vicerrectora administrativa", min: 35, max: 45 };
+    if (v <= 1300) return { tramo: "De $650 a $1.300 M", mod: "Invitación pública", ord: "Rectora", min: 45, max: 60 };
+    return { tramo: "Más de $1.300 M", mod: "Invitación pública con autorización previa", ord: "Rectora, con autorización del Consejo Superior", min: 60, max: 90 };
+  }
+
+  /* ---- fechas: todo en UTC, como cadenas AAAA-MM-DD ---- */
+  function ms(iso){ const p = iso.split("-"); return Date.UTC(+p[0], +p[1] - 1, +p[2]); }
+  function iso(t){ return new Date(t).toISOString().slice(0, 10); }
+  function pascua(y){
+    const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4,
+          f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30,
+          i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7,
+          m = Math.floor((a + 11 * h + 22 * l) / 451), mes = Math.floor((h + l - 7 * m + 114) / 31),
+          dia = ((h + l - 7 * m + 114) % 31) + 1;
+    return Date.UTC(y, mes - 1, dia);
+  }
+  /* festivos de Colombia · Ley 51 de 1983 */
+  const _fest = {};
+  function festivos(y){
+    if (_fest[y]) return _fest[y];
+    const f = {};
+    const lunes = function(t){ const dw = new Date(t).getUTCDay(); return dw === 1 ? t : t + ((8 - dw) % 7) * DIA; };
+    [[1, 1, "Año Nuevo"], [5, 1, "Día del Trabajo"], [7, 20, "Independencia"], [8, 7, "Batalla de Boyacá"],
+     [12, 8, "Inmaculada Concepción"], [12, 25, "Navidad"]].forEach(function(x){ f[iso(Date.UTC(y, x[0] - 1, x[1]))] = x[2]; });
+    [[1, 6, "Reyes Magos"], [3, 19, "San José"], [6, 29, "San Pedro y San Pablo"], [8, 15, "Asunción"],
+     [10, 12, "Día de la Raza"], [11, 1, "Todos los Santos"], [11, 11, "Independencia de Cartagena"]]
+      .forEach(function(x){ f[iso(lunes(Date.UTC(y, x[0] - 1, x[1])))] = x[2]; });
+    const p = pascua(y);
+    f[iso(p - 3 * DIA)] = "Jueves Santo"; f[iso(p - 2 * DIA)] = "Viernes Santo";
+    f[iso(p + 43 * DIA)] = "Ascensión"; f[iso(p + 64 * DIA)] = "Corpus Christi"; f[iso(p + 71 * DIA)] = "Sagrado Corazón";
+    return (_fest[y] = f);
+  }
+  function esFestivo(i){ return !!festivos(+i.slice(0, 4))[i]; }
+  function enVacaciones(i){ return i >= VAC[0] && i <= VAC[1]; }
+  function esHabil(i, pausa){
+    const dw = new Date(ms(i)).getUTCDay();
+    return dw !== 0 && dw !== 6 && !esFestivo(i) && !(pausa && enVacaciones(i));
+  }
+  /* n días hábiles contados desde el día siguiente a la fecha dada */
+  function sumaHabiles(desde, n, pausa){
+    let t = ms(desde), c = 0;
+    while (c < n){ t += DIA; if (esHabil(iso(t), pausa)) c++; }
+    return iso(t);
+  }
+  function sumaMeses(desde, n){
+    const p = desde.split("-").map(Number);
+    const y = p[0] + Math.floor((p[1] - 1 + n) / 12), m = (p[1] - 1 + n) % 12;
+    const ult = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+    return iso(Date.UTC(y, m, Math.min(p[2], ult)));
+  }
+  /* plazo de puesta en marcha en semanas o meses calendario desde la firma */
+  function sumaPlazo(desde, plazo, pausa){
+    if (!plazo) return desde;
+    const fin = plazo.sem ? iso(ms(desde) + plazo.sem * 7 * DIA) : sumaMeses(desde, plazo.mes);
+    if (!pausa) return fin;
+    const N = Math.round((ms(fin) - ms(desde)) / DIA);
+    let t = ms(desde), c = 0;
+    while (c < N){ t += DIA; if (!enVacaciones(iso(t))) c++; }
+    return iso(t);
+  }
+  /* o: {radica, rango:"min"|"max", base:12|36, pausa, supuesto: días hábiles para C10 y C13} */
+  function calendario(c, o){
+    if (typeof c === "string") c = cot(c);
+    const base = costo(c, o.base || 12);
+    const cuantia = base === null ? costo(c, 12) : base;
+    const m = modalidad(cuantia);
+    const res = { id: c.id, cuantia: cuantia, mod: m.mod, ord: m.ord, dias: null, firma: null, opera: null, llega: null, tipo: c.tipo, conSupuesto: false, invalido: false };
+    if (c.tipo === "interno"){
+      res.mod = "Sin contratación: trabajo interno"; res.ord = "No aplica: sin gasto. Lo dirige el jefe de la Oficina de Tecnologías"; res.dias = 0; res.firma = o.radica;
+    } else if (c.tipo === "otrosi" || c.tipo === "acuerdo"){
+      res.mod = c.tipo === "otrosi" ? "Otrosí al contrato de EduNube" : "Acuerdo del Consejo Superior";
+      if (c.tipo === "acuerdo") res.ord = "Consejo Superior";
+      const s = o.supuesto == null ? null : num(o.supuesto);
+      if (s === null) return res;
+      if (s < 0 || Math.round(s) !== s){ res.invalido = true; return res; }      // días enteros, cero o más
+      res.conSupuesto = true;                                                    // la fecha depende de un supuesto del equipo
+      res.dias = s; res.firma = sumaHabiles(o.radica, res.dias, o.pausa);
+      if (c.tipo === "acuerdo"){                                                 // fecha del acuerdo + vinculación; no hay puesta en marcha
+        res.opera = sumaHabiles(res.firma, VINCULA, o.pausa); res.llega = res.opera < META; return res;
+      }
+    } else {
+      res.dias = o.rango === "max" ? m.max : m.min;
+      res.firma = sumaHabiles(o.radica, res.dias, o.pausa);
+    }
+    res.opera = sumaPlazo(res.firma, c.plazo, o.pausa);
+    res.llega = res.opera < META;
+    return res;
+  }
+  function canasta(ids){
+    let ini = 0, rec = 0, c12 = 0, c36 = 0; const sin36 = [];
+    ids.forEach(function(id){
+      const c = cot(id);
+      ini += c.ini; rec += c.men * 12 + c.anual; c12 += costo(c, 12);
+      const v = costo(c, 36);
+      if (v === null){ sin36.push(id); c36 += costo(c, 12); } else c36 += v;
+    });
+    return { ini: r(ini, 4), rec: r(rec, 4), c12: r(c12, 4), c36: r(c36, 4), sin36: sin36, queda: r(LIBRES - c12, 4) };
+  }
+  return { H_MES: H_MES, H_ANIO: H_ANIO, LIBRES: LIBRES, META: META, VAC: VAC, VINCULA: VINCULA, COT: COT, r: r, num: num, pct: pct,
+           serie: serie, paralelo: paralelo, horasCaida: horasCaida, dispDesdeHoras: dispDesdeHoras, descuento: descuento,
+           grupo: grupo, cadena: cadena, cot: cot, costo: costo, modalidad: modalidad, festivos: festivos, esFestivo: esFestivo,
+           esHabil: esHabil, sumaHabiles: sumaHabiles, sumaMeses: sumaMeses, sumaPlazo: sumaPlazo, calendario: calendario,
+           canasta: canasta, ms: ms, iso: iso };
+})();
+/* </CALC> */
+
+/* ═════════ Formato ═════════ */
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function nf(v, dec){
+  if (v === null || v === undefined || !isFinite(v)) return "—";
+  const neg = v < 0; v = Math.abs(v);
+  const p = v.toFixed(dec == null ? 1 : dec).split(".");
+  p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return (neg ? "−" : "") + p[0] + (p[1] ? "," + p[1] : "");
+}
+function nfm(v){ return v === null ? "—" : "$" + nf(v, Math.abs(v - Math.round(v)) < 1e-9 ? 0 : 1) + " M"; }
+function fp(d, dec){ if (d === null || d === undefined) return "sin dato"; if (dec == null) dec = (d >= 0.9999 && d < 1) ? 4 : 2; return nf(d * 100, dec) + " %"; }
+function dur(h){
+  if (h === null || !isFinite(h) || h < 0) return "—";
+  if (h >= 1){ const m = Math.round(h * 60); return nf(Math.floor(m / 60), 0) + " h" + (m % 60 ? " " + (m % 60) + " min" : ""); }
+  const s = Math.round(h * 3600);
+  if (s >= 60) return Math.floor(s / 60) + " min" + (s % 60 ? " " + (s % 60) + " s" : "");
+  return s + " s";
+}
+/* horas con un decimal; por debajo de una hora, en minutos y segundos */
+function hv(h){ return h >= 1 ? nf(h, 1) + " h" : dur(h); }
+function hvTxt(h){ return h >= 1 ? nf(h, 1) + " horas" : dur(h); }
+const DSEM = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"], MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+function ff(i){ if (!i) return "—"; const d = new Date(CALC.ms(i)); return DSEM[d.getUTCDay()] + " " + d.getUTCDate() + " " + MESES[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
+
+/* ═════════ Datos del caso ═════════ */
+/* Disponibilidad medida, octubre de 2025 a septiembre de 2026, y compromiso contractual · Parte 17 */
+const SERV = [
+  { k: "internet", nom: "Internet principal", d: "99,5", fuente: "Parte 17 · medida", comp: "99,6 % anual" },
+  { k: "s7", nom: "Directorio S7", d: "99,7", fuente: "Parte 17 · medida", comp: "No hay: es interno" },
+  { k: "s1", nom: "SIGA S1", d: "99,1", fuente: "Parte 17 · medida", comp: "No hay: es interno" },
+  { k: "s5", nom: "Financiero S5", d: "99,4", fuente: "Parte 17 · medida", comp: "No hay: el contrato es de soporte" },
+  { k: "s2", nom: "Pasarela S2", d: "99,95", fuente: "Parte 17 · medida", comp: "99,9 %, reportada por el proveedor" },
+  { k: "banco", nom: "Recaudo del banco", d: "", fuente: "Parte 17 · sin dato; el convenio no promete nada", comp: "No hay" },
+  { k: "s3", nom: "Aula virtual S3", d: "99,6", fuente: "Parte 17 · medida", comp: "99,5 % mensual, medida por el proveedor" },
+  { k: "s4", nom: "Correo S4", d: "99,9", fuente: "Parte 17 · medida", comp: "99,9 %, según el proveedor de nube" },
+  { k: "centro", nom: "Internet del centro de tutoría", d: "", fuente: "Sin dato: es el internet del colegio anfitrión (Parte 1)", comp: "" }
+];
+function serv(k){ return SERV.filter(function(x){ return x.k === k; })[0] || null; }
+const AVISO_PAR = {
+  internet: "<b>Dato del caso (Partes 7 y 10).</b> La universidad ya tiene dos proveedores de internet, y los dos entran por el mismo poste y el mismo ducto de la portería norte. La disponibilidad del enlace de respaldo no está medida: el valor que pongan es un supuesto.",
+  s7: "<b>Dato del caso (Parte 6).</b> Los dos controladores de dominio son virtuales y están en el mismo clúster; el 16 de mayo cayeron juntos. El 99,7 % medido ya es el del servicio con sus dos controladores: no lo cuenten dos veces.",
+  otro: "<b>Antes de aplicar la fórmula:</b> ¿qué comparten los dos componentes? Poste, ducto, clúster, cuarto, dominio, proveedor, contrato de mantenimiento, programa."
+};
+function eslabon(k){ const s = serv(k); return { k: s.k, nom: s.nom, d: s.d, fuente: s.fuente, par: null }; }
+const PROCESO = "P2 · Matrícula académica y financiera, en la ventana del 18 al 29 de enero de 2027";
+
+/* ═════════ Estado y almacenamiento local ═════════ */
+const CLAVE = "sio0013-lab2-v2";
+function estadoInicial(){
+  const sel = {}; CALC.COT.forEach(function(c){ sel[c.id] = false; });
+  const can = function(n){ return { nom: "Alternativa " + n, sel: {}, rto: "", rpo: "", fuente: "", debil: "", riesgo: "", acepta: "" }; };
+  return {
+    equipo: "",
+    c1: { links: ["internet", "s7", "s1", "s5", "s2", "banco"].map(eslabon), just: "", ven: "288" },
+    c2: { links: [], just: "", ven: "6" },
+    e2: { rad: "2026-10-27", rango: "min", base: "12", pausa: false, sel: sel, sup: { C10: "", C13: "" }, just: "" },
+    e3: { rto: "", rpo: "", can: [can("A"), can("B"), can("C")], rec: "" }
+  };
+}
+let S = estadoInicial();
+try {
+  const g = JSON.parse(localStorage.getItem(CLAVE) || "null");
+  if (g && g.c1 && g.c2 && g.e2 && g.e3 && g.e3.can && g.e3.can.length === 3) S = g;
+} catch (e) {}
+function espejos(){
+  $("imp-equipo").textContent = "Equipo: " + (S.equipo.trim() || "sin nombre: escríbanlo arriba antes de imprimir") + " · " + new Date().toLocaleDateString("es-CO");
+  $("imp-e2sup").textContent = $("e2-sup").textContent;
+  $("imp-c1just").textContent = S.c1.just.trim() || "Sin escribir.";
+  $("imp-e2just").textContent = S.e2.just.trim() || "Sin escribir.";
+  $("imp-rec").textContent = S.e3.rec.trim() || "Sin escribir.";
+  $("imp-obj").textContent = PROCESO + ". Objetivo de la entrega 1: tiempo objetivo de recuperación (RTO) " + (S.e3.rto.trim() ? S.e3.rto.trim() + " h" : "sin digitar") + "; punto objetivo de recuperación (RPO) " + (S.e3.rpo.trim() ? S.e3.rpo.trim() + " h" : "sin digitar") + ".";
+}
+function guarda(){
+  espejos();
+  try { localStorage.setItem(CLAVE, JSON.stringify(S)); $("guardado").textContent = "Avance guardado en este navegador · " + new Date().toLocaleTimeString("es-CO"); }
+  catch (e) { $("guardado").textContent = "Este navegador no permite guardar: exporten el CSV antes de cerrar."; }
+}
+function crece(t){ t.style.height = "auto"; t.style.height = (t.scrollHeight + 4) + "px"; }
+function inval(el, mal){ el.classList.toggle("inval", !!mal); }
+
+/* ═════════ Demostración ═════════ */
+const REF = [["99", "—"], ["99,5", "EduNube, medida por mes"], ["99,6", "Telemagdalena, medida por año"], ["99,9", "PagoRed; el proveedor del correo"], ["99,95", "Nadie: es lo que midió la pasarela"], ["99,99", "Nadie"]];
+function pintaDemo(){
+  const d = CALC.pct($("dp").value);
+  inval($("dp"), d === null);
+  $("dps").textContent = d === null ? "Valor no válido: escriban un porcentaje entre 0 y 100."
+    : "indisponibilidad      : " + nf((1 - d) * 100, 4).replace(/,?0+$/, "") + " %\n" +
+      "caída permitida al mes : " + nf(CALC.horasCaida(d, 720), 3) + " h  =  " + dur(CALC.horasCaida(d, 720)) + "\n" +
+      "caída permitida al año : " + nf(CALC.horasCaida(d, 8760), 2) + " h  =  " + dur(CALC.horasCaida(d, 8760));
+  const h = CALC.num($("dh").value), per = +$("dper").value, hmal = h === null || h < 0 || h > per;
+  inval($("dh"), hmal);
+  $("dhs").textContent = hmal ? "Valor no válido: escriban las horas de caída, entre 0 y " + nf(per, 0) + "."
+    : "(" + nf(per, 0) + " − " + nf(h, 2).replace(/,00$/, "") + ") / " + nf(per, 0) + "\ndisponibilidad del periodo : " + fp(CALC.dispDesdeHoras(h, per), 2);
+  const nh = CALC.num($("nh").value), nm = CALC.num($("nm").value);
+  inval($("nh"), nh === null || nh < 0 || nh > 720); inval($("nm"), nm === null || nm < 0);
+  if (nh === null || nm === null || nh < 0 || nh > 720 || nm < 0){ $("ns").textContent = "Valor no válido: horas entre 0 y 720, y una mensualidad que no sea negativa."; return; }
+  const x = CALC.descuento(nh, nm);
+  $("ns").textContent =
+    "disponibilidad del mes   : (720 − " + nf(nh, 2).replace(/,00$/, "") + ") / 720 = " + fp(x.d, 2) + "\n" +
+    "meta del contrato        : 99,5 %      diferencia = " + nf(x.puntos, 2) + " puntos\n" +
+    "descuento, 5 % por punto : por puntos completos, " + nfm(CALC.r(x.porPunto, 1)) + "   ·   prorrateado, " + nfm(CALC.r(x.prorrata, 1)) + "\n" +
+    (x.puntos > 0 ? "Eso, si no aplica ninguna de las tres exclusiones de la cláusula séptima." : "No hay incumplimiento: la caída cabe en las 3 h 36 min permitidas.");
+}
+function montaDemo(){
+  $("dtab").innerHTML = "<thead><tr><th>Disponibilidad</th><th>Caída permitida al mes</th><th>Caída permitida al año</th><th>Quién la promete en el caso</th></tr></thead><tbody>" +
+    REF.map(function(x){ const v = CALC.pct(x[0]), t = function(h){ return nf(h, 3).replace(/0+$/, "").replace(/,$/, ""); };
+      return "<tr><td><b>" + x[0] + " %</b></td><td>" + dur(CALC.horasCaida(v, 720)) + " <span style='color:var(--gris)'>(" + t(CALC.horasCaida(v, 720)) + " h)</span></td><td>" +
+             dur(CALC.horasCaida(v, 8760)) + " <span style='color:var(--gris)'>(" + t(CALC.horasCaida(v, 8760)) + " h)</span></td><td>" + x[1] + "</td></tr>"; }).join("") + "</tbody>";
+  ["dp", "dh", "dper", "nh", "nm"].forEach(function(id){ $(id).addEventListener("input", pintaDemo); });
+  pintaDemo();
+}
+
+/* ═════════ Ejercicio 1 · constructor de cadenas ═════════ */
+function parsea(links){
+  return links.map(function(e){
+    return { d: CALC.pct(e.d), par: e.par ? { d: CALC.pct(e.par.d), indep: e.par.indep } : null };
+  });
+}
+function ventana(cid){ const v = CALC.num(S[cid].ven); return (v === null || v <= 0) ? null : v; }
+const RE_SUP = /^Supuesto del equipo: (?:escenario )?[^%]*%\. ?/;
+/* estado de un eslabón: {mal: no se está contando por error, html: aviso de la fila} */
+function estadoFila(e, i){
+  const txt = String(e.d).trim(), v = CALC.pct(e.d), s = serv(e.k), med = s && s.d ? s.d : "";
+  const botones = " <span class='noimp'>Escenarios: " + ["99,9", "99,5", "99"].map(function(x){ return "<button class='sec mini' data-a='esc' data-v='" + x + "' data-i='" + i + "'>" + x + " %</button>"; }).join(" ") + "</span>";
+  if (txt && v === null) return { mal: true, html: "<span class='sup rj'>Valor no válido</span> Este eslabón <b>no se está contando</b>, y por eso la cadena se ve mejor de lo que es. Escriban un porcentaje entre 0 y 100." };
+  if (!txt && med) return { mal: true, html: "<span class='sup rj'>Vacío</span> El caso trae dato medido para este eslabón (" + med + " %, Parte 17). Mientras esté vacío <b>no se está contando</b> y la cadena mejora en falso. <button class='sec mini noimp' data-a='rest' data-i='" + i + "'>restaurar " + med + " %</button>" };
+  if (e.k === "banco" || e.k === "centro")
+    return { mal: false, html: (txt ? "<span class='sup'>Supuesto del equipo</span> El caso no trae este dato: el " + esc(txt) + " % es de ustedes. Declaren en la fuente de dónde sale y a quién se le pide el real."
+                                    : "<span class='sup na'>Sin dato en el caso</span> Si escriben un valor, es un <b>supuesto del equipo</b>: declárenlo en la fuente.") + botones };
+  if (!txt) return { mal: false, html: "<span class='sup na'>Sin valor</span> Este eslabón no se está contando." };
+  return { mal: false, html: "" };
+}
+function marcaFila(cid, i){
+  const ed = $(cid + "-ed"), e = S[cid].links[i], st = estadoFila(e, i);
+  const inp = ed.querySelector("input[data-k='d'][data-i='" + i + "']"), row = ed.querySelector("tr[data-est='" + i + "']");
+  if (!inp || !row) return;
+  inval(inp, st.mal);
+  if (row._h !== st.html){ row._h = st.html; row.cells[1].innerHTML = st.html; }
+  row.hidden = !st.html;
+  const pin = ed.querySelector("input[data-k='pd'][data-i='" + i + "']");
+  if (pin) inval(pin, String(e.par.d).trim() && CALC.pct(e.par.d) === null);
+}
+function pintaEditor(cid){
+  const L = S[cid].links;
+  if (!L.length){ $(cid + "-ed").innerHTML = "<div class='sal'>La cadena está vacía. Agreguen eslabones con los botones de abajo.</div>"; return; }
+  let h = "<table class='ed'><thead><tr><th>#</th><th style='width:27%'>Eslabón</th><th style='width:13%'>Disponibilidad, %</th><th>Fuente o supuesto declarado</th><th class='noimp' style='width:215px'></th></tr></thead><tbody>";
+  L.forEach(function(e, i){
+    h += "<tr><td class='nn'>" + (i + 1) + "</td>" +
+      "<td><input type='text' data-i='" + i + "' data-k='nom' value=\"" + esc(e.nom) + "\" aria-label='Nombre del eslabón " + (i + 1) + "' spellcheck='false'></td>" +
+      "<td><input type='text' inputmode='decimal' data-i='" + i + "' data-k='d' value=\"" + esc(e.d) + "\" placeholder='sin dato' aria-label='Disponibilidad del eslabón " + (i + 1) + ", en porcentaje'></td>" +
+      "<td><input type='text' data-i='" + i + "' data-k='fuente' value=\"" + esc(e.fuente) + "\" placeholder='De dónde sale el número' aria-label='Fuente del eslabón " + (i + 1) + "' spellcheck='false'></td>" +
+      "<td class='noimp' style='white-space:nowrap'>" +
+        (e.par ? "" : "<button class='sec mini' data-a='par' data-i='" + i + "'>+ paralelo</button> ") +
+        "<button class='sec mini' data-a='sube' data-i='" + i + "' title='Subir' aria-label='Subir el eslabón " + (i + 1) + "'>↑</button> <button class='sec mini' data-a='baja' data-i='" + i + "' title='Bajar' aria-label='Bajar el eslabón " + (i + 1) + "'>↓</button> " +
+        "<button class='sec mini' data-a='quita' data-i='" + i + "'>quitar</button></td></tr>" +
+      "<tr class='sub' data-est='" + i + "' hidden><td></td><td colspan='4'></td></tr>";
+    if (e.par){
+      h += "<tr class='sub'><td class='nn'>∥</td>" +
+        "<td><input type='text' data-i='" + i + "' data-k='pnom' value=\"" + esc(e.par.nom) + "\" placeholder='Componente redundante' aria-label='Componente en paralelo' spellcheck='false'></td>" +
+        "<td><input type='text' inputmode='decimal' data-i='" + i + "' data-k='pd' value=\"" + esc(e.par.d) + "\" placeholder='sin dato' aria-label='Disponibilidad del componente en paralelo'></td>" +
+        "<td><select data-i='" + i + "' data-k='pindep' aria-label='¿Fallan de forma independiente?'>" +
+          "<option value=''" + (e.par.indep === "" ? " selected" : "") + ">¿Fallan de forma independiente? Decidan</option>" +
+          "<option value='si'" + (e.par.indep === "si" ? " selected" : "") + ">Sí: son independientes (se aplica el paralelo)</option>" +
+          "<option value='no'" + (e.par.indep === "no" ? " selected" : "") + ">No: comparten causa de falla (no se aplica)</option></select></td>" +
+        "<td class='noimp'><button class='sec mini' data-a='nopar' data-i='" + i + "'>quitar paralelo</button></td></tr>" +
+        "<tr class='sub'><td></td><td colspan='4' style='font-size:13px'>" + (AVISO_PAR[e.k] || AVISO_PAR.otro) + "</td></tr>";
+    }
+  });
+  $(cid + "-ed").innerHTML = h + "</tbody></table>";
+  L.forEach(function(e, i){ marcaFila(cid, i); });
+}
+function pintaCadena(cid){
+  const L = S[cid].links, v0 = ventana(cid), ven = v0 || 0;
+  inval($(cid + "-ven"), v0 === null);
+  const R = CALC.cadena(parsea(L), ven);
+  /* diagrama */
+  let dg = "<div class='cad'>";
+  L.forEach(function(e, i){
+    const g = R.grupos[i], debil = R.d !== null && R.debil === i;
+    const caja = function(nom, d, extra){ return "<div class='esl" + (d === null ? " sd" : "") + (extra || "") + "'><div class='en'>" + esc(nom || "sin nombre") + "</div><div class='ev'>" + fp(d) + "</div></div>"; };
+    if (i) dg += "<div class='con'></div>";
+    if (e.par){
+      const ok = g.modo === "paralelo";
+      dg += "<div class='par" + (ok ? "" : " nop") + "'>" + caja(e.nom, CALC.pct(e.d)) + caja(e.par.nom, CALC.pct(e.par.d)) +
+            "<div class='pt'>" + (ok ? "Paralelo · " + fp(g.d) : g.modo === "comun" ? "Causa común · cuenta " + fp(g.d) : g.modo === "sin-decidir" ? "Falta decidir · cuenta " + fp(g.d) : "Falta un dato · cuenta " + fp(g.d)) + "</div></div>";
+    } else dg += caja(e.nom, CALC.pct(e.d), debil ? " debil" : "");
+  });
+  $(cid + "-dia").innerHTML = L.length ? dg + "</div><div class='leyenda' style='margin-top:4px'>Cajas unidas por una línea: en serie. Recuadro punteado con dos cajas: en paralelo. En naranja, el eslabón más débil.</div>" : "";
+  if (R.d === null){ $(cid + "-res").innerHTML = L.length ? "<div class='sal'>Ningún eslabón tiene un valor válido todavía.</div>" : ""; return; }
+  const nomG = function(i){ return (L[i].nom || "eslabón " + (i + 1)) + (L[i].par ? " ∥ " + (L[i].par.nom || "redundante") : ""); };
+  const sinNom = R.sinDato.map(nomG);
+  const malos = L.map(function(e, i){ return estadoFila(e, i).mal ? nomG(i) : null; }).filter(Boolean);
+  let h = "";
+  if (malos.length) h += "<div class='adv'><b>No se está contando: " + esc(malos.join(", ")) + ".</b> Tiene un valor vacío o no válido. El resultado de abajo es mejor que el real hasta que lo corrijan.</div>";
+  if (v0 === null) h += "<div class='adv'><b>Ventana no válida.</b> Escriban un número de horas mayor que cero; mientras tanto no se calculan las horas de la ventana.</div>";
+  /* indicadores */
+  h += "<div class='kpis'>" +
+    "<div class='kpi na'><div class='v'>" + fp(R.d) + "</div><div class='l'>Disponibilidad de la cadena" + (sinNom.length ? " · techo: sin contar " + esc(sinNom.join(", ")) : "") + "</div></div>" +
+    "<div class='kpi'><div class='v'>" + nf(R.ind * 100, 2) + " %</div><div class='l'>Indisponibilidad</div></div>" +
+    "<div class='kpi'><div class='v'>" + nf(R.horasAnio, 0) + " h</div><div class='l'>De caída esperadas al año (8.760 h)</div></div>" +
+    "<div class='kpi'><div class='v'>" + (v0 === null ? "—" : hv(R.horasVentana)) + "</div><div class='l'>De caída esperadas en la ventana de " + (v0 === null ? "—" : nf(ven, 0)) + " h</div></div>" +
+    "<div class='kpi'><div class='v' style='font-size:15px'>" + esc(nomG(R.debil)) + "</div><div class='l'>Eslabón más débil · " + fp(R.grupos[R.debil].d) + "</div></div></div>";
+  /* paso a paso */
+  const f6 = function(v){ return nf(v, 6).replace(/0+$/, "").replace(/,$/, ""); };
+  let pasos = [], acc = null;
+  R.con.forEach(function(i){
+    const g = R.grupos[i];
+    if (L[i].par && g.modo === "paralelo")
+      pasos.push("paralelo  1 − (1 − " + f6(CALC.pct(L[i].d)) + ") × (1 − " + f6(CALC.pct(L[i].par.d)) + ") = " + f6(g.d) + "      " + nomG(i));
+    if (acc === null){ acc = g.d; pasos.push(f6(g.d) + "      " + nomG(i)); }
+    else { const n = acc * g.d; pasos.push(f6(acc) + " × " + f6(g.d) + " = " + nf(n, 6) + "      × " + nomG(i)); acc = n; }
+  });
+  pasos.push("");
+  pasos.push("Disponibilidad de la cadena" + (sinNom.length ? ", sin " + sinNom.join(", ") : "") + " = " + fp(R.d) + "      Indisponibilidad = " + nf(R.ind * 100, 2) + " %");
+  pasos.push(nf(R.ind * 100, 2) + " % de 8.760 horas = " + nf(R.horasAnio, 0) + " horas al año" + (v0 === null ? "" : "      " + nf(R.ind * 100, 2) + " % de " + nf(ven, 0) + " horas = " + hvTxt(R.horasVentana)));
+  h += "<div class='et' style='margin-top:10px'>El cálculo, paso a paso</div><div class='sal'>" + esc(pasos.join("\n")) + "</div>";
+  /* avisos */
+  L.forEach(function(e, i){
+    const g = R.grupos[i]; if (!e.par) return;
+    if (g.modo === "sin-decidir") h += "<div class='adv'><b>" + esc(nomG(i)) + ": falta decidir si fallan de forma independiente.</b> Mientras tanto la herramienta no aplica el paralelo y cuenta " + fp(g.d) + ". Si fueran independientes daría " + fp(g.indep) + ".</div>";
+    if (g.modo === "comun") h += "<div class='adv'><b>" + esc(nomG(i)) + ": comparten causa de falla.</b> La fórmula del paralelo no aplica: el conjunto no supera la disponibilidad de lo que comparten. El valor real está entre " + fp(g.comun) + " (todas las caídas coinciden) y " + fp(g.indep) + " (si fueran independientes); la herramienta usa " + fp(g.comun) + ", el supuesto prudente. Para romper la dependencia hay que cambiar la ruta, el clúster o el cuarto, no el número.</div>";
+    if (g.modo === "par-sin-dato") h += "<div class='adv'><b>" + esc(nomG(i)) + ": uno de los dos no tiene un valor válido.</b> No se puede calcular el paralelo; se cuenta solo el que tiene valor.</div>";
+    if (g.modo === "paralelo") h += "<div class='aviso'><b>" + esc(nomG(i)) + ": paralelo aplicado, " + fp(g.d) + ".</b> Ustedes declararon que fallan de forma independiente. Escriban en la justificación qué evidencia lo sostiene.</div>";
+  });
+  if (sinNom.length) h += "<div class='adv'><b>Sin contar: " + esc(sinNom.join(", ")) + ".</b> El resultado es un techo: con cualquier valor real, la cadena solo puede ser igual o peor. Nómbrenlo, digan a quién se le pide y calculen con escenarios declarados.</div>";
+  let x = "<div class='leyenda'>Si ninguna caída coincidiera con otra, la cadena daría " + fp(R.cotaInf) + "; si todas coincidieran con las del eslabón más débil, " + fp(R.cotaSup) + ". El producto, " + fp(R.d) + ", supone fallas independientes.</div>";
+  /* escenarios para el eslabón sin dato */
+  if (R.sinDato.length === 1 && !L[R.sinDato[0]].par && !malos.length){
+    x += "<div class='et' style='margin-top:14px'>Escenarios declarados para «" + esc(nomG(R.sinDato[0])) + "»</div><table><thead><tr><th>Supuesto</th><th>Disponibilidad de la cadena</th><th>Horas de caída al año</th><th>Caída en la ventana</th></tr></thead><tbody>" +
+      [0.999, 0.995, 0.99].map(function(v){ const d = R.d * v;
+        return "<tr><td><b>" + fp(v, v === 0.99 ? 0 : 1) + "</b></td><td>" + fp(d) + "</td><td>" + nf(CALC.horasCaida(d, 8760), 0) + " h</td><td>" + (v0 === null ? "—" : hv(CALC.horasCaida(d, ven))) + "</td></tr>"; }).join("") + "</tbody></table>";
+  }
+  /* sensibilidad */
+  x += "<div class='et' style='margin-top:14px'>Sensibilidad · cuánto mejora la cadena si mejora cada eslabón</div><table><thead><tr><th>Eslabón</th><th>Hoy</th><th>Cadena si su caída baja a la mitad</th><th>Horas que se ganan al año</th><th>Cadena si fuera perfecto</th></tr></thead><tbody>" +
+    R.sens.map(function(s){ const g = R.grupos[s.i];
+      return "<tr><td><b>" + esc(nomG(s.i)) + "</b></td><td>" + fp(g.d) + "</td><td>" + fp(s.mitad) + "</td><td>" + nf(s.ganaAnio, 1) + " h</td><td>" + fp(s.perfecto) + "</td></tr>"; }).join("") + "</tbody></table>" +
+    "<div class='leyenda'>La sensibilidad dice dónde rinde más mejorar; no dice cuánto cuesta ni si se puede. Eso es el ejercicio 2.</div>";
+  $(cid + "-res").innerHTML = h + "<div class='noimp'>" + x + "</div>";
+}
+function montaCadena(cid){
+  const ed = $(cid + "-ed");
+  const foco = function(sel){ const el = ed.querySelector(sel) || $(cid + "-pal").querySelector("button"); if (el) el.focus(); };
+  $(cid + "-pal").innerHTML = SERV.map(function(s){ return "<button data-k='" + s.k + "'>" + esc(s.nom) + " · " + (s.d ? s.d + " %" : "sin dato") + "</button>"; }).join("") + "<button data-k=''>Eslabón en blanco</button>";
+  $(cid + "-pal").addEventListener("click", function(ev){
+    const b = ev.target.closest("button"); if (!b) return;
+    S[cid].links.push(b.dataset.k ? eslabon(b.dataset.k) : { k: "", nom: "", d: "", fuente: "", par: null });
+    pintaEditor(cid); pintaCadena(cid); guarda();          /* los botones de la paleta no se reconstruyen: conservan el foco */
+  });
+  /* escribir nunca reconstruye la tabla: solo se actualizan el aviso de la fila y los resultados */
+  const escribe = function(ev){
+    const t = ev.target, i = +t.dataset.i, k = t.dataset.k; if (!k) return;
+    const e = S[cid].links[i];
+    if (k === "nom" || k === "fuente") e[k] = t.value;
+    else if (k === "d"){
+      e.d = t.value;
+      if (RE_SUP.test(e.fuente)){             /* la fuente declarada sigue al valor */
+        const txt = t.value.trim();
+        e.fuente = (CALC.pct(txt) !== null && txt ? "Supuesto del equipo: " + txt + " %. " : "") + e.fuente.replace(RE_SUP, "");
+        ed.querySelector("input[data-k='fuente'][data-i='" + i + "']").value = e.fuente;
+      }
+    }
+    else if (k === "pnom") e.par.nom = t.value; else if (k === "pd") e.par.d = t.value; else if (k === "pindep") e.par.indep = t.value;
+    marcaFila(cid, i); pintaCadena(cid); guarda();
+  };
+  ed.addEventListener("input", escribe);
+  ed.addEventListener("change", function(ev){ if (ev.target.tagName === "SELECT") escribe(ev); });
+  ed.addEventListener("click", function(ev){
+    const b = ev.target.closest("button"); if (!b) return;
+    const L = S[cid].links, i = +b.dataset.i, a = b.dataset.a;
+    if (a === "esc" || a === "rest"){           /* sin reconstruir: se actualizan los dos campos de la fila */
+      const e = L[i];
+      if (a === "esc"){ e.d = b.dataset.v; e.fuente = "Supuesto del equipo: escenario " + b.dataset.v + " %. " + e.fuente.replace(RE_SUP, ""); }
+      else e.d = serv(e.k).d;
+      ed.querySelector("input[data-k='d'][data-i='" + i + "']").value = e.d;
+      ed.querySelector("input[data-k='fuente'][data-i='" + i + "']").value = e.fuente;
+      marcaFila(cid, i); pintaCadena(cid); guarda();
+      foco(a === "esc" ? "button[data-a='esc'][data-v='" + b.dataset.v + "'][data-i='" + i + "']" : "input[data-k='d'][data-i='" + i + "']");
+      return;
+    }
+    let sel = "";
+    if (a === "quita"){ L.splice(i, 1); sel = "input[data-k='nom'][data-i='" + Math.min(i, L.length - 1) + "']"; }
+    else if (a === "sube"){ if (i > 0) L.splice(i - 1, 0, L.splice(i, 1)[0]); sel = "button[data-a='sube'][data-i='" + Math.max(0, i - 1) + "']"; }
+    else if (a === "baja"){ if (i < L.length - 1) L.splice(i + 1, 0, L.splice(i, 1)[0]); sel = "button[data-a='baja'][data-i='" + Math.min(L.length - 1, i + 1) + "']"; }
+    else if (a === "par"){ L[i].par = { nom: "", d: "", indep: "" }; sel = "input[data-k='pnom'][data-i='" + i + "']"; }
+    else if (a === "nopar"){ L[i].par = null; sel = "button[data-a='par'][data-i='" + i + "']"; }
+    else return;
+    pintaEditor(cid); pintaCadena(cid); guarda(); foco(sel);
+  });
+  $(cid + "-ven").value = S[cid].ven; $(cid + "-just").value = S[cid].just;
+  $(cid + "-ven").addEventListener("input", function(){ S[cid].ven = this.value; pintaCadena(cid); guarda(); });
+  $(cid + "-just").addEventListener("input", function(){ S[cid].just = this.value; crece(this); guarda(); });
+  pintaEditor(cid); pintaCadena(cid);
+}
+
+/* ═════════ Ejercicio 2 · cotizaciones, calendario y canasta ═════════ */
+function opc(){ return { radica: S.e2.rad, rango: S.e2.rango, base: +S.e2.base, pausa: S.e2.pausa }; }
+function cal(c){ const o = opc(); o.supuesto = S.e2.sup[c.id] === "" ? null : S.e2.sup[c.id]; return CALC.calendario(c, o); }
+function txtLlega(k){ return k.llega === null ? (k.invalido ? "días no válidos" : "sin fecha") : (k.llega ? "sí" : "no") + (k.conSupuesto ? ", con supuesto" : ""); }
+function celLlega(k){
+  if (k.llega === null) return "<span class='sdato'>" + (k.invalido ? "Días no válidos" : "Sin fecha") + "</span>";
+  if (k.conSupuesto) return "<span class='cs'>" + (k.llega ? "Sí, con supuesto" : "No, con supuesto") + "</span>";
+  return k.llega ? "<span class='si'>Sí</span>" : "<span class='no'>No</span>";
+}
+function etq(x){ return x.id + " (" + (x.opera ? ff(x.opera) : "sin fecha") + (x.conSupuesto ? ", con supuesto del equipo" : "") + ")"; }
+function construyeE2(){
+  let h = "<thead><tr><th class='noimp'></th><th>#</th><th>Alternativa (Parte 11)</th><th>Inversión inicial</th><th>Costo mensual</th><th>Puesta en marcha</th><th>Costo anual (12 meses)</th><th>A 36 meses</th><th>Modalidad y quién ordena el gasto</th><th>Firma</th><th>Operando</th><th>¿Antes del 18 ene?</th></tr></thead><tbody>";
+  CALC.COT.forEach(function(c){
+    const c12 = CALC.costo(c, 12), c36 = CALC.costo(c, 36), esp = c.tipo === "otrosi" || c.tipo === "acuerdo";
+    h += "<tr id='e2r-" + c.id + "'><td class='noimp'><input type='checkbox' data-id='" + c.id + "' aria-label='Incluir " + c.id + " en la canasta'></td>" +
+      "<td><b>" + c.id + "</b></td><td>" + esc(c.nom) + (c.nota ? "<span class='peq'>" + esc(c.nota) + "</span>" : "") + "</td>" +
+      "<td class='n'>" + c.iniT + (c.iniN ? "<span class='peq'>" + c.iniN + "</span>" : "") + "</td><td class='n'>" + c.menT + "</td><td>" + c.plazoT + "</td>" +
+      "<td class='n'><b>" + nfm(c12) + "</b></td><td class='n'>" + (c36 === null ? "—<span class='peq'>solo 12 meses</span>" : nfm(c36)) + "</td>" +
+      "<td id='e2m-" + c.id + "'></td>" +
+      "<td>" + (esp ? "<input type='text' inputmode='numeric' data-sup='" + c.id + "' placeholder='días' aria-label='Supuesto de días hábiles para " + c.id + "'><span class='peq'>días hábiles " + (c.tipo === "otrosi" ? "hasta el otrosí" : "hasta el acuerdo") + ": supuesto del equipo</span>" : "") + "<span id='e2f-" + c.id + "'></span></td>" +
+      "<td id='e2o-" + c.id + "'></td><td id='e2l-" + c.id + "'></td></tr>";
+  });
+  $("e2-tab").innerHTML = h + "</tbody>";
+  CALC.COT.forEach(function(c){
+    $("e2r-" + c.id).querySelector("input[data-id]").checked = !!S.e2.sel[c.id];
+    const s = $("e2r-" + c.id).querySelector("input[data-sup]"); if (s) s.value = S.e2.sup[c.id];
+  });
+}
+/* actualiza solo las celdas calculadas: la tabla no se reconstruye y el foco no se pierde */
+function actualizaE2(){
+  const o = opc(), hab = CALC.esHabil(o.radica);
+  $("e2-sup").innerHTML = "<span class='sup'>Supuestos en uso</span> Radicación: " + ff(o.radica) + " · contratación en el " + (o.rango === "min" ? "mínimo" : "máximo") + " de su rango, en días hábiles · cuantía = costo a " + o.base + " meses · puesta en marcha desde el día siguiente a la firma, " + (o.pausa ? "sin contar las vacaciones colectivas" : "sin parar en vacaciones") + "." +
+    (hab ? "" : " <b>La fecha de radicación no es día hábil:</b> el conteo arranca el siguiente día hábil.");
+  CALC.COT.forEach(function(c){
+    const k = cal(c);
+    $("e2r-" + c.id).classList.toggle("sel", !!S.e2.sel[c.id]);
+    $("e2m-" + c.id).innerHTML = esc(k.mod) + "<span class='peq'>" + esc(k.ord) + (c.tipo === "contrato" ? " · " + k.dias + " días hábiles" : c.tipo === "otrosi" ? " (por cuantía)" : "") + "</span>";
+    $("e2f-" + c.id).innerHTML = k.firma ? ff(k.firma) : "";
+    const s = $("e2r-" + c.id).querySelector("input[data-sup]"); if (s) inval(s, k.invalido);
+    $("e2o-" + c.id).innerHTML = k.invalido ? "<span class='sdato'>Días no válidos</span><span class='peq'>escriban un número entero de días hábiles, cero o más</span>"
+      : !k.opera ? "<span class='sdato'>Sin dato</span><span class='peq'>el caso no da el plazo: escriban su supuesto</span>"
+      : "<b>" + ff(k.opera) + "</b>" +
+        (c.tipo === "acuerdo" ? "<span class='peq'>Fecha del acuerdo que ustedes suponen, más 12 días hábiles para vincular (Parte 17). No es un dato del caso, y la vicerrectora pidió no contar con gente nueva antes de febrero (Parte 18).</span>" : "") +
+        (c.tipo === "otrosi" ? "<span class='peq'>Con el plazo que ustedes suponen. El contrato de EduNube vence el 31 de diciembre de 2026: el otrosí no cubre enero de 2027 salvo que el contrato nuevo lo incluya (Parte 10).</span>" : "");
+    $("e2l-" + c.id).innerHTML = celLlega(k);
+  });
+  pintaCanasta(); pintaE3();
+}
+function pintaCanasta(){
+  const ids = CALC.COT.filter(function(c){ return S.e2.sel[c.id]; }).map(function(c){ return c.id; });
+  $("e2").classList.toggle("vacia", !ids.length);
+  if (!ids.length){ $("e2-can").innerHTML = "<div class='sal'>Marquen en la tabla las cotizaciones que comprarían.</div>"; return; }
+  const k = CALC.canasta(ids), fuera = CALC.COT.filter(function(c){ return !S.e2.sel[c.id]; });
+  const cs = ids.map(function(id){ return cal(CALC.cot(id)); });
+  const lista = function(f){ const r = cs.filter(f); return r.length ? r.map(etq).join(", ") : "ninguna"; };
+  let h = "<div class='kpis'>" +
+    "<div class='kpi'><div class='v'>" + nfm(k.ini) + "</div><div class='l'>Inversión inicial, una vez</div></div>" +
+    "<div class='kpi'><div class='v'>" + nfm(k.rec) + "</div><div class='l'>Gasto que se repite cada año</div></div>" +
+    "<div class='kpi na'><div class='v'>" + nfm(k.c12) + "</div><div class='l'>Costo anual (a 12 meses)</div></div>" +
+    "<div class='kpi'><div class='v'>" + nfm(k.c36) + "</div><div class='l'>Costo a 36 meses" + (k.sin36.length ? " · " + k.sin36.join(", ") + " solo a 12" : "") + "</div></div>" +
+    "<div class='kpi" + (k.queda < 0 ? " na" : "") + "'><div class='v' style='color:" + (k.queda < 0 ? "var(--rojo)" : "var(--verde)") + "'>" + nfm(Math.abs(k.queda)) + "</div><div class='l'>" + (k.queda < 0 ? "Faltan: exige adición presupuestal y un argumento" : "Quedan de los $450 M libres") + "</div></div></div>";
+  h += "<div class='sal'>" + esc(
+    "Canasta: " + ids.map(function(id){ return id + " " + nf(CALC.costo(id, 12), 1); }).join(" + ") + " = " + nf(k.c12, 1) + "   →   450 − " + nf(k.c12, 1) + " = " + nf(k.queda, 1) + "\n" +
+    "Operando antes del 18 de enero : " + lista(function(x){ return x.llega === true && !x.conSupuesto; }) + "\n" +
+    (cs.some(function(x){ return x.llega === true && x.conSupuesto; }) ? "Solo si se cumple su supuesto   : " + lista(function(x){ return x.llega === true && x.conSupuesto; }) + "\n" : "") +
+    "Llegan después                 : " + lista(function(x){ return x.llega === false; }) +
+    (cs.some(function(x){ return x.llega === null; }) ? "\nSin fecha, falta un supuesto   : " + cs.filter(function(x){ return x.llega === null; }).map(function(x){ return x.id; }).join(", ") : "")) + "</div>";
+  h += "<div class='noimp'><div class='et' style='margin-top:12px'>Lo que queda por fuera</div><table><thead><tr><th>#</th><th>Alternativa</th><th>Costo anual</th><th>¿Cabría en lo que queda?</th></tr></thead><tbody>" +
+    fuera.map(function(c){ const v = CALC.costo(c, 12);
+      return "<tr><td><b>" + c.id + "</b></td><td>" + esc(c.nom) + "</td><td>" + nfm(v) + "</td><td>" + (v === 0 ? "No cuesta plata: cuesta trabajo interno" : v <= k.queda ? "<span class='si'>Cabe</span>" : "<span class='no'>No cabe</span>" + (k.queda >= 0 ? " · faltarían " + nfm(CALC.r(v - k.queda, 1)) : "")) + "</td></tr>"; }).join("") + "</tbody></table>" +
+    "<div class='leyenda'>Que quepa en la plata no significa que quepa en el plazo, ni que haya quién lo opere. El costo mensual se repite en 2028 y 2029: quién lo paga es un supuesto que hay que escribir.</div></div>";
+  $("e2-can").innerHTML = h;
+}
+function montaE2(){
+  const rad = $("e2-rad");
+  rad.value = S.e2.rad; $("e2-rango").value = S.e2.rango; $("e2-base").value = S.e2.base; $("e2-pausa").checked = S.e2.pausa; $("e2-just").value = S.e2.just;
+  rad.addEventListener("change", function(){
+    const v = this.value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || v < this.min || v > this.max){
+      $("e2-radmsg").textContent = "Fecha no válida (debe estar entre el 1 de octubre de 2026 y el 31 de diciembre de 2027). Se conserva " + ff(S.e2.rad) + ".";
+      this.value = S.e2.rad; return;
+    }
+    $("e2-radmsg").textContent = ""; S.e2.rad = v; actualizaE2(); guarda();
+  });
+  $("e2-rango").addEventListener("change", function(){ S.e2.rango = this.value; actualizaE2(); guarda(); });
+  $("e2-base").addEventListener("change", function(){ S.e2.base = this.value; actualizaE2(); guarda(); });
+  $("e2-pausa").addEventListener("change", function(){ S.e2.pausa = this.checked; actualizaE2(); guarda(); });
+  $("e2-just").addEventListener("input", function(){ S.e2.just = this.value; crece(this); guarda(); });
+  construyeE2();
+  $("e2-tab").addEventListener("change", function(ev){ const t = ev.target; if (t.dataset.id){ S.e2.sel[t.dataset.id] = t.checked; actualizaE2(); guarda(); } });
+  $("e2-tab").addEventListener("input", function(ev){ const t = ev.target; if (t.dataset.sup){ S.e2.sup[t.dataset.sup] = t.value.trim(); actualizaE2(); guarda(); } });
+  actualizaE2();
+}
+
+/* ═════════ Ejercicio 3 · tres alternativas ═════════ */
+function idsCan(c){ return CALC.COT.filter(function(x){ return c.sel[x.id]; }).map(function(x){ return x.id; }); }
+function horasOk(s){ const v = CALC.num(s); return v !== null && v >= 0 ? v : null; }
+function frente(esp, obj){
+  const h = function(v){ return nf(v, 1).replace(/,0$/, "") + " h"; };
+  if (!String(esp).trim()) return "<span class='sdato'>Falta la estimación</span>";
+  const e = horasOk(esp), o = horasOk(obj);
+  if (e === null) return "<span class='sdato'>Valor no válido: horas, cero o más</span>";
+  if (!String(obj).trim()) return h(e) + " · <span class='sdato'>falta el objetivo de la entrega 1</span>";
+  if (o === null) return h(e) + " · <span class='sdato'>objetivo no válido</span>";
+  return h(e) + " frente a " + h(o) + " · " + (e <= o ? "<span class='si'>cumple</span>" : "<span class='no'>no cumple</span>");
+}
+function pintaE3(){
+  if (!$("e3-tab")) return;
+  inval($("e3-rto"), S.e3.rto.trim() && horasOk(S.e3.rto) === null); inval($("e3-rpo"), S.e3.rpo.trim() && horasOk(S.e3.rpo) === null);
+  const filas = ["Cotizaciones", "Inversión inicial", "Costo anual (a 12 meses)", "Costo a 36 meses", "Frente a los $450 M libres",
+                 "Operando antes del 18 de enero", "Llega después, o sin fecha", "Quién ordena el gasto",
+                 "Tiempo de recuperación esperado / objetivo (RTO)", "Punto de recuperación esperado / objetivo (RPO)",
+                 "Fuente de los tiempos", "Eslabón más débil después de comprar · entrega 2", "Riesgo que queda sin cubrir · entrega 2", "Quién lo acepta · entrega 2"].map(function(f){ return [f, []]; });
+  S.e3.can.forEach(function(c){
+    const ids = idsCan(c), k = CALC.canasta(ids), cs = ids.map(function(id){ return cal(CALC.cot(id)); });
+    const ord = {}; cs.forEach(function(x){ (ord[x.ord] = ord[x.ord] || []).push(x.id); });
+    const v = [
+      ids.length ? ids.join(", ") : "<span class='sdato'>Vacía</span>", nfm(k.ini), "<b>" + nfm(k.c12) + "</b>",
+      nfm(k.c36) + (k.sin36.length ? "<span class='peq'>" + k.sin36.join(", ") + " solo a 12 meses</span>" : ""),
+      k.queda < 0 ? "<span class='no'>Faltan " + nfm(-k.queda) + "</span>" : "<span class='si'>Quedan " + nfm(k.queda) + "</span>",
+      cs.filter(function(x){ return x.llega === true; }).map(function(x){ return x.conSupuesto ? "<span class='cs'>" + etq(x) + "</span>" : etq(x); }).join("<br>") || "Ninguna",
+      cs.filter(function(x){ return x.llega !== true; }).map(etq).join("<br>") || "Ninguna",
+      Object.keys(ord).map(function(o){ return esc(o) + ": " + ord[o].join(", "); }).join("<br>") || "—",
+      frente(c.rto, S.e3.rto), frente(c.rpo, S.e3.rpo),
+      c.fuente.trim() ? esc(c.fuente) : "<span class='sdato'>Sin fuente declarada</span>",
+      esc(c.debil) || "—", esc(c.riesgo) || "—", esc(c.acepta) || "—"];
+    v.forEach(function(x, i){ filas[i][1].push(x); });
+  });
+  $("e3-tab").innerHTML = "<thead><tr><th style='width:22%'>Criterio</th>" + S.e3.can.map(function(c, i){ return "<th>" + "ABC"[i] + " · " + esc(c.nom) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    filas.map(function(f, i){ const vacia = i >= 11 && f[1].every(function(x){ return x === "—"; });      /* filas opcionales sin llenar: no se imprimen */
+      return "<tr" + (vacia ? " class='noimp'" : "") + "><td><b>" + f[0] + "</b></td>" + f[1].map(function(x){ return "<td>" + x + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
+}
+function pintaCans(){
+  $("e3-cans").innerHTML = S.e3.can.map(function(c, i){
+    const L = "ABC"[i];
+    const campo = function(k, ph, ta, rot){ return ta ? "<textarea data-c='" + i + "' data-k='" + k + "' placeholder=\"" + ph + "\" aria-label=\"" + rot + ", alternativa " + L + "\" spellcheck='false' style='min-height:54px'>" + esc(c[k]) + "</textarea>"
+      : "<input type='text' data-c='" + i + "' data-k='" + k + "' value=\"" + esc(c[k]) + "\" placeholder=\"" + ph + "\" aria-label=\"" + rot + ", alternativa " + L + "\" spellcheck='false'>"; };
+    return "<div class='tarj can'><div class='et' style='margin-top:0;color:var(--naranja)'>Alternativa " + L + "</div>" + campo("nom", "Nombre de la alternativa", false, "Nombre") +
+      "<div>" + CALC.COT.map(function(x){ return "<label title=\"" + esc(x.nom) + "\"><input type='checkbox' data-c='" + i + "' data-id='" + x.id + "'" + (c.sel[x.id] ? " checked" : "") + ">" + x.id + "</label>"; }).join("") + "</div>" +
+      "<div class='et'>Tiempo de recuperación esperado, horas</div>" + campo("rto", "horas", false, "Tiempo de recuperación esperado") +
+      "<div class='et'>Punto de recuperación esperado, horas</div>" + campo("rpo", "horas de datos que se pierden", false, "Punto de recuperación esperado") +
+      "<div class='et'>Fuente de esos dos tiempos</div>" + campo("fuente", "Dato del caso con su parte, o «estimación del equipo» y en qué se apoya", true, "Fuente de los tiempos") +
+      "<details class='opc'" + (c.debil || c.riesgo || c.acepta ? " open" : "") + "><summary>Si alcanza el tiempo, o para la entrega 2</summary>" +
+      "<div class='et'>Eslabón más débil después de comprar</div>" + campo("debil", "Vuelvan al ejercicio 1", false, "Eslabón más débil después de comprar") +
+      "<div class='et'>Riesgo que queda sin cubrir</div>" + campo("riesgo", "Qué proceso o escenario sigue expuesto", true, "Riesgo que queda sin cubrir") +
+      "<div class='et'>Quién lo acepta</div>" + campo("acepta", "Cargo de la Parte 4 con autoridad sobre ese gasto", false, "Quién acepta el riesgo") + "</details></div>";
+  }).join("");
+}
+function montaE3(){
+  ["rto", "rpo", "rec"].forEach(function(x){
+    $("e3-" + x).value = S.e3[x];
+    $("e3-" + x).addEventListener("input", function(){ S.e3[x] = this.value; if (this.tagName === "TEXTAREA") crece(this); pintaE3(); guarda(); });
+  });
+  $("e3-cans").addEventListener("input", function(ev){
+    const t = ev.target, c = S.e3.can[+t.dataset.c]; if (!c) return;
+    if (t.dataset.id) c.sel[t.dataset.id] = t.checked; else c[t.dataset.k] = t.value;
+    if (t.dataset.k === "rto" || t.dataset.k === "rpo") inval(t, t.value.trim() && horasOk(t.value) === null);
+    if (t.tagName === "TEXTAREA") crece(t);
+    pintaE3(); guarda();
+  });
+  $("e3-copia").addEventListener("click", function(){
+    S.e3.can[0].sel = JSON.parse(JSON.stringify(S.e2.sel)); pintaCans(); pintaE3(); guarda(); this.focus();
+  });
+  pintaCans(); pintaE3();
+}
+
+/* ═════════ Exportar, imprimir y borrar ═════════ */
+/* una celda de CSV: sin etiquetas; si empieza por signo se le antepone un espacio para que la hoja de cálculo no la tome por fórmula */
+function celdaCsv(v){
+  v = String(v == null ? "" : v).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  if (/^[=+\-@]/.test(v)) v = " " + v;
+  return /[;"\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+function csv(){
+  const F = [], fila = function(){ F.push(Array.prototype.map.call(arguments, celdaCsv).join(";")); };
+  fila("SIO0013 · Laboratorio 2 · Disponibilidad compuesta y costo de las estrategias");
+  fila("Equipo", S.equipo); fila("Exportado", new Date().toLocaleString("es-CO")); fila("");
+  fila("Demostración", "Porcentaje consultado", $("dp").value, "Horas de caída consultadas", $("dh").value, "Horas de caída en el mes (cláusula novena)", $("nh").value); fila("");
+  [["c1", "Cadena 1 · Matrícula (P2)"], ["c2", "Cadena 2 · Docencia virtual de un sábado (P6) · opcional"]].forEach(function(x){
+    const c = S[x[0]], v0 = ventana(x[0]), R = CALC.cadena(parsea(c.links), v0 || 0);
+    fila(x[1]); fila("#", "Eslabón", "Disponibilidad %", "Compromiso contractual (Parte 17)", "Fuente o supuesto", "Estado", "En paralelo con", "Disponibilidad % del redundante", "¿Independientes?", "Valor que cuenta %");
+    c.links.forEach(function(e, i){ const s = serv(e.k), st = estadoFila(e, i);
+      fila(i + 1, e.nom, e.d || "sin dato", s ? s.comp : "", e.fuente, st.mal ? "NO SE CUENTA: vacío o no válido" : CALC.pct(e.d) === null ? "sin dato" : "", e.par ? e.par.nom : "", e.par ? (e.par.d || "sin dato") : "", e.par ? (e.par.indep || "sin decidir") : "", R.grupos[i].d === null ? "sin dato" : nf(R.grupos[i].d * 100, 4)); });
+    if (R.d !== null){
+      fila("Disponibilidad de la cadena %", nf(R.d * 100, 4), R.sinDato.length ? "Techo: sin contar " + R.sinDato.map(function(i){ return c.links[i].nom; }).join(", ") : "");
+      fila("Horas de caída esperadas al año", nf(R.horasAnio, 1)); fila("Horas de la ventana", v0 === null ? "no válida" : c.ven, "Horas de caída esperadas en la ventana", v0 === null ? "" : nf(R.horasVentana, 3), v0 === null ? "" : dur(R.horasVentana));
+      fila("Eslabón más débil", c.links[R.debil].nom);
+      fila("Sensibilidad", "Eslabón", "Cadena si su caída baja a la mitad %", "Horas que se ganan al año", "Cadena si fuera perfecto %");
+      R.sens.forEach(function(s){ fila("", c.links[s.i].nom, nf(s.mitad * 100, 4), nf(s.ganaAnio, 1), nf(s.perfecto * 100, 4)); });
+    }
+    fila("Justificación y supuestos", c.just); fila("");
+  });
+  const o = opc();
+  fila("Ejercicio 2 · Cotizaciones (millones de pesos)");
+  fila("Supuestos", "Radicación " + o.radica, "Contratación en el " + (o.rango === "min" ? "mínimo" : "máximo") + " del rango", "Cuantía sobre el costo a " + o.base + " meses", o.pausa ? "Sin contar vacaciones colectivas" : "Sin parar en vacaciones");
+  fila("#", "Alternativa", "Inversión inicial", "Costo mensual", "Puesta en marcha", "Costo anual (12 meses)", "A 36 meses", "Modalidad", "Quién ordena el gasto", "Días hábiles", "Firma", "Operando", "Antes del 18 ene 2027", "Fecha con supuesto del equipo", "En la canasta");
+  CALC.COT.forEach(function(c){ const k = cal(c), c36 = CALC.costo(c, 36);
+    fila(c.id, c.nom, c.iniT + (c.iniN ? " " + c.iniN : ""), c.menT, c.plazoT, nf(CALC.costo(c, 12), 1), c36 === null ? "solo 12 meses" : nf(c36, 1), k.mod, k.ord, k.dias === null ? "sin dato" : k.dias, k.firma || "sin dato", k.opera || "sin dato", txtLlega(k), k.conSupuesto ? "sí: " + k.dias + " días hábiles supuestos" : "", S.e2.sel[c.id] ? "sí" : ""); });
+  const ids = CALC.COT.filter(function(c){ return S.e2.sel[c.id]; }).map(function(c){ return c.id; }), kc = CALC.canasta(ids);
+  fila("Canasta", ids.join(", ")); fila("Inversión inicial", nf(kc.ini, 1), "Gasto que se repite cada año", nf(kc.rec, 1), "Costo anual (12 meses)", nf(kc.c12, 1), "Costo a 36 meses", nf(kc.c36, 1), "450 menos costo anual", nf(kc.queda, 1));
+  fila("Justificación", S.e2.just); fila("");
+  fila("Ejercicio 3 · Tres alternativas para mejorar la cadena de matrícula"); fila("Proceso", PROCESO, "Tiempo objetivo de recuperación (RTO) h", S.e3.rto, "Punto objetivo de recuperación (RPO) h", S.e3.rpo);
+  fila("Alternativa", "Cotizaciones", "Inversión inicial", "Costo anual (12 meses)", "A 36 meses", "Antes del 18 ene", "Después o sin fecha", "Quién ordena el gasto", "Tiempo de recuperación esperado h", "Punto de recuperación esperado h", "Fuente", "Eslabón más débil después", "Riesgo sin cubrir", "Quién lo acepta");
+  S.e3.can.forEach(function(c, i){ const id3 = idsCan(c), k = CALC.canasta(id3), cs = id3.map(function(id){ return cal(CALC.cot(id)); });
+    fila("ABC"[i] + " · " + c.nom, id3.join(", "), nf(k.ini, 1), nf(k.c12, 1), nf(k.c36, 1),
+      cs.filter(function(x){ return x.llega === true; }).map(etq).join(", "), cs.filter(function(x){ return x.llega !== true; }).map(etq).join(", "),
+      cs.map(function(x){ return x.id + ": " + x.ord; }).join(" | "), c.rto, c.rpo, c.fuente, c.debil, c.riesgo, c.acepta); });
+  fila("Recomendación", S.e3.rec);
+  return F.join("\r\n");
+}
+function muestraCsv(msg){
+  $("csvbox").style.display = "block"; $("csvmsg").textContent = msg; $("csvtxt").value = csv(); $("csvtxt").focus(); $("csvtxt").select();
+}
+$("bcsv").addEventListener("click", function(){
+  try {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["﻿" + csv()], { type: "text/csv;charset=utf-8" }));
+    a.download = "Laboratorio-2-SIO0013" + (S.equipo.trim() ? "-" + S.equipo.trim().replace(/[^\wáéíóúñÁÉÍÓÚÑ]+/g, "-").slice(0, 40) : "") + ".csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  } catch (e) { muestraCsv("La descarga no funcionó en este navegador. Copien el texto y péguenlo en un archivo .csv o en el mensaje de entrega."); }
+});
+$("bcsvtxt").addEventListener("click", function(){
+  if ($("csvbox").style.display === "block"){ $("csvbox").style.display = "none"; return; }
+  muestraCsv("Si la descarga está bloqueada: seleccionen todo, copien y peguen en un archivo .csv, en una hoja de cálculo o en el mensaje de entrega.");
+});
+$("bimp").addEventListener("click", function(){ espejos(); window.print(); });
+window.addEventListener("beforeprint", espejos);
+$("bborra").addEventListener("click", function(){
+  if (!confirm("Se borra todo lo que han escrito en este laboratorio y vuelven los valores iniciales del caso. ¿Continuar?")) return;
+  try { localStorage.removeItem(CLAVE); } catch (e) {}
+  location.reload();
+});
+$("equipo").value = S.equipo;
+$("equipo").addEventListener("input", function(){ S.equipo = this.value; guarda(); });
+
+/* ═════════ Arranque ═════════ */
+montaDemo(); montaCadena("c1"); montaCadena("c2"); montaE2(); montaE3(); espejos();
+$$("textarea").forEach(function(t){ if (t.id !== "csvtxt") crece(t); });
+
+/* ═════════ Repaso ═════════ */
+montarQuiz("quiz", [
+ ["Un equipo promedia las cinco disponibilidades medidas de la cadena de matrícula y reporta 99,53 %.",
+  "En serie se multiplica", "Todos los eslabones tienen que funcionar: se multiplican. El producto es 97,67 %, peor que el peor eslabón (SIGA, 99,1 %). El promedio (41 horas de caída al año) esconde unas 163 de las 204."],
+ ["Se calcula 99,9975 % para dos enlaces de internet de dos proveedores distintos. Los dos entran por el mismo poste y el mismo ducto.",
+  "Redundancia con causa común", "La fórmula del paralelo supone fallas independientes. Con el mismo poste, un solo daño tumba los dos: el conjunto no supera la disponibilidad de lo que comparten (Parte 7)."],
+ ["Según la medición de la propia universidad, el proveedor cumplió su 99,5 % mensual; aun así, el servicio estuvo tres horas y media caído un sábado de exámenes.",
+  "Un porcentaje es un promedio", "99,5 % mensual admite 3 h 36 min de caída, seguidas y en el peor momento, sin incumplir nada. El porcentaje no dice cuándo cae ni cuánto dura cada caída, y no es un tiempo de recuperación."],
+ ["Tras 19 horas de caída, la universidad espera que el descuento del 5 % por punto cubra el costo de reprogramar 212 exámenes.",
+  "Un descuento no es una indemnización", "Se calcula sobre lo que se paga, no sobre lo que se pierde: unos $4,4 millones en el mejor caso, y la cláusula novena lo declara «única compensación». En junio de 2025 fue de cero pesos."],
+ ["La tabla omite el recaudo del banco porque nadie lo mide, y el 97,67 % se presenta como la disponibilidad de la matrícula.",
+  "El dato faltante se declara", "Sin el banco, 97,67 % es un techo. Se nombra el vacío, se dice a quién se le pide (el tesorero, con el gerente de cuenta) y se calcula con escenarios: 97,57 %, 97,18 % y 96,69 %."],
+ ["El 16 de mayo de 2026 el proveedor del aula virtual registró su servicio como disponible mientras 3.900 estudiantes no podían ingresar.",
+  "Importa quién mide y desde dónde", "La cláusula séptima mide «en sus propios sistemas» y excluye las fallas originadas en la universidad. El servicio estaba arriba; el directorio de Girardot, no (H8)."]
+], ["En serie se multiplica", "Redundancia con causa común", "Un porcentaje es un promedio", "Un descuento no es una indemnización", "El dato faltante se declara", "Importa quién mide y desde dónde"], "qver", "qreset", "qmarca");
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio 1 · SIO0013 Continuidad del negocio</title>
+<style>
+/* Hoja común de los laboratorios de SIO0010. Misma identidad del laboratorio 1.
+   Al final está la hoja de impresión: el PDF de cada laboratorio sale de este mismo archivo. */
+:root{
+  --naranja:#F36406; --naranja-lav:#FDEFE9; --azul:#154361; --azul-lav:#E9F0F5;
+  --tinta:#15171C; --tinta-2:#4A505C; --gris:#5C5C5C; --papel:#FFFFFF; --papel-2:#F4F4F4;
+  --linea:#D8DBDF; --linea-suave:#E9EBEE; --verde:#1B6B47; --verde-lav:#E1F0E8;
+  --rojo:#A8321B; --rojo-lav:#FBEAE6;
+  --mono:"Consolas","Cascadia Mono",ui-monospace,monospace;
+  --sans:Arial,Helvetica,sans-serif; --titular:"Arial Black",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel-2);color:var(--tinta);font-family:var(--sans);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 80px;background:var(--papel)}
+header.top{padding:26px 0 0}
+.marca{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.marca img{height:40px;width:auto}
+.regla{height:5px;background:var(--tinta);margin:0 0 12px}
+.kicker{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.20em;text-transform:uppercase;color:var(--gris)}
+h1{font-family:var(--titular);font-size:38px;line-height:1.1;margin:8px 0 14px;letter-spacing:-.01em}
+.lead{font-size:16px;color:var(--tinta-2);max-width:78ch}
+.aviso{border-left:4px solid var(--naranja);background:var(--naranja-lav);padding:12px 16px;margin:18px 0}
+.aviso b{color:var(--tinta)}
+.adv{border-left:4px solid var(--rojo);background:var(--rojo-lav);padding:12px 16px;margin:16px 0;font-size:14.5px;color:var(--tinta-2)}
+.adv b{color:var(--rojo)}
+section{margin-top:44px;scroll-margin-top:16px}
+.sec-h{border-top:4px solid var(--tinta);padding-top:10px;margin-bottom:16px}
+.sec-n{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--naranja)}
+h2{font-family:var(--titular);font-size:25px;margin:6px 0 0;letter-spacing:-.01em}
+h3{font-size:16px;margin:22px 0 8px}
+.nav{position:sticky;top:0;background:var(--papel);border-bottom:1px solid var(--linea);padding:10px 0;z-index:9;display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--gris);border:1px solid var(--linea);padding:5px 9px;border-radius:2px}
+.nav a:hover{color:var(--naranja);border-color:var(--naranja)}
+.panel{border:1px solid var(--linea);border-radius:3px;padding:16px;margin:14px 0;background:var(--papel)}
+.et{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--azul);margin-bottom:7px}
+textarea,input[type=text],input[type=number],select{width:100%;font-family:var(--mono);font-size:13px;padding:9px 11px;border:1px solid var(--linea);border-radius:2px;background:var(--papel);color:var(--tinta);resize:vertical}
+textarea{min-height:72px}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.fila label{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);font-weight:700}
+button{font-family:var(--sans);font-size:13px;font-weight:700;padding:8px 15px;border:1px solid var(--tinta);background:var(--tinta);color:#fff;border-radius:2px;cursor:pointer}
+button:hover{background:var(--naranja);border-color:var(--naranja)}
+button.sec{background:transparent;color:var(--tinta)}
+button.sec:hover{color:var(--naranja)}
+button:disabled{opacity:.45;cursor:default}
+input[type=range]{flex:1;min-width:190px;accent-color:var(--naranja)}
+.sal{font-family:var(--mono);font-size:13px;background:var(--papel-2);border:1px solid var(--linea-suave);border-radius:2px;padding:11px 13px;white-space:pre-wrap;word-break:break-word;min-height:42px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.dos,.tres{grid-template-columns:1fr}}
+.imgs{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:8px}
+.imgs figure{margin:0;text-align:center}
+.imgs img{width:230px;height:230px;image-rendering:pixelated;border:1px solid var(--linea)}
+.imgs figcaption{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);margin-top:8px;line-height:1.5}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:8px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--azul);padding:7px 9px;font-weight:700}
+td{padding:6px 9px;border-bottom:1px solid var(--linea-suave);color:var(--tinta-2);vertical-align:top}
+td b{color:var(--tinta)}
+.leyenda{font-family:var(--mono);font-size:10.5px;color:var(--gris);margin-top:14px;line-height:1.7}
+.ok{color:var(--verde);font-weight:700}
+.mal{color:var(--naranja);font-weight:700}
+.rojo{color:var(--rojo);font-weight:700}
+details{border:1px solid var(--linea);border-radius:2px;padding:10px 14px;margin-top:12px;background:var(--papel-2)}
+summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--azul)}
+details p{margin:9px 0 0;font-size:14px;color:var(--tinta-2)}
+details p:first-of-type{margin-top:10px}
+
+/* bloque de comandos con botón de copiar */
+.cmd{position:relative;background:#15171C;border-radius:3px;padding:13px 15px;margin:11px 0;overflow-x:auto}
+.cmd pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:#E8EAED;white-space:pre}
+.cmd .c{color:#8A9199}
+.cmd .n{color:#F0A26A}
+.cmd .copiar{position:absolute;top:8px;right:8px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;background:transparent;color:#8A9199;border:1px solid #3A3F47}
+.cmd .copiar:hover{color:#fff;background:transparent;border-color:#8A9199}
+.cmd-t{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--azul);margin:16px 0 -4px}
+
+/* pasos numerados */
+ol.pasos{margin:12px 0 0;padding:0;list-style:none;counter-reset:pp}
+ol.pasos li{counter-increment:pp;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--linea-suave)}
+ol.pasos li:last-child{border-bottom:0}
+ol.pasos li::before{content:counter(pp);flex:0 0 22px;height:22px;border-radius:50%;background:var(--azul);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+ol.pasos li b{display:block;color:var(--tinta)}
+ol.pasos li span{font-size:14.5px;color:var(--tinta-2)}
+
+/* tarjetas */
+.tarj{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;background:var(--papel)}
+.tarj.fill{background:var(--papel-2)}
+.tarj.az{background:var(--azul-lav);border-color:#C6D5E0}
+.tarj.na{background:var(--naranja-lav);border-color:#F5CFBF}
+.tarj h4{margin:0 0 5px;font-size:14px}
+.tarj p{margin:0;font-size:13.5px;color:var(--tinta-2)}
+
+/* entregable */
+.ent{border:2px solid var(--tinta);border-radius:3px;padding:15px 17px;margin-top:16px}
+.ent .et{color:var(--naranja)}
+.ent ul{margin:8px 0 0;padding-left:19px;font-size:14.5px;color:var(--tinta-2)}
+.ent li{margin-bottom:5px}
+
+/* casillas de verificación */
+ul.chk{margin:10px 0 0;padding:0;list-style:none}
+ul.chk li{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--linea-suave);font-size:14.5px;color:var(--tinta-2)}
+ul.chk li:last-child{border-bottom:0}
+ul.chk li::before{content:"";flex:0 0 13px;height:13px;border:1.5px solid var(--azul);border-radius:2px;margin-top:4px}
+
+/* repaso */
+.preg{border:1px solid var(--linea);border-radius:3px;padding:13px 15px;margin-bottom:9px}
+.preg .q{font-weight:700;margin-bottom:8px}
+.preg .ops{display:flex;gap:7px;flex-wrap:wrap}
+.preg .ops button{font-size:12px;padding:6px 11px;background:transparent;color:var(--tinta);border-color:var(--linea)}
+.preg .ops button.elegida{background:var(--azul);color:#fff;border-color:var(--azul)}
+.preg .fb{margin-top:9px;font-size:13.5px;display:none}
+
+footer{margin-top:54px;border-top:1px solid var(--linea);padding-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* ───────────────────────── impresión ─────────────────────────
+   El PDF de cada laboratorio se genera de este mismo archivo. */
+@media print{
+  @page{ size:A4; margin:15mm 14mm 14mm }
+  body{background:#fff;font-size:10.2pt;line-height:1.45}
+  .wrap{max-width:none;padding:0;background:#fff}
+  .nav{display:none}
+  button,input[type=range],.copiar{display:none!important}
+  h1{font-size:25pt}
+  h2{font-size:15pt}
+  h3{font-size:11.5pt}
+  .lead{font-size:10.6pt;max-width:none}
+  section{margin-top:18pt;page-break-inside:auto}
+  .sec-h{page-break-after:avoid}
+  .panel,.tarj,.ent,.preg,.adv,.aviso,details,.cmd{page-break-inside:avoid}
+  .cmd{background:#F4F4F4;border:.7pt solid var(--linea)}
+  .cmd pre{color:#15171C;font-size:8.6pt}
+  .cmd .c{color:#6A7078}
+  .cmd .n{color:#A8321B}
+  .sal{min-height:0;font-size:8.6pt}
+  .inter .sal{display:none}
+  .inter::after{content:"Panel interactivo · ábralo en el navegador para ejecutarlo";display:block;font-family:var(--mono);font-size:8.4pt;letter-spacing:.06em;color:var(--gris);border-top:.7pt solid var(--linea-suave);margin-top:8px;padding-top:7px}
+  details{background:#fff}
+  details summary{list-style:none;color:var(--azul)}
+  details summary::-webkit-details-marker{display:none}
+  table{font-size:9pt}
+  th{padding:5px 7px;font-size:7.4pt}
+  td{padding:4.5px 7px}
+  .imgs img{width:150px;height:150px}
+  footer{margin-top:20pt;font-size:8pt}
+  a{color:inherit;text-decoration:none}
+}
+
+</style>
+</head>
+<body>
+<script>
+/* Utilidades comunes de los laboratorios (heredadas de SIO0010, usadas en SIO0013).
+   Todo ocurre en el navegador: no hay peticiones de red. Cada laboratorio guarda su avance en el almacenamiento local. */
+
+const $  = id => document.getElementById(id);
+const $$ = sel => Array.prototype.slice.call(document.querySelectorAll(sel));
+
+/* ---------- bytes, hexadecimal y texto ---------- */
+const UTF8 = new TextEncoder();
+const DEC  = new TextDecoder();
+
+function bytes(txt){ return UTF8.encode(txt); }
+function texto(buf){ return DEC.decode(buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf); }
+function hex(buf){
+  const b = buf instanceof ArrayBuffer ? new Uint8Array(buf) : buf;
+  return Array.prototype.map.call(b, v => v.toString(16).padStart(2, "0")).join("");
+}
+function desdeHex(s){
+  s = (s || "").replace(/[^0-9a-fA-F]/g, "");
+  const b = new Uint8Array(s.length >> 1);
+  for (let i = 0; i < b.length; i++) b[i] = parseInt(s.substr(i * 2, 2), 16);
+  return b;
+}
+function aleatorio(n){ const b = new Uint8Array(n); crypto.getRandomValues(b); return b; }
+function bloques(h, n){ return (h.match(new RegExp(".{1," + (n * 2) + "}", "g")) || []).join(" "); }
+
+/* ---------- copiar bloques de comandos ---------- */
+function montarCopias(){
+  $$(".cmd").forEach(function(caja){
+    if (caja.querySelector(".copiar")) return;
+    const b = document.createElement("button");
+    b.className = "copiar"; b.type = "button"; b.textContent = "copiar";
+    b.addEventListener("click", function(){
+      const t = caja.querySelector("pre").innerText;
+      const listo = function(){ b.textContent = "copiado"; setTimeout(function(){ b.textContent = "copiar"; }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(listo, function(){ manual(t, listo); });
+      } else { manual(t, listo); }
+    });
+    caja.appendChild(b);
+  });
+  function manual(t, listo){          // sin permiso de portapapeles: selección manual
+    const a = document.createElement("textarea");
+    a.value = t; a.style.position = "fixed"; a.style.opacity = "0";
+    document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); listo(); } catch (e) {}
+    document.body.removeChild(a);
+  }
+}
+
+/* ---------- repaso de opción múltiple ----------
+   preguntas: [[enunciado, respuesta, explicación], ...]   ·   opciones: ["A", "B", ...] */
+function montarQuiz(cont, preguntas, opciones, idVer, idReset, idMarca){
+  const caja = $(cont);
+  const elegido = {};
+
+  function pinta(){
+    caja.innerHTML = "";
+    preguntas.forEach(function(p, i){
+      const d = document.createElement("div"); d.className = "preg";
+      const q = document.createElement("div"); q.className = "q"; q.textContent = (i + 1) + ". " + p[0];
+      const ops = document.createElement("div"); ops.className = "ops";
+      opciones.forEach(function(o){
+        const b = document.createElement("button"); b.type = "button"; b.textContent = o;
+        if (elegido[i] === o) b.className = "elegida";
+        b.addEventListener("click", function(){ elegido[i] = o; pinta(); marca(); });
+        ops.appendChild(b);
+      });
+      const fb = document.createElement("div"); fb.className = "fb"; fb.id = cont + "-fb" + i;
+      d.appendChild(q); d.appendChild(ops); d.appendChild(fb);
+      caja.appendChild(d);
+    });
+  }
+  function marca(){
+    const n = Object.keys(elegido).length;
+    if (idMarca) $(idMarca).textContent = n ? n + " de " + preguntas.length + " respondidas" : "";
+  }
+  function ver(){
+    preguntas.forEach(function(p, i){
+      const fb = $(cont + "-fb" + i);
+      const bien = elegido[i] === p[1];
+      fb.style.display = "block";
+      fb.innerHTML = '<span class="' + (bien ? "ok" : "mal") + '">' + (bien ? "Correcto" : "Respuesta: " + p[1]) +
+                     '</span> · <span style="color:var(--tinta-2)">' + p[2] + "</span>";
+    });
+  }
+  function reinicia(){ for (const k in elegido) delete elegido[k]; pinta(); marca(); }
+
+  if (idVer)   $(idVer).addEventListener("click", ver);
+  if (idReset) $(idReset).addEventListener("click", reinicia);
+  pinta();
+}
+
+/* ---------- cronómetro ---------- */
+async function cronometra(fn){
+  const t = performance.now();
+  const r = await fn();
+  return { ms: performance.now() - t, r: r };
+}
+function ms(v){ return v >= 1000 ? (v / 1000).toFixed(2) + " s" : v.toFixed(1) + " ms"; }
+
+/* ---------- impresión: los desplegables salen abiertos ---------- */
+function abreTodo(){ $$("details").forEach(function(d){ d.open = true; }); }
+window.addEventListener("beforeprint", abreTodo);
+if (window.matchMedia) {
+  const mq = window.matchMedia("print");
+  if (mq.addEventListener) mq.addEventListener("change", function(e){ if (e.matches) abreTodo(); });
+}
+
+document.addEventListener("DOMContentLoaded", montarCopias);
+
+</script>
+<style>
+  .glos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 0}
+  @media(max-width:820px){.glos{grid-template-columns:1fr 1fr}}
+  .glos div{border-top:2px solid var(--tinta);padding-top:6px;font-size:12.5px;color:var(--tinta-2)}
+  .glos b{display:block;color:var(--tinta);font-size:13px}
+  .estado{font-family:var(--mono);font-size:10.5px;color:var(--gris);margin-left:auto;align-self:center}
+  .selp{display:grid;grid-template-columns:repeat(4,1fr);gap:4px 14px;margin:8px 0}
+  @media(max-width:820px){.selp{grid-template-columns:1fr 1fr}}
+  .selp label{font-size:13px;display:flex;gap:7px;align-items:flex-start;padding:3px 0;cursor:pointer}
+  input[type=checkbox]{accent-color:var(--naranja);width:15px;height:15px;margin:2px 0 0;flex:0 0 auto}
+  :focus-visible{outline:2px solid var(--naranja);outline-offset:1px}
+  details.proc{padding:0;background:var(--papel);border:1px solid var(--linea);border-left:4px solid var(--linea);margin-top:8px}
+  details.proc.sel{border-left-color:var(--naranja)}
+  details.proc.demo{border-left-color:var(--azul)}
+  details.proc>summary{padding:10px 14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;color:var(--tinta);font-size:14.5px}
+  details.proc>summary .pid{font-family:var(--mono);color:var(--naranja);font-weight:700;min-width:28px}
+  details.proc>summary .chips{margin-left:auto;font-family:var(--mono);font-size:10.5px;font-weight:400;color:var(--gris);text-align:right}
+  details.proc>summary .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--linea);padding:1px 6px;border-radius:2px;color:var(--gris);font-weight:700}
+  details.proc.sel>summary .tag{border-color:var(--naranja);color:var(--naranja)}
+  .pbody{padding:2px 14px 16px;border-top:1px solid var(--linea-suave)}
+  .caso{font-size:13px}
+  .caso table{font-size:12.5px;margin-top:6px}
+  .caso td.k{width:190px;font-weight:700;color:var(--tinta)}
+  .caso ul{margin:0;padding-left:17px}
+  .caso li{margin-bottom:3px}
+  .mom{border-top:3px solid var(--tinta);margin-top:16px;padding-top:8px}
+  .mom.critico{border-top-color:var(--naranja)}
+  .mom-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+  .mom-h b{font-family:var(--titular);font-size:14px;white-space:nowrap}
+  .mom-h input{flex:1;min-width:260px;font-family:var(--sans);font-size:12.5px;padding:4px 7px}
+  .mgrid{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(0,1fr);gap:16px;align-items:start}
+  @media(max-width:900px){.mgrid{grid-template-columns:1fr}}
+  table.mx{table-layout:fixed;font-size:12.5px;margin:0}
+  table.mx th{padding:5px 4px;font-size:9px;letter-spacing:.06em;text-align:center}
+  table.mx th:first-child,table.mx th:last-child{text-align:left;padding-left:7px}
+  table.mx td{padding:3px 3px;vertical-align:middle}
+  table.mx td:first-child{padding-left:7px;font-weight:700;color:var(--tinta);font-size:12px}
+  table.mx select{width:100%;padding:3px 0 3px 4px;font-size:13px;font-family:var(--mono)}
+  table.mx select.alto{background:var(--naranja-lav);border-color:var(--naranja);font-weight:700}
+  table.mx input[type=text]{padding:4px 6px;font-size:12px;font-family:var(--sans)}
+  table.mx tr.niv td{border-top:2px solid var(--tinta);border-bottom:0;text-align:center;font-family:var(--mono);font-weight:700;color:var(--tinta);padding:5px 3px}
+  table.mx tr.niv td:first-child{text-align:left;font-family:var(--sans)}
+  table.mx tr.niv td.sup{background:var(--naranja);color:#fff}
+  table.mx tr.niv td.cr{text-align:left;font-family:var(--sans);font-weight:400;font-size:12px;color:var(--tinta-2);padding-left:7px}
+  .tm{display:grid;grid-template-columns:1fr 1fr;gap:7px 10px}
+  .tm .full{grid-column:1/-1}
+  .tm label,.lb{display:block;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin-bottom:2px}
+  .tm .par{display:flex;gap:4px}
+  .tm .par input{flex:1;min-width:0;padding:5px 7px}
+  .tm .par select{width:auto;flex:0 0 auto;padding:5px 4px;font-size:12px}
+  .tm textarea{min-height:44px;padding:5px 7px;font-family:var(--sans);font-size:12.5px}
+  .pmt{background:var(--papel-2);border-left:4px solid var(--tinta);padding:7px 10px}
+  .pmt .val{font-family:var(--titular);font-size:17px;line-height:1.2}
+  .pmt .sub{font-size:11.5px;color:var(--tinta-2);margin-top:2px}
+  .curva svg{width:100%;height:auto;display:block;max-width:470px}
+  .avisos{font-size:12.5px}
+  .avisos ul{list-style:none;margin:0;padding:0}
+  .avisos li{padding:5px 0 5px 9px;border-left:3px solid var(--linea);margin-bottom:5px;color:var(--tinta-2)}
+  .avisos li.error{border-left-color:var(--rojo);background:var(--rojo-lav)}
+  .avisos li.aviso{border-left-color:var(--naranja)}
+  .avisos li.nota{border-left-color:var(--azul)}
+  .avisos li b{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
+  .avisos li.error b{color:var(--rojo)} .avisos li.aviso b{color:var(--naranja)} .avisos li.nota b{color:var(--azul)}
+  .cont{overflow-x:auto}
+  table.cons{table-layout:fixed;font-size:11.5px;min-width:940px}
+  table.cons th{font-size:8.5px;letter-spacing:.06em;padding:5px 4px}
+  table.cons td{padding:4px 4px;word-wrap:break-word;overflow-wrap:anywhere}
+  table.cons td.c{text-align:center;font-family:var(--mono)}
+  table.cons td.sup{background:var(--naranja-lav);color:var(--tinta);font-weight:700}
+  table.cons tr.pri td{border-top:1.5px solid var(--linea)}
+  table.dep{table-layout:fixed;font-size:12px}
+  table.dep th{font-size:9px;padding:5px 4px;letter-spacing:.06em}
+  table.dep th.pc,table.dep td.pc{text-align:center;width:38px;padding:3px 0}
+  table.dep td.pc.decl{background:var(--azul-lav)}
+  table.dep td{padding:4px 6px}
+  table.dep td small{color:var(--gris);display:block;font-size:11px;line-height:1.35}
+  table.dep tr.sep td{background:var(--papel-2);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--tinta)}
+  table.dep td.h{font-family:var(--mono);font-weight:700;color:var(--tinta)}
+  table.bre{table-layout:fixed;font-size:12px}
+  table.bre th{font-size:9px;padding:5px 5px;letter-spacing:.06em}
+  table.bre td{padding:5px 6px}
+  table.bre input[type=text]{padding:4px 6px;font-size:12px;font-family:var(--sans)}
+  table.bre .par{display:flex;gap:3px}
+  table.bre .par input{flex:1;min-width:0;font-family:var(--mono)}
+  table.bre .par select{width:auto;padding:4px 2px;font-size:11.5px}
+  table.bre td.out{font-weight:700;color:var(--tinta)}
+  .conf{border:1px solid var(--naranja);border-radius:3px;padding:10px 12px;margin-top:8px;font-size:13px}
+  .conf table{font-size:12px}
+  .mini{font-size:12px;padding:5px 10px}
+  section{scroll-margin-top:60px}
+  .sin5 details.proc:not(.demo) tr.c-per{display:none}
+  .pv,.soloimp{display:none}
+  [hidden]{display:none!important}
+  .nav{flex-wrap:nowrap;overflow:hidden}
+  .nav a{white-space:nowrap;padding:5px 8px}
+  .estado{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mav{margin-top:8px}
+  #csvtxt{min-height:120px;font-size:11px;white-space:pre;margin-top:6px}
+  @media print{
+    @page{size:A4 landscape;margin:12mm}
+    .noimp,details.proc.vacia,details.caso,tr.sinuso{display:none!important}
+    .soloimp{display:block}
+    #ident{border:1.5pt solid #15171C;padding:8pt 10pt;margin:10pt 0;font-size:9.5pt;line-height:1.5}
+    #ident b{color:#15171C}
+    details.proc{border-left-width:2pt;page-break-inside:auto}
+    details.proc::details-content{content-visibility:visible;display:block}
+    input[type=text],textarea,select{display:none!important}
+    .pv{display:inline;font-family:var(--sans);font-size:8.6pt;color:#15171C;white-space:pre-wrap;overflow-wrap:anywhere}
+    textarea+.pv,.mom-h .pv,table.mx td:last-child .pv,table.bre td>.pv{display:block}
+    table.mx td{text-align:center}
+    table.mx td:first-child,table.mx td:last-child{text-align:left}
+    table.mx td .pv{font-family:var(--mono)}
+    table.mx td:last-child .pv{font-family:var(--sans)}
+    .tm .par{display:block}
+    .tm .par .pv{margin-right:4pt;font-weight:700}
+    table.cons{min-width:0;font-size:7.4pt}
+    table.cons th{font-size:6.2pt;padding:4px 2px;letter-spacing:0}
+    table.bre,table.dep{font-size:8pt}
+    .mgrid{grid-template-columns:minmax(0,1.62fr) minmax(0,1fr)}
+    .mom{margin-top:10pt}
+    .curva svg{max-width:330pt}
+    .pmt,table.mx tr,table.cons tr,table.bre tr,table.dep tr,.avisos li{page-break-inside:avoid}
+    .cont{overflow:visible}
+    section{margin-top:14pt}
+    h1{font-size:20pt}
+  }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="marca"><img src="data:image/png;base64,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" alt="Institución Universitaria de Envigado"></div>
+  <div class="regla"></div>
+  <div class="kicker">SIO0013 · Continuidad del negocio · Laboratorio 1 · Sesión 2 · jueves 15 de octubre de 2026</div>
+  <h1>Análisis de impacto de la Universidad Pedagógica Colombiana</h1>
+  <p class="lead">Noventa y cinco minutos del bloque B. Cada equipo profundiza en cuatro de los doce procesos de la Parte 5 del caso y el grupo consolida los doce. Para cada proceso y para dos momentos del calendario valoran el impacto por categoría y por franja de tiempo; de la curva salen el periodo máximo tolerable, el tiempo objetivo, el punto objetivo y el nivel mínimo de operación. Todo corre en este archivo, sin red y sin instalar nada.</p>
+  <div class="aviso noimp"><b>Antes de empezar.</b> Esta herramienta no trae la respuesta: trae los datos del caso, hace las cuentas y avisa cuando algo no cuadra. <b>No se evalúa que el número coincida con el del docente ni con el de otro equipo.</b> Se evalúa que cada tiempo salga de la curva, distinga el calendario y cite el dato del caso que lo sostiene (Parte 18: «evidencia»).</div>
+  <div class="aviso noimp" style="border-left-color:var(--azul);background:var(--azul-lav)"><b>Ritmo del bloque.</b> Arranque, reparto y ejemplo guiado, 10 minutos · análisis de los cuatro procesos, 50 · consolidación del grupo, 20 · revisión de coherencia y herencia de tiempos a los sistemas, 15. La tabla de la brecha se termina de llenar en la puesta en común que sigue. El repaso del final es para la casa: no cuenta en los 95 minutos. Lo que no cierre en el aula continúa en la entrega 1.</div>
+  <div class="glos noimp">
+    <div><b>Periodo máximo tolerable de interrupción</b>Tiempo a partir del cual no haber reanudado resulta inaceptable. Sigla de uso corriente: MTPD.</div>
+    <div><b>Tiempo objetivo de recuperación</b>Plazo desde el incidente para reanudar al nivel mínimo. Sigla: RTO.</div>
+    <div><b>Punto objetivo de recuperación</b>Datos que se acepta perder, medidos en tiempo hacia atrás. Sigla: RPO.</div>
+    <div><b>Nivel mínimo de operación</b>Objetivo mínimo de continuidad del negocio: qué funciones, para quién. Sigla: MBCO.</div>
+  </div>
+</header>
+<div class="soloimp" id="ident"></div>
+
+<nav class="nav noimp">
+  <a href="#e0">0 · Ejemplo guiado</a>
+  <a href="#e1">1 · Impacto y tiempos</a>
+  <a href="#con">Consolidar y exportar</a>
+  <a href="#e2">2 · Dependencias</a>
+  <a href="#e3">3 · La brecha</a>
+  <a href="#rep">Repaso</a>
+  <a href="#ent">Qué se entrega</a>
+  <span class="estado" id="estado" aria-live="polite"></span>
+</nav>
+
+<datalist id="dl-sus"></datalist>
+
+<!-- ───────────── EJERCICIO 0 ───────────── -->
+<section id="e0" class="noimp">
+  <div class="sec-h"><div class="sec-n">Ejercicio 0 · 10 minutos · demostración guiada</div><h2>Aprender la herramienta con P2 Matrícula</h2></div>
+  <p class="lead">Es el ejemplo que el docente desarrolló en el tablero, con los mismos valores. La semana de matrícula ya está diligenciada; la semana normal está a medias, a propósito.</p>
+  <div class="adv"><b>Ejemplo del docente, no la respuesta.</b> Es una forma razonada de llegar a los tiempos de P2 con datos del caso. No es la única: un equipo puede defender otro periodo tolerable, siempre que lo haga con curva, con calendario y con dato. El equipo al que le toque Matrícula no copia este ejemplo: lo revisa, lo discute y lo sostiene o lo cambia con argumento.</div>
+  <ol class="pasos">
+    <li><div><b>Lean la semana de matrícula.</b><span>Cada celda es un nivel de 1 a 5 para una categoría y una franja. La fila «Nivel de la franja» toma el más alto de la columna: el impacto no se promedia. La presentación agrupó «legal y reputacional» y «financiero y personas»; aquí el mismo valor va en las dos filas, y es discutible que deban ir iguales.</span></div></li>
+    <li><div><b>Miren dónde cruza.</b><span>La curva marca la primera franja que toca el umbral (nivel 4). Esa franja es el periodo máximo tolerable que la herramienta propone.</span></div></li>
+    <li><div><b>Completen la semana normal.</b><span>La presentación dio un solo nivel por franja: 1 a las 4 horas, 1 al día, 2 a los 3 días, 3 a la semana y 4 a las 2 semanas. Decidan en qué categoría cae cada uno, llenen las celdas y escriban el dato que lo sostiene. Mientras falte la curva, la herramienta avisa que hay tiempo objetivo sin periodo tolerable. La nota de «valoración incompleta» seguirá ahí hasta que valoren las demás categorías: el ejemplo usa las cinco.</span></div></li>
+    <li><div><b>Rompan una regla.</b><span>Cambien el tiempo objetivo de la semana de matrícula a 24 horas y lean el aviso. Pónganlo en 0. Devuélvanlo a 8. Así se comportará la herramienta con sus procesos.</span></div></li>
+  </ol>
+  <div id="demo"></div>
+  <div class="fila noimp"><button class="sec mini" id="demo-reset">Restablecer el ejemplo</button><span class="leyenda" style="margin:0">Valores de la presentación de la sesión 2 (ejemplo guiado, P2). El umbral del ejemplo es el nivel 4.</span></div>
+</section>
+
+<!-- ───────────── EJERCICIO 1 ───────────── -->
+<section id="e1">
+  <div class="sec-h"><div class="sec-n">Ejercicio 1 · 50 minutos · el núcleo</div><h2>Impacto por franja y los cuatro valores</h2></div>
+  <p class="lead">Marquen los cuatro procesos de su equipo. Para cada uno, y para cada momento del calendario, valoren el impacto, lean la curva y fijen los tiempos. La columna que se califica primero es la última: el dato del caso que sostiene cada fila.</p>
+
+  <div class="panel noimp">
+    <div class="et">Equipo, escala y reparto</div>
+    <div class="fila">
+      <label for="equipo">Equipo</label><input type="text" id="equipo" style="width:210px" placeholder="nombre o número del equipo">
+      <label for="umbral">Nivel inaceptable (umbral)</label>
+      <select id="umbral" style="width:auto"><option value="3">3 · Serio</option><option value="4">4 · Grave</option><option value="5">5 · Crítico</option></select>
+      <label for="uquien">Quién debe aprobarlo</label><input type="text" id="uquien" style="width:230px" placeholder="cargo de la Parte 3 o 4">
+    </div>
+    <div class="fila"><label style="text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:13px;color:var(--tinta-2);font-weight:400;display:flex;gap:7px"><input type="checkbox" id="quinta"> Añadir la quinta categoría, «sobre personas». El laboratorio pide cuatro (académico, financiero, legal y reputacional); la quinta es decisión del equipo.</label></div>
+    <div class="et" style="margin-top:10px">Los cuatro procesos que profundiza este equipo</div>
+    <div class="selp" id="selp"></div>
+    <div class="fila">
+      <button class="sec mini" data-rep="P1,P2,P3,P4">Ingreso y registro: P1 a P4</button>
+      <button class="sec mini" data-rep="P5,P6,P9,P12">Vida académica: P5, P6, P9 y P12</button>
+      <button class="sec mini" data-rep="P7,P8,P10,P11">Administración y servicio: P7, P8, P10 y P11</button>
+      <span class="leyenda" style="margin:0" id="selmarca"></span>
+    </div>
+    <div class="leyenda">Reparto propuesto en la presentación. El docente lo ajusta al número de equipos; lo que no se negocia es que los doce queden cubiertos.</div>
+    <div class="aviso" style="margin:10px 0 0"><b>Repártanse el trabajo.</b> Cincuenta minutos alcanzan si no llenan todo en un solo portátil: cada integrante puede abrir este archivo en el suyo, llenar un proceso, descargar su CSV y pasarlo al portátil del equipo, que los importa en «Consolidar y exportar». Entran como procesos nuevos, sin conflicto.</div>
+  </div>
+
+  <details class="noimp"><summary>La escala común de cinco niveles y por qué estas cinco franjas</summary>
+    <p>Escala de trabajo, propuesta del módulo y no dato del caso. Pueden ajustarla si todo el equipo usa la misma. El umbral es una decisión de la dirección: en los ejemplos de la sesión es el nivel 4 en cualquier categoría.</p>
+    <table>
+      <thead><tr><th>Nivel</th><th>Académico</th><th>Financiero</th><th>Legal y regulatorio</th><th>Reputacional y personas</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 · Menor</b></td><td>Se absorbe sin reprogramar nada</td><td>Ingreso aplazado unas horas, sin costo</td><td>Sin términos en riesgo</td><td>Molestia interna, sin eco</td></tr>
+        <tr><td><b>2 · Moderado</b></td><td>Se reprograma dentro de la misma fecha del calendario</td><td>Ingreso aplazado días; costos menores</td><td>Peticiones aisladas, respondidas en término</td><td>Quejas en redes; afectados puntuales</td></tr>
+        <tr><td><b>3 · Serio</b></td><td>Se reprograma dentro de la ventana, a costa de otros días</td><td>Costos adicionales ciertos: mora, logística</td><td>Peticiones masivas; términos apretados</td><td>Prensa local; grupos enteros afectados</td></tr>
+        <tr><td><b>4 · Grave</b></td><td>Exige mover una fecha del calendario: acto del Consejo Académico</td><td>Ingresos de la Nación o de la matrícula aplazados sin fecha cierta</td><td>Tutelas; términos incumplidos</td><td>Protesta, prensa regional, población vulnerable sin servicio</td></tr>
+        <tr><td><b>5 · Crítico</b></td><td>Se agota la holgura: se corre el semestre o el año</td><td>Pérdida que no se recupera o que compromete la operación</td><td>Actuación de un ente de control</td><td>Llega al informe de pares o al Ministerio</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Franja</th><th>Qué cambia al cruzarla</th><th>Ancla en el caso</th></tr></thead>
+      <tbody>
+        <tr><td><b>4 horas</b></td><td>Se pierde media jornada de atención. Todavía se puede recuperar el mismo día</td><td>Horario de tecnología: de 7:00 a 12:00 y de 2:00 a 6:00 (Parte 9)</td></tr>
+        <tr><td><b>1 día</b></td><td>Se pierde una fecha completa. Lo citado para hoy ya no se hizo hoy</td><td>Una franja de matrícula: hasta 4.100 estudiantes. Once horas bastaron en 2024 para 1.900 peticiones y tres tutelas (Partes 13 y 17)</td></tr>
+        <tr><td><b>3 días</b></td><td>Ya no se arregla reprogramando: hay que mover el calendario</td><td>Lo que tardó el Consejo Académico en sacar el acuerdo en enero de 2024 (Parte 17)</td></tr>
+        <tr><td><b>1 semana</b></td><td>Se consume toda la holgura del semestre</td><td>Cinco días hábiles entre el fin de 2027-1 y el intersemestral (Parte 17)</td></tr>
+        <tr><td><b>2 semanas</b></td><td>Se pierde una ventana completa del calendario</td><td>La matrícula dura diez días hábiles. Un repuesto de servidor tarda diez días hábiles en llegar (Partes 2 y 17)</td></tr>
+      </tbody>
+    </table>
+    <p><b>Horas de reloj, no horas hábiles.</b> Las franjas y los tiempos se cuentan en tiempo corrido. El sábado es el día de mayor uso del aula virtual y de menor presencia de tecnología (Parte 2).</p>
+  </details>
+
+  <details class="noimp"><summary>Cuatro reglas de coherencia que la herramienta revisa, y una quinta propia de una universidad</summary>
+    <p><b>Regla 1.</b> El tiempo objetivo de recuperación es menor que el periodo máximo tolerable, siempre y con margen: detectar, decidir y verificar también gastan reloj.</p>
+    <p><b>Regla 2.</b> El punto objetivo de recuperación es de datos, no de servicio. No se compara con los otros dos: mide otra cosa, en dirección contraria.</p>
+    <p><b>Regla 3.</b> El tiempo objetivo se cumple al alcanzar el nivel mínimo de operación. Sin nivel mínimo definido no se puede verificar: ¿recuperado hasta dónde?</p>
+    <p><b>Regla 4.</b> Un recurso hereda el tiempo más exigente de los procesos que sostiene. Es el ejercicio 2.</p>
+    <p><b>La quinta.</b> Los cuatro valores se fijan por momento del calendario. Un solo tiempo por proceso para todo el año está mal antes de discutir el número.</p>
+  </details>
+
+  <div id="procs"></div>
+</section>
+
+<!-- ───────────── CONSOLIDAR ───────────── -->
+<section id="con">
+  <div class="sec-h"><div class="sec-n">Consolidación del grupo · 20 minutos</div><h2>Una sola tabla con los doce procesos</h2></div>
+  <p class="lead">Cada equipo exporta su tabla y la importan en el portátil que consolida. Si dos equipos analizaron el mismo proceso y los números difieren, <b>se discute el argumento, no se promedia</b>: la herramienta conserva las dos versiones hasta que el grupo decide.</p>
+
+  <div class="panel noimp">
+    <div class="et">Guardar, exportar, importar e imprimir</div>
+    <div class="fila">
+      <button id="b-csv">Descargar la tabla consolidada (CSV)</button>
+      <button class="sec" id="b-csv2">Descargar herencia y brecha (CSV)</button>
+      <button class="sec" id="b-imp">Imprimir</button>
+    </div>
+    <div class="fila">
+      <label for="f-imp">Importar un CSV de este laboratorio</label>
+      <input type="file" id="f-imp" accept=".csv,text/csv" style="font-size:12.5px">
+      <span class="leyenda" style="margin:0" id="impmarca" aria-live="polite"></span>
+    </div>
+    <div class="fila">
+      <button class="sec mini" id="b-borrar">Borrar el avance guardado</button>
+      <span class="leyenda" style="margin:0">El avance se guarda solo en el almacenamiento local de este navegador, en este portátil. No viaja a ninguna parte: para llevarlo a otro portátil, exporten los dos CSV e impórtenlos allá (el de la tabla primero).</span>
+    </div>
+    <div class="fila">
+      <button class="sec mini" id="b-txt">Mostrar la tabla como texto</button>
+      <button class="sec mini" id="b-txtimp">Importar el texto pegado</button>
+      <span class="leyenda" style="margin:0">Si la descarga o el selector de archivos no funcionan: copien el texto, péguenlo aquí mismo en el otro portátil e impórtenlo.</span>
+    </div>
+    <label class="lb" for="csvtxt" id="csvlb" hidden>CSV como texto: para copiar, o para pegar el de otro portátil</label>
+    <textarea id="csvtxt" spellcheck="false" hidden></textarea>
+  </div>
+
+  <div class="panel noimp">
+    <div class="et">La estimación del martes, frente a lo de hoy</div>
+    <div class="tm">
+      <div><label for="martes">Lo que estimaron el martes, a mano alzada</label><textarea id="martes" rows="2" placeholder="¿cuánto aguanta la universidad si el sistema académico cae la semana de matrícula?"></textarea></div>
+      <div><label for="martesdif">Lo que obtuvieron hoy y una frase que explique la diferencia</label><textarea id="martesdif" rows="2"></textarea></div>
+    </div>
+  </div>
+
+  <div id="conflictos"></div>
+  <div class="cont"><table class="cons" id="tcons"></table></div>
+  <div class="leyenda">Columnas de franja: nivel más alto entre las categorías valoradas; sombreado, desde el umbral. El CSV lleva además el nivel de cada categoría, el sustento de cada fila y el equipo que analizó cada proceso.</div>
+  <div class="avisos" id="avglobal" style="margin-top:12px" aria-live="polite"></div>
+</section>
+
+<!-- ───────────── EJERCICIO 2 ───────────── -->
+<section id="e2">
+  <div class="sec-h"><div class="sec-n">Ejercicio 2 · 15 minutos · revisión de coherencia</div><h2>Dependencias y herencia del tiempo objetivo</h2></div>
+  <p class="lead">Marquen de qué sistemas y proveedores depende cada proceso. Viene marcado lo que cada dueño declaró en la Parte 5 (celdas sombreadas) y nada más. La herramienta le asigna a cada recurso el tiempo objetivo más exigente entre los procesos que lo usan, en cualquiera de sus dos momentos.</p>
+  <div class="adv"><b>Lo que el mapa de procesos no dice (Parte 5).</b> La columna de dependencias recoge lo que cada dueño declaró. Casi ninguno mencionó el directorio, S7, del que depende el ingreso a todos los sistemas (Parte 6). Revisen cada columna antes de creerle al dueño. Personas y sedes no caben en esta tabla: van en el campo «Personas y sedes de las que depende» que está al pie de cada tarjeta de proceso (Partes 4, 7 y 9), y salen en la columna de dependencias de la tabla consolidada.</div>
+  <div id="dep"></div>
+  <div class="avisos" id="avdep" style="margin-top:10px" aria-live="polite"></div>
+  <details class="noimp"><summary>Qué significa heredar, y qué no hace la herramienta</summary>
+    <p>El tiempo se fija en el proceso y baja por la cadena: si un sistema sirve a un proceso con un tiempo objetivo de pocas horas y a otro con días, el sistema es de pocas horas. La herramienta solo hereda por las casillas marcadas. No deduce cadenas por su cuenta: si un sistema necesita a otro para funcionar, márquenlo también en la columna del proceso.</p>
+    <p>El tiempo objetivo de un proveedor no se declara: se contrata. Si el contrato dice «el menor tiempo posible» (evidencia C, cláusula octava), el tiempo heredado todavía no existe en ningún papel.</p>
+  </details>
+</section>
+
+<!-- ───────────── EJERCICIO 3 ───────────── -->
+<section id="e3">
+  <div class="sec-h"><div class="sec-n">Ejercicio 3 · se cierra en la puesta en común</div><h2>La brecha: lo que se necesita frente a lo que hoy se logra</h2></div>
+  <p class="lead">Cada objetivo tiene un gemelo real. El objetivo lo fijaron ustedes; el real se mide en una prueba o en un incidente. Para cada recurso con dependientes, lean lo que el caso da, escriban su estimación de la capacidad actual <b>y la fuente</b>, y la herramienta hace la resta. Si el caso no lo da, no lo inventen: «desconocido», con destinatario, es una respuesta completa (Parte 16).</p>
+  <h3>Tiempo: objetivo heredado frente a tiempo real de recuperación</h3>
+  <div class="cont" id="bre-t"></div>
+  <h3>Datos: punto objetivo heredado frente a punto real de recuperación</h3>
+  <p style="font-size:13.5px;color:var(--tinta-2);margin:0 0 4px">El punto real no es la frecuencia de la copia: es la antigüedad de la copia más reciente que sobrevive al evento y que de verdad se puede restaurar. Depende de qué se pierde. Digan en la fuente para cuál caso estiman: se pierde un sistema y el equipo de respaldo sobrevive, o se pierde el cuarto completo.</p>
+  <div class="cont" id="bre-d"></div>
+  <div class="leyenda">Días hábiles del caso (licencias, repuestos) no son tiempo corrido: conviértanlos y digan cómo. Lo que no se vale: ajustar el objetivo hasta que coincida con lo que hay.</div>
+  <details class="noimp"><summary>Los respaldos según la Parte 8, para estimar el punto real</summary>
+    <table>
+      <thead><tr><th>Trabajo</th><th>Qué copia</th><th>Cuándo</th><th>Copia completa</th><th>Retención</th></tr></thead>
+      <tbody>
+        <tr><td><b>T1 · Máquinas críticas</b></td><td>Ocho máquinas virtuales: aplicación de SIGA (2), financiero (2), directorio (2), control de acceso y telefonía</td><td>Incremental diario a las 10:00 p.m. Completo sintético los domingos</td><td>1,4 TB</td><td>14 días</td></tr>
+        <tr><td><b>T2 · Base de datos de SIGA</b></td><td>Volcado de la base de datos hacia una carpeta compartida del equipo de respaldo</td><td>Completo los domingos a la 1:00 a.m. Incremental diario a las 11:30 p.m.</td><td>480 GB</td><td>14 días</td></tr>
+        <tr><td><b>T3 · Documentos</b></td><td>La carpeta de documentos del gestor documental</td><td>Incremental diario a las 12:30 a.m.</td><td>3,6 TB</td><td>14 días</td></tr>
+        <tr><td><b>T4 · Resto de máquinas</b></td><td>Las otras 53 máquinas virtuales, incluida la del gestor documental y la de la wiki interna</td><td>Semanal, los sábados a las 8:00 p.m.</td><td>5,7 TB</td><td>Dos copias</td></tr>
+      </tbody>
+    </table>
+    <p><b>Dónde quedan.</b> Todos los trabajos escriben en el equipo de respaldo de 60 TB que está en el mismo bastidor que los servidores (Parte 8). Lectura medida desde ese equipo en 2022: 95 MB por segundo; con ese número y los tamaños se estima cuánto tarda solo la copia, que nunca es lo que más tarda.</p>
+    <p><b>La copia fuera del cuarto.</b> El primer viernes de cada mes se copia a un disco externo de 8 TB el último volcado completo de la base de SIGA y la base del financiero, nada más, sin cifrar. Viaja a Honda. Cuaderno de 2026: en abril y en agosto no se hizo; la de junio no viajó. Nunca se ha restaurado desde esos discos (Parte 16).</p>
+    <p><b>Restauraciones hechas.</b> Agosto de 2022: base de SIGA completa, 310 GB, 31 horas desde la falla hasta el servicio, un día de datos perdido. Marzo de 2023: una carpeta del gestor documental, cuarenta minutos. Nunca: una máquina virtual completa, el directorio, el financiero, el conjunto.</p>
+  </details>
+</section>
+
+<!-- ───────────── REPASO ───────────── -->
+<section id="rep" class="noimp">
+  <div class="sec-h"><div class="sec-n">Repaso · para la casa · fuera de los 95 minutos</div><h2>Los cuatro valores y de dónde salen sus nombres</h2></div>
+  <p class="lead">Seis enunciados, para antes del quiz del martes. Elijan el término o el documento al que corresponde cada uno.</p>
+  <div id="quiz"></div>
+  <div class="fila"><button id="qver">Ver respuestas</button><button class="sec" id="qreset">Reiniciar</button><span id="qmarca" class="leyenda" style="margin:0"></span></div>
+</section>
+
+<!-- ───────────── ENTREGA ───────────── -->
+<section id="ent" class="noimp">
+  <div class="sec-h"><div class="sec-n">Cierre</div><h2>Qué se entrega y cómo se evalúa · 8 %</h2></div>
+  <p class="lead">Evaluación de desempeño, por equipo: la tabla que queda al terminar el bloque y cómo la sustentan. Entreguen el CSV de la tabla consolidada, o la impresión (sale en A4 horizontal, con el nombre del equipo y solo lo diligenciado).</p>
+  <ul class="chk">
+    <li>La tabla con una fila por proceso y por momento del calendario: impacto por franja, periodo máximo tolerable, tiempo objetivo, punto objetivo, nivel mínimo, dependencias y dato o supuesto.</li>
+    <li>La curva de los cuatro procesos del equipo, con el umbral y el punto de cruce.</li>
+    <li>La tabla de herencia: el tiempo objetivo de cada sistema compartido y de qué proceso viene. SIGA y el directorio primero.</li>
+    <li>Las personas y las sedes de las que depende cada proceso, además de sistemas y proveedores.</li>
+    <li>La brecha con número donde hay dato, y «desconocido», con destinatario, donde el caso no lo da.</li>
+    <li>Al lado de la estimación a mano alzada del martes, el valor que obtuvieron hoy y una frase que explique la diferencia (hay un campo para eso en «Consolidar y exportar»).</li>
+  </ul>
+  <table>
+    <thead><tr><th>Criterio</th><th>Se cumple cuando…</th><th>No se cumple cuando…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Los tiempos salen de la curva</b></td><td>Cada periodo tolerable es la franja en que una categoría toca el umbral</td><td>El número aparece primero y la valoración se acomoda</td></tr>
+      <tr><td><b>El calendario está presente</b></td><td>Cada proceso tiene al menos dos momentos, con fechas</td><td>Hay un solo valor por proceso para todo el año</td></tr>
+      <tr><td><b>Las cuatro reglas de coherencia</b></td><td>Tiempo objetivo menor que el tolerable; punto objetivo razonado como datos</td><td>Tiempo objetivo igual al tolerable, o punto copiado del tiempo</td></tr>
+      <tr><td><b>Dependencias completas</b></td><td>Aparecen el directorio, las personas y los proveedores</td><td>Solo se listan los sistemas que el dueño declaró</td></tr>
+      <tr><td><b>Trazabilidad</b></td><td>Cada número cita una parte del caso o un supuesto declarado, con destinatario</td><td>Hay cifras que no están en el caso</td></tr>
+    </tbody>
+  </table>
+  <div class="aviso"><b>Lo que no se evalúa.</b> Que el número coincida con el del docente o con el de otro equipo. Dos equipos con tiempos distintos y bien argumentados tienen la misma nota.</div>
+  <div class="ent">
+    <div class="et">Lo que sigue</div>
+    <ul>
+      <li>Esta tabla es el corazón de la <b>entrega 1 · Diagnóstico</b>, que se recibe al inicio de la sesión del martes 20 de octubre: sección 4 (análisis de impacto), sección 5 (dependencias y tiempos heredados) y sección 6 (la brecha).</li>
+      <li><b>Cómo se cita.</b> ISO 22301:2019 exige fijar estos plazos en 8.2.2, pero no los define ni les fija valor; solo en dos notas dice que pueden llamarse periodo máximo tolerable de interrupción (MTPD) y tiempo objetivo de recuperación (RTO). El punto objetivo de recuperación (RPO) y el objetivo mínimo de continuidad (MBCO) no aparecen en esa norma. Las definiciones están en ISO 22300:2021; la guía de análisis de impacto, en ISO/TS 22317:2021; y RPO y MBCO se usan en ISO/IEC 27031:2025. Una cita bien hecha: «tiempo objetivo de recuperación (ISO 22300:2021), fijado en cumplimiento de ISO 22301:2019, 8.2.2».</li>
+      <li>Todavía no van soluciones. La entrega 1 no propone comprar ni contratar nada.</li>
+      <li>Traigan la tabla el martes: es la vara con que se mide cada estrategia.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>Institución Universitaria de Envigado · Facultad de Ingeniería</span>
+  <span>SIO0013 · Continuidad del negocio · Laboratorio 1</span>
+</footer>
+</div>
+
+<script>
+/*LOGICA-INICIO  (funciones puras: las ejecuta también el script de prueba en Node) */
+const FRANJAS = [
+  { id: "4h", n: "4 horas",   h: 4 },
+  { id: "1d", n: "1 día",     h: 24 },
+  { id: "3d", n: "3 días",    h: 72 },
+  { id: "1s", n: "1 semana",  h: 168 },
+  { id: "2s", n: "2 semanas", h: 336 }
+];
+const CATS = [
+  { id: "aca", n: "Académico" },
+  { id: "fin", n: "Financiero" },
+  { id: "leg", n: "Legal y regulatorio" },
+  { id: "rep", n: "Reputacional" },
+  { id: "per", n: "Sobre personas" }
+];
+const MOMS = [
+  { id: "critico", n: "Momento crítico" },
+  { id: "normal",  n: "Semana normal" }
+];
+const UNID = { min: 1 / 60, h: 1, d: 24, sem: 168 };
+const UNID_N = { min: "minutos", h: "horas", d: "días", sem: "semanas" };
+const EPS = 1e-9;
+const T_ENTERARSE = 2.75;      // Parte 17: 2 h 45 min para que tecnología se entere, fuera de horario
+
+function parseNum(s){
+  if (typeof s === "number") return isFinite(s) && s >= 0 ? s : NaN;
+  s = String(s == null ? "" : s).trim().replace(/\s+/g, "");
+  if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, "");     // 1.000 es mil: el punto es separador de miles
+  s = s.replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+function esCero(h){ return esNum(h) && Math.round(h * 60) === 0; }       // menos de medio minuto es cero
+/* texto + unidad → horas de reloj; null si está vacío; NaN si no es un número */
+function aHoras(valor, unidad){
+  if (valor == null || String(valor).trim() === "") return null;
+  const n = parseNum(valor);
+  if (isNaN(n)) return NaN;
+  return n * (UNID[unidad] || 1);
+}
+function esNum(v){ return typeof v === "number" && !isNaN(v); }
+function fmtH(h){
+  if (!esNum(h)) return "—";
+  const m = Math.round(h * 60);
+  if (m === 0) return "0 horas";
+  if (m % 10080 === 0) { const s = m / 10080; return s + (s === 1 ? " semana" : " semanas"); }
+  if (m % 1440 === 0 && m >= 2880) return (m / 1440) + " días";
+  if (m < 60) return m + (m === 1 ? " minuto" : " minutos");
+  if (m % 60 === 0) { const x = m / 60; return x + (x === 1 ? " hora" : " horas"); }
+  return Math.floor(m / 60) + " h " + (m % 60) + " min";
+}
+function momVacio(){
+  const x = {}, s = {};
+  CATS.forEach(function(c){ x[c.id] = [null, null, null, null, null]; s[c.id] = ""; });
+  return { fechas: "", x: x, s: s, mt: "", mtU: "h", rto: "", rtoU: "h", rpo: "", rpoU: "h", mbco: "", sus: "" };
+}
+function catsActivas(quinta){ return quinta ? CATS : CATS.slice(0, 4); }
+
+/* nivel de cada franja: el MÁXIMO entre las categorías valoradas (no se promedia) */
+function nivelesFranja(x, cats){
+  return FRANJAS.map(function(_, i){
+    let m = null;
+    cats.forEach(function(c){ const v = x[c.id][i]; if (v != null && (m == null || v > m)) m = v; });
+    return m;
+  });
+}
+function celdasVacias(x, cats){
+  let n = 0;
+  cats.forEach(function(c){ x[c.id].forEach(function(v){ if (v == null) n++; }); });
+  return n;
+}
+/* primera franja cuyo nivel toca el umbral */
+function cruce(niveles, umbral){
+  let hueco = false;
+  for (let i = 0; i < niveles.length; i++){
+    if (niveles[i] == null) { hueco = true; continue; }
+    if (niveles[i] >= umbral) return { idx: i, dudoso: hueco };
+  }
+  return { idx: -1, dudoso: hueco };
+}
+/* periodo máximo tolerable de un momento: lo propone la curva; el equipo puede afinarlo dentro de la franja */
+function mtpd(mom, umbral, cats){
+  const niv = nivelesFranja(mom.x, cats);
+  const hay = niv.some(function(v){ return v != null; });
+  const cr = cruce(niv, umbral);
+  const r = { niv: niv, idx: cr.idx, dudoso: cr.dudoso, estado: !hay ? "vacia" : cr.idx >= 0 ? "cruza" : "no-cruza",
+              propuestaH: null, previaH: 0, adoptH: aHoras(mom.mt, mom.mtU), adoptOk: true, h: null };
+  if (r.estado === "cruza") {
+    r.propuestaH = FRANJAS[cr.idx].h;
+    r.previaH = cr.idx > 0 ? FRANJAS[cr.idx - 1].h : 0;
+    if (r.adoptH != null) r.adoptOk = esNum(r.adoptH) && r.adoptH > r.previaH + EPS && r.adoptH <= r.propuestaH + EPS;
+    r.h = (r.adoptH != null && r.adoptOk) ? r.adoptH : r.propuestaH;
+  } else if (r.estado === "no-cruza") {
+    r.previaH = FRANJAS[FRANJAS.length - 1].h;
+    if (r.adoptH != null) r.adoptOk = esNum(r.adoptH) && r.adoptH > r.previaH + EPS;
+    r.h = (r.adoptH != null && r.adoptOk) ? r.adoptH : null;
+  } else if (r.adoptH != null) { r.adoptOk = false; }
+  return r;
+}
+/* el impacto no baja con el tiempo: devuelve los puntos donde una categoría decrece */
+function noMonotono(x, cats){
+  const r = [];
+  cats.forEach(function(c){
+    let prev = null, pi = -1;
+    x[c.id].forEach(function(v, i){
+      if (v == null) return;
+      if (prev != null && v < prev) r.push({ cat: c.id, de: pi, a: i });
+      prev = v; pi = i;
+    });
+  });
+  return r;
+}
+function sustentoValido(t){
+  t = String(t || "");
+  if (/supuesto[^.]*:\s*…/i.test(t) || /se pregunta a\s*…/i.test(t)) return false;        // la plantilla sin llenar no es un sustento
+  return /(partes?\s*\d{1,2})|(evidencias?\s*[a-f]\b)|(supuesto)|(ficha de (la |una )?entrevista)|(entrevista de proceso)/i.test(t);
+}
+function momSinDatos(mom, cats){
+  if (celdasVacias(mom.x, CATS) < CATS.length * FRANJAS.length) return false;
+  if ([mom.mt, mom.rto, mom.rpo, mom.mbco, mom.sus].some(function(v){ return String(v || "").trim() !== ""; })) return false;
+  return !CATS.some(function(c){ return String(mom.s[c.id] || "").trim() !== ""; });
+}
+function mismaDuracion(v1, u1, v2, u2){
+  const x = aHoras(v1, u1), y = aHoras(v2, u2);
+  if (x == null || y == null) return x == null && y == null;
+  if (!esNum(x) || !esNum(y)) return String(v1).trim() === String(v2).trim() && u1 === u2;
+  return Math.abs(x - y) < EPS;                                           // 24 horas y 1 día son lo mismo
+}
+function mismosValores(a, b, cats){
+  if (!mismaDuracion(a.rto, a.rtoU, b.rto, b.rtoU) || !mismaDuracion(a.rpo, a.rpoU, b.rpo, b.rpoU)) return false;
+  return cats.every(function(c){ return a.x[c.id].every(function(v, i){ return v === b.x[c.id][i]; }); });
+}
+/* avisos de coherencia de un momento. o = { umbral, cats, otro } */
+function validar(mom, o){
+  const av = [], cats = o.cats, u = o.umbral;
+  function pon(niv, cod, msg){ av.push({ niv: niv, cod: cod, msg: msg }); }
+  if (momSinDatos(mom, cats)) return av;
+  const mt = mtpd(mom, u, cats);
+  const rto = aHoras(mom.rto, mom.rtoU), rpo = aHoras(mom.rpo, mom.rpoU);
+  const faltan = celdasVacias(mom.x, cats);
+
+  if ((rto != null && isNaN(rto)) || (rpo != null && isNaN(rpo)))
+    pon("error", "NUM", "Hay un tiempo que no es un número. Escriban solo la cifra (por ejemplo 8 o 2,5) y elijan la unidad.");
+  if (mt.adoptH != null && !mt.adoptOk)
+    pon("error", "AFINE", mt.estado === "cruza"
+      ? "El periodo tolerable afinado no sale de la curva: debe ser mayor que " + fmtH(mt.previaH) + " y no pasar de " + fmtH(mt.propuestaH) + ", que es la franja donde se cruza el umbral. Si creen que es otro, cambien la valoración, no el número."
+      : mt.estado === "no-cruza" ? "La curva no cruza el umbral en dos semanas: un periodo tolerable afinado tiene que ser mayor que 2 semanas."
+      : "Hay un periodo tolerable escrito y la curva está vacía. Primero se valora; el número sale de ahí.");
+  if (esNum(rto)) {
+    if (mt.estado === "vacia")
+      pon("aviso", "R1B", "Hay tiempo objetivo pero no hay curva. Sin valoración por franja no hay periodo tolerable contra el cual medirlo: el número apareció primero.");
+    else if (esNum(mt.h) && rto >= mt.h - EPS)
+      pon("error", "R1", "Regla 1: el tiempo objetivo (" + fmtH(rto) + ") es " + (Math.abs(rto - mt.h) < EPS ? "igual al" : "mayor que el") + " periodo máximo tolerable (" + fmtH(mt.h) + "). Debe ser menor, y con margen: detectar, decidir y verificar también gastan reloj.");
+    else if (mt.estado === "no-cruza" && !esNum(mt.h))
+      pon("nota", "NOCRUZA", "La curva no toca el umbral en ninguna franja: el periodo tolerable es mayor que 2 semanas. El tiempo objetivo no se puede validar contra un número; digan cuál adoptan y por qué, o declaren que el proceso no es crítico en este momento del calendario.");
+    if (esNum(mt.h) && rto < mt.h - EPS && rto > 0.8 * mt.h + EPS)
+      pon("nota", "MARGEN", "El tiempo objetivo (" + fmtH(rto) + ") deja menos de la quinta parte del periodo tolerable (" + fmtH(mt.h) + ") como margen. La regla dice «menor, y con margen»: el 80 % es un criterio de esta herramienta, no de la norma, pero digan qué margen dejan y por qué alcanza.");
+    if (esCero(rto))
+      pon("error", "CERO", "Tiempo objetivo de 0: ninguna organización reanuda en cero. La universidad ya toleró once horas en 2024 y nueve horas y cuarto en 2026 (Partes 13 y 14). Un cero es una opinión, como «ni un minuto» (evidencia E).");
+    else if (rto < T_ENTERARSE - EPS)
+      pon("nota", "ENTERARSE", "El tiempo objetivo (" + fmtH(rto) + ") es menor que lo que tardó tecnología en enterarse el 16 de mayo, fuera de horario: 2 h 45 min (Parte 17). El objetivo lo fija el negocio y pueden sostenerlo, pero anótenlo: es brecha segura.");
+    if (String(mom.mbco || "").trim() === "")
+      pon("aviso", "R3", "Regla 3: hay tiempo objetivo y falta el nivel mínimo de operación. ¿Recuperado hasta dónde? Si no se conoce, escríbanlo: «desconocido; se pregunta a…; mientras tanto se supone…».");
+  }
+  if (esNum(rpo)) {
+    if (esCero(rpo))
+      pon("aviso", "CERO-RPO", "Punto objetivo de 0: significa no perder ni un registro. Solo se sostiene si explican de dónde se reconstruye lo que no alcanzó a copiarse; si la respuesta es «de ningún lado», díganlo en el sustento.");
+    if (esNum(rto) && !esCero(rto) && Math.abs(rpo - rto) < EPS)
+      pon("aviso", "R2", "Regla 2: el punto objetivo es idéntico al tiempo objetivo. ¿Lo copiaron? Uno mide datos hacia atrás y el otro servicio hacia adelante; rara vez coinciden por la misma razón.");
+  }
+  if ((esNum(rto) || esNum(rpo)) && !sustentoValido(mom.sus))
+    pon("aviso", "SUS-T", "Los tiempos no citan su fuente. Escriban la parte del caso o el supuesto declarado que los sostiene, y para el punto objetivo, de dónde se reconstruirían los datos.");
+  const sinS = cats.filter(function(c){
+    return mom.x[c.id].some(function(v){ return v != null; }) && !sustentoValido(mom.s[c.id]);
+  });
+  if (sinS.length)
+    pon("aviso", "SUS", "Sin sustento: " + sinS.map(function(c){ return c.n.toLowerCase(); }).join(", ") + ". Cada fila valorada debe citar una parte o evidencia del caso, o decir «supuesto» y a quién se le pregunta. Sin fuente, es intuición.");
+  noMonotono(mom.x, cats).forEach(function(d){
+    const c = CATS.filter(function(k){ return k.id === d.cat; })[0];
+    pon("aviso", "MONO", "El impacto " + c.n.toLowerCase() + " baja al pasar de " + FRANJAS[d.de].n + " a " + FRANJAS[d.a].n + ". El daño acumulado no disminuye con el tiempo: revisen la fila.");
+  });
+  if (mt.estado === "cruza" && mt.dudoso)
+    pon("aviso", "HUECO", "Hay franjas sin valorar antes de la franja de cruce (" + FRANJAS[mt.idx].n + "). El cruce podría ser anterior.");
+  if (mt.estado !== "vacia" && faltan > 0)
+    pon("nota", "INCOMP", "Valoración incompleta: faltan " + faltan + (faltan === 1 ? " celda" : " celdas") + ".");
+  if (mt.estado === "cruza" && mt.idx === 0 && !mt.dudoso)
+    pon("nota", "PRIMERA", "La curva cruza el umbral en la primera franja: el periodo tolerable es de 4 horas o menos. Es la afirmación más fuerte de la tabla; asegúrense de que el dato que la sostiene sea un hecho medido y no una respuesta de la encuesta.");
+  if (o.otro && faltan === 0 && celdasVacias(o.otro.x, cats) === 0 && mismosValores(mom, o.otro, cats))
+    pon("aviso", "IGUALES", "Los dos momentos del calendario tienen exactamente los mismos valores. Un solo valor para todo el año es lo primero que la rúbrica castiga: revisen qué cambia entre un momento y otro (Partes 2 y 17).");
+  return av;
+}
+/* Regla 4. lista = [{ pid, deps:[rid], moms:[{ id, rtoH, rpoH }] }]  →  { rid: { h, de:[{pid,mom}], n, sin:[pid] } } */
+function heredar(lista, campo){
+  const r = {};
+  lista.forEach(function(p){
+    p.deps.forEach(function(rid){
+      const e = r[rid] || (r[rid] = { h: null, de: [], n: 0, sin: [] });
+      e.n++;
+      let alguno = false;
+      p.moms.forEach(function(m){
+        const v = m[campo];
+        if (!esNum(v)) return;
+        alguno = true;
+        if (e.h == null || v < e.h - EPS) { e.h = v; e.de = [{ pid: p.pid, mom: m.id }]; }
+        else if (Math.abs(v - e.h) < EPS) e.de.push({ pid: p.pid, mom: m.id });
+      });
+      if (!alguno) e.sin.push(p.pid);
+    });
+  });
+  return r;
+}
+/* capacidad actual frente al objetivo heredado */
+function brecha(capH, objH){
+  if (!esNum(objH)) return { t: "sin-objetivo" };
+  if (capH == null) return { t: "sin-capacidad" };
+  if (!esNum(capH)) return { t: "no-numero" };
+  if (esCero(capH)) return { t: "cero" };
+  const d = capH - objH;
+  return d > EPS ? { t: "brecha", h: d } : { t: "cabe", h: -d };
+}
+
+/* ---------- CSV (separador punto y coma, comillas dobles, UTF-8) ---------- */
+function csvCampo(v){
+  v = v == null ? "" : String(v);
+  return /[;"\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+function csvTexto(filas){ return filas.map(function(f){ return f.map(csvCampo).join(";"); }).join("\r\n") + "\r\n"; }
+function csvParse(txt){
+  txt = String(txt || "").replace(/^﻿/, "");
+  const filas = []; let fila = [], campo = "", q = false;
+  for (let i = 0; i < txt.length; i++){
+    const ch = txt[i];
+    if (q) {
+      if (ch === '"') { if (txt[i + 1] === '"') { campo += '"'; i++; } else q = false; }
+      else campo += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ";") { fila.push(campo); campo = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && txt[i + 1] === "\n") i++;
+      fila.push(campo); campo = "";
+      if (fila.length > 1 || fila[0] !== "") filas.push(fila);
+      fila = [];
+    } else campo += ch;
+  }
+  if (campo !== "" || fila.length) { fila.push(campo); filas.push(fila); }
+  filas.abierta = q;                       // quedó una comilla sin cerrar: archivo dañado o truncado
+  return filas;
+}
+function columnasCSV(){
+  const c = ["proceso", "nombre", "dueno", "equipo", "profundizado", "momento", "fechas", "umbral", "quinta_categoria"];
+  CATS.forEach(function(k){ FRANJAS.forEach(function(f){ c.push(k.id + "_" + f.id); }); });
+  CATS.forEach(function(k){ c.push("sustento_" + k.id); });
+  FRANJAS.forEach(function(f){ c.push("nivel_" + f.id); });
+  return c.concat(["tolerable_propuesto_h", "tolerable_afinado", "tolerable_afinado_unidad", "tolerable_h",
+    "tiempo_objetivo", "tiempo_objetivo_unidad", "tiempo_objetivo_h",
+    "punto_objetivo", "punto_objetivo_unidad", "punto_objetivo_h",
+    "nivel_minimo", "dato_o_supuesto", "sistemas", "proveedores", "personas_sedes", "avisos",
+    "archivo_de", "aprobador_umbral", "estimacion_martes", "diferencia_martes"]);
+}
+function numCSV(h){ return esNum(h) ? String(Math.round(h * 10000) / 10000).replace(".", ",") : ""; }
+/* est = estado completo; meta = { P1:{n,dueno}, … }. La columna «equipo» es el equipo que analizó ESE proceso;
+   «archivo_de», el equipo que exporta. La última fila, #FIN, lleva el número de filas de datos. */
+function exportarCSV(est, meta){
+  const cols = columnasCSV(), filas = [cols];
+  const cats = catsActivas(est.quinta);
+  let n = 0;
+  Object.keys(meta).forEach(function(pid){
+    const p = est.p[pid];
+    ["critico", "normal"].forEach(function(mid){
+      const mom = p.m[mid], mt = mtpd(mom, est.umbral, cats);
+      const av = validar(mom, { umbral: est.umbral, cats: cats, otro: mid === "critico" ? p.m.normal : null });
+      const o = { proceso: pid, nombre: meta[pid].n, dueno: meta[pid].dueno, equipo: p.origen || est.equipo,
+        profundizado: est.sel.indexOf(pid) >= 0 ? "si" : "no", momento: mid, fechas: mom.fechas,
+        umbral: est.umbral, quinta_categoria: est.quinta ? "si" : "no",
+        tolerable_propuesto_h: numCSV(mt.propuestaH), tolerable_afinado: mom.mt, tolerable_afinado_unidad: mom.mtU, tolerable_h: numCSV(mt.h),
+        tiempo_objetivo: mom.rto, tiempo_objetivo_unidad: mom.rtoU, tiempo_objetivo_h: numCSV(aHoras(mom.rto, mom.rtoU)),
+        punto_objetivo: mom.rpo, punto_objetivo_unidad: mom.rpoU, punto_objetivo_h: numCSV(aHoras(mom.rpo, mom.rpoU)),
+        nivel_minimo: mom.mbco, dato_o_supuesto: mom.sus, sistemas: p.sis.join("|"), proveedores: p.prov.join("|"),
+        personas_sedes: p.pers || "",
+        avisos: av.filter(function(a){ return a.niv !== "nota"; }).map(function(a){ return a.cod; }).join("|"),
+        archivo_de: est.equipo, aprobador_umbral: est.uquien || "", estimacion_martes: est.martes || "", diferencia_martes: est.martesDif || "" };
+      CATS.forEach(function(k){
+        FRANJAS.forEach(function(f, i){ o[k.id + "_" + f.id] = mom.x[k.id][i] == null ? "" : mom.x[k.id][i]; });
+        o["sustento_" + k.id] = mom.s[k.id];
+      });
+      FRANJAS.forEach(function(f, i){ o["nivel_" + f.id] = mt.niv[i] == null ? "" : mt.niv[i]; });
+      filas.push(cols.map(function(c){ return o[c]; }));
+      n++;
+    });
+  });
+  filas.push(["#FIN", String(n)]);
+  return csvTexto(filas);
+}
+/* devuelve { ok, error, avisos:[…], equipo, aprobador, martes, martesDif, umbral, quinta, sel:[pid],
+               p:{ pid:{ m:{critico,normal}, sis, prov, pers, origen } } } */
+function importarCSV(txt, pidsValidos){
+  txt = String(txt || "");
+  const filas = csvParse(txt);
+  if (filas.abierta) return { ok: false, error: "El archivo tiene una comilla sin cerrar: está dañado o truncado. Expórtenlo de nuevo desde el laboratorio." };
+  if (filas.length < 2) return { ok: false, error: "El archivo está vacío o no es el CSV de este laboratorio." };
+  const cab = filas[0], ix = {};
+  cab.forEach(function(c, i){ ix[c.trim()] = i; });
+  const falta = ["proceso", "momento", "tiempo_objetivo", "aca_4h", "sustento_aca"].filter(function(c){ return !(c in ix); });
+  if (falta.length) {
+    const l1 = txt.replace(/^\uFEFF/, "").split(/\r?\n/)[0];
+    if (l1.indexOf(";") < 0 && /proceso"?,/.test(l1))
+      return { ok: false, error: "El archivo está separado por comas y este laboratorio usa punto y coma. Suele pasar al abrirlo y guardarlo desde una hoja de cálculo: expórtenlo de nuevo desde el laboratorio y no lo vuelvan a guardar." };
+    return { ok: false, error: "No es la tabla consolidada de este laboratorio: faltan las columnas " + falta.join(", ") + "." };
+  }
+  const r = { ok: true, avisos: [], equipo: "", aprobador: "", martes: "", martesDif: "", umbral: 4, quinta: false, sel: [], p: {} };
+  const UOK = { min: 1, h: 1, d: 1, sem: 1 }, vistos = {};
+  let cortas = 0, malos = 0, unidades = 0, fin = null, datos = 0;
+  function g(f, c){ return c in ix && f[ix[c]] != null ? f[ix[c]] : ""; }
+  for (let n = 1; n < filas.length; n++){
+    const f = filas[n];
+    if (f[0] === "#FIN") { fin = parseInt(f[1], 10); continue; }
+    if (f.length < cab.length) { cortas++; continue; }
+    const pid = g(f, "proceso").trim(), mid = g(f, "momento").trim();
+    if (pidsValidos.indexOf(pid) < 0 || (mid !== "critico" && mid !== "normal")) continue;
+    datos++; vistos[pid + mid] = 1;
+    const p = r.p[pid] || (r.p[pid] = { m: { critico: momVacio(), normal: momVacio() }, sis: [], prov: [], pers: "", origen: "" });
+    const mom = p.m[mid];
+    function uni(c){ const u = g(f, c).trim(); if (u === "" || UOK[u]) return u || "h"; unidades++; return "h"; }
+    p.origen = g(f, "equipo");
+    if (g(f, "archivo_de") || g(f, "equipo")) r.equipo = g(f, "archivo_de") || g(f, "equipo");
+    if (g(f, "aprobador_umbral")) r.aprobador = g(f, "aprobador_umbral");
+    if (g(f, "estimacion_martes")) r.martes = g(f, "estimacion_martes");
+    if (g(f, "diferencia_martes")) r.martesDif = g(f, "diferencia_martes");
+    const u = parseInt(g(f, "umbral"), 10); if (u >= 3 && u <= 5) r.umbral = u;
+    if (g(f, "quinta_categoria") === "si") r.quinta = true;
+    if (g(f, "profundizado") === "si" && r.sel.indexOf(pid) < 0) r.sel.push(pid);
+    mom.fechas = g(f, "fechas");
+    CATS.forEach(function(k){
+      FRANJAS.forEach(function(fr, i){
+        const crudo = g(f, k.id + "_" + fr.id).trim();
+        if (crudo === "") { mom.x[k.id][i] = null; return; }
+        if (/^[1-5]$/.test(crudo)) mom.x[k.id][i] = parseInt(crudo, 10); else { mom.x[k.id][i] = null; malos++; }
+      });
+      mom.s[k.id] = g(f, "sustento_" + k.id);
+    });
+    mom.mt = g(f, "tolerable_afinado"); mom.mtU = uni("tolerable_afinado_unidad");
+    mom.rto = g(f, "tiempo_objetivo");  mom.rtoU = uni("tiempo_objetivo_unidad");
+    mom.rpo = g(f, "punto_objetivo");   mom.rpoU = uni("punto_objetivo_unidad");
+    mom.mbco = g(f, "nivel_minimo"); mom.sus = g(f, "dato_o_supuesto");
+    p.sis = g(f, "sistemas").split("|").filter(Boolean);
+    p.prov = g(f, "proveedores").split("|").filter(Boolean);
+    if (g(f, "personas_sedes")) p.pers = g(f, "personas_sedes");
+  }
+  if (!Object.keys(r.p).length) return { ok: false, error: "El archivo no trae ninguna fila de proceso reconocible (P1 a P12)." + (cortas ? " Hay " + cortas + " fila(s) incompletas: parece truncado." : "") };
+  if (cortas) r.avisos.push(cortas + " fila(s) incompletas se descartaron: el archivo parece truncado.");
+  if (fin == null) r.avisos.push("El archivo no trae la marca de fin: puede estar truncado.");
+  else if (fin !== datos) r.avisos.push("El archivo anuncia " + fin + " filas y trae " + datos + ": está incompleto.");
+  Object.keys(r.p).forEach(function(pid){
+    if (!vistos[pid + "critico"] || !vistos[pid + "normal"]) r.avisos.push(pid + " llegó con un solo momento del calendario.");
+  });
+  if (malos) r.avisos.push(malos + " nivel(es) que no eran un número de 1 a 5 se dejaron en blanco.");
+  if (unidades) r.avisos.push(unidades + " unidad(es) desconocidas se tomaron como horas: revisen esos tiempos (valen min, h, d y sem).");
+  if (txt.indexOf("\uFFFD") >= 0) r.avisos.push("Hay tildes o eñes dañadas: el archivo no estaba en UTF-8. Expórtenlo de nuevo desde el laboratorio.");
+  return r;
+}
+/* segundo archivo: herencia y brecha. Solo viajan las estimaciones del equipo, no los cálculos */
+function esCSVBrecha(txt){
+  const f = csvParse(String(txt || "").replace(/^\uFEFF/, "").split(/\r?\n/)[0] || "");
+  return f.length > 0 && f[0].indexOf("recurso") >= 0 && f[0].indexOf("capacidad_estimada") >= 0;
+}
+function importarBrechaCSV(txt, rids){
+  const filas = csvParse(txt);
+  if (filas.abierta) return { ok: false, error: "El archivo tiene una comilla sin cerrar: está dañado o truncado." };
+  if (filas.length < 2) return { ok: false, error: "El archivo de herencia y brecha no trae ninguna fila." };
+  const ix = {}; filas[0].forEach(function(c, i){ ix[c.trim()] = i; });
+  const UOK = { min: 1, h: 1, d: 1, sem: 1 }, r = { ok: true, equipo: "", b: {} };
+  function g(f, c){ return c in ix && f[ix[c]] != null ? f[ix[c]] : ""; }
+  for (let n = 1; n < filas.length; n++){
+    const f = filas[n], rid = g(f, "recurso").trim();
+    if (rids.indexOf(rid) < 0) continue;
+    const b = { cap: g(f, "capacidad_estimada"), capU: UOK[g(f, "unidad")] ? g(f, "unidad") : "h", fte: g(f, "fuente"),
+                pr: g(f, "punto_real_estimado"), prU: UOK[g(f, "punto_unidad")] ? g(f, "punto_unidad") : "h", prF: g(f, "punto_fuente") };
+    if (g(f, "equipo")) r.equipo = g(f, "equipo");
+    if ([b.cap, b.fte, b.pr, b.prF].some(function(v){ return String(v).trim() !== ""; })) r.b[rid] = b;
+  }
+  return r;
+}
+/*LOGICA-FIN*/
+
+/* ═════════ Datos del caso (Parte A), transcritos con su parte ═════════ */
+const CONS = {
+  gratuidad: "Giro de gratuidad: $21.400 millones del semestre se liquidan sobre los matriculados que la universidad reporte con corte al 26 de febrero. Lo que no entre en ese corte queda para una reliquidación posterior, sin fecha cierta.",
+  recaudo: "Recaudo propio de matrícula: $9.800 millones por semestre entre posgrado y educación continua. El 70 % entra en las dos semanas de matrícula.",
+  holgura: "Holgura del calendario: el semestre debe tener dieciséis semanas de clase. Entre el fin de 2027-1 y el inicio del intersemestral hay cinco días hábiles de holgura. Más allá de eso, se corre todo el año.",
+  nomina: "Nómina mensual: $7.900 millones, incluidos los aportes, para 885 personas de planta y ocasionales, más $2.600 millones para 610 docentes de cátedra, a quienes se les paga por hora dictada.",
+  segsoc: "Seguridad social: la planilla mensual, que hace parte de esa nómina, es de $2.900 millones. Pagarla tarde genera intereses de mora: unos $2 millones por día.",
+  credito: "Crédito educativo: 2.300 estudiantes reciben giro de sostenimiento solo si la constancia de matrícula llega antes del 12 de febrero.",
+  examen: "Examen de admisión: reprogramarlo cuesta $148 millones en logística de nueve sedes de aplicación.",
+  peticiones: "Peticiones y tutelas: quince días hábiles para responder una petición. Un fallo de tutela se cumple en un plazo que no pasa de 48 horas. En 2024 hubo 1.900 peticiones y tres tutelas por once horas de degradación.",
+  practica: "Práctica pedagógica: cada semana de retraso en la afiliación es una semana menos de práctica para 3.400 estudiantes. La práctica tiene un mínimo de horas para graduarse.",
+  catedra: "Docentes de cátedra: se vinculan por resolución para cada periodo y se les paga por hora dictada. Cada semana que se atrasa el inicio de clases son unos $650 millones que 610 personas dejan de recibir ese mes.",
+  acreditacion: "Acreditación: la visita de renovación es en el segundo semestre de 2027. Un incidente grave sin plan, con el hallazgo de 2024 abierto, llega al informe de pares."
+};
+const MED_GEN = "Que alguien de tecnología se entere, fuera de horario: 2 h 45 min, de la caída a la llamada, mayo de 2026 (Parte 17).";
+const MED_SIS = {
+  S1: ["Restaurar la base de SIGA (310 GB): 31 horas desde la falla hasta el servicio, agosto de 2022; se perdió un día de datos (Partes 8 y 17). Hoy la base pesa 480 GB (Parte 6).",
+       "Volver de un apagado completo, sin daño: 9 h 15 min, mayo de 2026 (Parte 17)."],
+  S3: ["Junio de 2025: el aula virtual estuvo 19 horas fuera de servicio por una falla en la región de nube del proveedor (Parte 13). Nunca se ha pedido una restauración a EduNube (Partes 8 y 16)."],
+  S5: ["Reexpedir la licencia del financiero para reinstalarlo en otro servidor: 2 días hábiles (Partes 10 y 17). El financiero nunca se ha restaurado (Parte 8)."],
+  S6: ["Marzo de 2023: una carpeta del gestor documental borrada por error se restauró en cuarenta minutos (Parte 8). El 16 de mayo de 2026 los documentos llevaban 45 días sin respaldo (evidencia B)."],
+  S7: ["16 de mayo de 2026: el directorio cayó a las 6:05 a.m. y respondió a las 2:10 p.m. (Parte 14). Nunca se ha restaurado (Parte 8)."]
+};
+const PROCS = [
+  { id: "P1", n: "Inscripción y admisión", dueno: "Admisiones y Registro", persona: "Luz Dary Ospina Rojas, jefe de Admisiones, Registro y Control (Parte 4)",
+    critico: "Septiembre a noviembre; mayo a junio",
+    fechas: "Tres últimos días del plazo de inscripción, que cierra el 23 de octubre de 2026 (Partes 2 y 17)",
+    cal: ["1 sep – 23 oct 2026 · Inscripciones para 2027-1: 9.400 aspirantes esperados para 2.600 cupos. Pago de la inscripción por pasarela.",
+          "Sáb 31 oct 2026 · Examen de admisión: presencial, en las tres sedes y en seis centros de tutoría. La citación sale del sistema académico.",
+          "Vie 20 nov 2026 · Publicación de admitidos: fecha anunciada en la convocatoria. Incumplirla genera derechos de petición."],
+    dep: "Sistema académico, pasarela de pagos, correo", manual: "Ninguna. Hasta 2011 se hacía en formularios de papel.",
+    vol: ["120 inscripciones", "1.150", "Los tres últimos días del plazo"],
+    cons: ["examen", "peticiones", "acreditacion"], enc: null,
+    extra: ["Mover una fecha del calendario académico: 3 días, enero de 2024 (Parte 17)."], vacio: "",
+    sis: ["S1", "S2", "S4"], prov: ["PagoRed"] },
+  { id: "P2", n: "Matrícula académica y financiera", dueno: "Admisiones y Registro · Tesorería", persona: "Luz Dary Ospina Rojas, jefe de Admisiones, Registro y Control, y Wilson Aldana Bocanegra, tesorero (Parte 4)",
+    critico: "Dos semanas de enero y dos de julio",
+    fechas: "18 al 29 de enero de 2027: admitidos nuevos del 18 al 20, antiguos del 21 al 29 (Parte 2). Pico: primer día de antiguos (Parte 17)",
+    cal: ["18 – 29 ene 2027 · Matrícula 2027-1: admitidos nuevos del 18 al 20. Antiguos del 21 al 29, por franjas según promedio. Hasta 4.100 matrículas en un solo día.",
+          "Lun 1 feb 2027 · Inicio de clases. Ese día empiezan también los contratos de prestación de servicios y la vinculación de los 610 docentes de cátedra.",
+          "Vie 12 feb 2027 · Límite de certificados para crédito educativo: 2.300 estudiantes necesitan constancia de matrícula.",
+          "Vie 26 feb 2027 · Corte del reporte de matriculados: base del giro de gratuidad del semestre, $21.400 millones esperados.",
+          "Entre el 15 de diciembre y el 1 de febrero hay seis personas de tecnología en nómina, en vacaciones colectivas hasta el 8 de enero."],
+    dep: "Sistema académico, financiero, pasarela, banco, directorio", manual: "Ninguna. El recibo con código de barras lo genera el sistema académico.",
+    vol: ["0", "4.100 matrículas", "Primer día de antiguos. Diez días hábiles al semestre"],
+    cons: ["gratuidad", "recaudo", "holgura", "credito", "peticiones", "catedra", "acreditacion"],
+    enc: ["«Ni un minuto.»", "«Eso no puede pasar. Para eso está Sistemas.»"],
+    extra: ["Enero de 2024: el primer día de matrícula de antiguos SIGA no soportó la concurrencia. Once horas de servicio degradado; plantón, catorce notas de prensa, 1.900 peticiones y tres tutelas (Parte 13).",
+            "Mover una fecha del calendario académico: 3 días, enero de 2024 (Parte 17)."],
+    vacio: "No se sabe si la universidad puede operar la matrícula con menos funciones. Quién podría saberlo: Luz Dary Ospina y Yaneth Barrios, juntas (Parte 16).",
+    sis: ["S1", "S5", "S2", "S7"], prov: ["PagoRed", "Banco"] },
+  { id: "P3", n: "Registro y cierre de notas", dueno: "Admisiones y Registro · decanaturas", persona: "Luz Dary Ospina Rojas, jefe de Admisiones, Registro y Control (Parte 4), y los decanos",
+    critico: "Última semana de cada semestre",
+    fechas: "Dos últimos días antes del cierre de notas del viernes 11 de diciembre de 2026, 5:00 p.m. (Partes 2 y 17)",
+    cal: ["Sáb 28 nov 2026 · Fin de clases 2026-2. Exámenes finales del 30 de noviembre al 5 de diciembre.",
+          "Vie 11 dic 2026 · Cierre de notas, 5:00 p.m.: 1.100 docentes registran unas 96.000 notas definitivas en la última semana. Sin cierre no hay promedios, ni grados, ni matrícula.",
+          "17 y 18 dic 2026 · Ceremonias de grado."],
+    dep: "Sistema académico", manual: "Planillas en papel firmadas, que luego alguien digita. Se usó en 2022.",
+    vol: ["900 registros", "31.000", "Los dos últimos días antes del cierre"],
+    cons: ["holgura", "acreditacion"],
+    enc: ["«En semana normal, una semana. En cierre, nada.»", "«Planillas en papel, como en 2022. Pero alguien tiene que digitar después.»"],
+    extra: ["Agosto de 2022: se perdió un día de datos; los docentes volvieron a digitar 2.300 notas parciales desde sus planillas (Parte 13)."], vacio: "",
+    sis: ["S1"], prov: [] },
+  { id: "P4", n: "Certificados y constancias", dueno: "Admisiones y Registro", persona: "Luz Dary Ospina Rojas, jefe de Admisiones, Registro y Control (Parte 4)",
+    critico: "Febrero y agosto; todo el año",
+    fechas: "Primeras dos semanas de febrero y de agosto (Parte 17). Límite de constancias para crédito educativo: viernes 12 de febrero de 2027 (Parte 2)",
+    cal: ["Vie 12 feb 2027 · Límite de certificados para crédito educativo: 2.300 estudiantes necesitan constancia de matrícula para que les giren el sostenimiento."],
+    dep: "Sistema académico, pasarela, gestión documental", manual: "Certificado manual firmado por la jefe, si hay acceso al historial.",
+    vol: ["45", "310", "Primeras dos semanas de febrero y de agosto"],
+    cons: ["credito", "peticiones"],
+    enc: ["«Un día.»", "«Los hago a mano si puedo ver el historial. Si no puedo verlo, no.»"],
+    extra: [], vacio: "",
+    sis: ["S1", "S2", "S6"], prov: ["PagoRed"] },
+  { id: "P5", n: "Grados", dueno: "Secretaría General · Admisiones", persona: "Camilo Andrés Rubio Herrán, secretario general, y Luz Dary Ospina Rojas, que guarda los libros de actas de grado en papel (Parte 4)",
+    critico: "Cuatro ceremonias al año",
+    fechas: "Ceremonias del 17 y 18 de diciembre de 2026 (Parte 2). Dos días de ceremonia, cuatro veces al año (Parte 17)",
+    cal: ["Vie 11 dic 2026 · Cierre de notas: sin cierre no hay promedios, ni grados, ni matrícula.",
+          "Mar 15 dic 2026 · Terminan los contratos de prestación de servicios: salen ocho de las catorce personas de tecnología.",
+          "17 y 18 dic 2026 · Ceremonias de grado: 1.240 graduandos. Los diplomas y actas se generan del sistema académico; el paz y salvo, del financiero."],
+    dep: "Sistema académico, financiero, gestión documental", manual: "Parcial: el libro de actas se lleva también en papel.",
+    vol: ["0", "1.240 graduandos", "Dos días de ceremonia, cuatro veces al año"],
+    cons: ["peticiones", "acreditacion"], enc: null, extra: [], vacio: "",
+    sis: ["S1", "S5", "S6"], prov: [] },
+  { id: "P6", n: "Docencia virtual y a distancia", dueno: "Facultad de Educación a Distancia", persona: "Sandra Milena Yate Ducuara, decana de Educación a Distancia; supervisa el contrato del aula virtual (Parte 4)",
+    critico: "Sábados; semanas de finales",
+    fechas: "Sábados de encuentro y semana de finales: exámenes del 30 de noviembre al 5 de diciembre de 2026 (Parte 2)",
+    cal: ["Cada sábado · Encuentro presencial en los 14 centros de tutoría. Los tutores toman asistencia y suben notas parciales al aula virtual ese mismo día. Es el día de mayor uso del aula virtual y el de menor presencia de tecnología.",
+          "30 nov – 5 dic 2026 · Exámenes finales. Los de distancia se presentan en el aula virtual.",
+          "El contrato del aula virtual termina cada 31 de diciembre; los cursos de 2027-1 hay que crearlos entre el 18 y el 29 de enero (Parte 10)."],
+    dep: "Aula virtual, directorio, correo, internet de los centros", manual: "Guías impresas en el centro de tutoría. No hay para todas las asignaturas.",
+    vol: ["7.400 usuarios", "11.900", "Sábados; semana de finales"],
+    cons: ["holgura", "acreditacion"],
+    enc: ["«Cero. Somos virtuales.»", "«Suspender el semestre. No tenemos otra forma de llegar a 6.200 personas.»"],
+    extra: ["Junio de 2025: 19 horas sin aula virtual un sábado de exámenes finales de distancia; se reprogramaron 212 exámenes (Parte 13).",
+            "16 de mayo de 2026: unos 3.900 estudiantes no pudieron ingresar; se repusieron 96 sesiones (Parte 14)."],
+    vacio: "No se sabe si las copias de EduNube sirven ni cuánto tarda una restauración. Quién podría saberlo: EduNube, por solicitud escrita de la supervisora (Parte 16).",
+    sis: ["S3", "S7", "S4"], prov: ["InternetCentros"] },
+  { id: "P7", n: "Nómina y seguridad social", dueno: "Talento Humano", persona: "Nubia Stella Montealegre, jefe de Talento Humano; su equipo liquida en el sistema financiero y no tiene procedimiento manual (Parte 4)",
+    critico: "Del 20 al último día hábil",
+    fechas: "Del 20 al último día hábil del mes: novedades hasta el 20, liquidación del 21 al 25, pago el último día hábil (Parte 2)",
+    cal: ["Cada mes · Las novedades de nómina se reciben hasta el día 20. Se liquida entre el 21 y el 25. Se paga el último día hábil. La planilla de seguridad social vence según el calendario oficial, en los primeros días hábiles del mes siguiente."],
+    dep: "Financiero y nómina, portal del banco, operador de planilla", manual: "Ninguna documentada. En 2022 se repitió la nómina del mes anterior.",
+    vol: ["—", "1.495 personas", "Liquidación del 21 al 25; pago el último día hábil"],
+    cons: ["nomina", "segsoc", "catedra"],
+    enc: ["«Depende del día. Del 1 al 19 no pasa nada.»", "«No sé. El archivo para el banco lo hace el sistema.»"],
+    extra: ["Agosto de 2022: la nómina de ese mes se pagó repitiendo la del mes anterior y se ajustó en septiembre (Parte 13).",
+            "El tesorero paga por el portal empresarial del banco con dos dispositivos de firma: uno lo tiene él; el otro, la vicerrectora (Parte 4)."],
+    vacio: "No se sabe si el banco aceptaría un archivo de nómina elaborado por fuera del sistema. Quién podría saberlo: el tesorero, con el gerente de cuenta (Parte 16).",
+    sis: ["S5"], prov: ["Banco", "Planilla"] },
+  { id: "P8", n: "Tesorería y pago a proveedores", dueno: "Tesorería", persona: "Wilson Aldana Bocanegra, tesorero (Parte 4)",
+    critico: "Cierre de mes y de vigencia",
+    fechas: "Cierre de mes y de vigencia; pico en la última semana de diciembre (Partes 5 y 17)",
+    cal: ["21 dic – 8 ene · Vacaciones colectivas: la universidad cierra.",
+          "Un servicio prestado sin contrato ni registro presupuestal es un hecho cumplido (Parte 12, Ley 30 de 1992, artículo 94)."],
+    dep: "Financiero, portal del banco", manual: "Pagos directos en el portal del banco, sin registro presupuestal.",
+    vol: ["35 órdenes", "240", "Última semana de diciembre"],
+    cons: [],
+    enc: ["«Dos días.»", "«Pago por el portal del banco lo urgente y legalizo después. No es lo correcto, pero se puede.»"],
+    extra: [], vacio: "",
+    sis: ["S5"], prov: ["Banco"] },
+  { id: "P9", n: "Vinculación docente", dueno: "Talento Humano · decanaturas", persona: "Nubia Stella Montealegre, jefe de Talento Humano (Parte 4), y los decanos",
+    critico: "Dos semanas antes de clases",
+    fechas: "Dos semanas antes del inicio de clases del lunes 1 de febrero de 2027 (Partes 2, 5 y 17)",
+    cal: ["Lun 1 feb 2027 · Inicio de clases. Ese día empiezan también los contratos de prestación de servicios y la vinculación de los 610 docentes de cátedra.",
+          "21 dic – 8 ene · Vacaciones colectivas."],
+    dep: "Sistema académico (carga), financiero, gestión documental", manual: "Ninguna. Sin carga académica no se puede expedir la resolución de vinculación.",
+    vol: ["0", "610 vinculaciones", "Dos semanas antes de clases"],
+    cons: ["catedra", "holgura"], enc: null, extra: [], vacio: "",
+    sis: ["S1", "S5", "S6"], prov: [] },
+  { id: "P10", n: "Bienestar: restaurante y apoyos", dueno: "Bienestar Universitario", persona: "Diana Marcela Useche Rincón, jefe de Bienestar Universitario; supervisa el contrato del operador de alimentación (Parte 4)",
+    critico: "Todos los días de clase",
+    fechas: "Todos los días de clase, de 11:30 a 2:00 (Parte 17)",
+    cal: ["El 83 % de los estudiantes de pregrado es de estratos 1 y 2. Unos 4.200 almuerzan cada día en el restaurante subsidiado, que valida el derecho al almuerzo contra el sistema académico (Parte 1).",
+          "El día normal y el día pico tienen el mismo volumen (Parte 17): decidan cuál es el segundo momento del calendario de este proceso y declárenlo en el campo de fechas."],
+    dep: "Sistema académico, carné, lector en el restaurante", manual: "Listado impreso del día anterior. Se imprime solo si alguien lo pide.",
+    vol: ["4.200 raciones", "4.200", "Todos los días de clase, de 11:30 a 2:00"],
+    cons: [],
+    enc: ["«Un almuerzo.»", "«El operador sirve con listado si se lo autorizan por escrito. ¿Quién lo autoriza?»"],
+    extra: ["Contrato del operador de alimentación: 4.200 raciones diarias; se paga por ración validada con el lector. No dice qué se paga, ni qué se sirve, si el lector no funciona (Parte 10).",
+            "Los lectores del restaurante consultan a SIGA en línea (Parte 6, S12)."],
+    vacio: "",
+    sis: ["S1", "S12"], prov: [] },
+  { id: "P11", n: "Gestión documental y atención al ciudadano", dueno: "Secretaría General", persona: "Camilo Andrés Rubio Herrán, secretario general; responde tutelas y derechos de petición (Parte 4)",
+    critico: "Permanente, con términos legales",
+    fechas: "Permanente, con términos legales; pico de radicación en las semanas de matrícula (Partes 5 y 17)",
+    cal: ["Derecho de petición: quince días hábiles para responder; diez si se piden documentos o información. Los términos corren aunque el gestor documental esté caído. En vacaciones colectivas la universidad suele suspenderlos por resolución; los de tutela no se suspenden (Parte 12, Ley 1755 de 2015).",
+          "Acción de tutela: el fallo fija un plazo de cumplimiento que no puede pasar de 48 horas (Parte 12, Decreto 2591 de 1991)."],
+    dep: "Gestor documental, correo", manual: "Radicación en libro. Los términos de respuesta siguen corriendo.",
+    vol: ["180 documentos", "650", "Semanas de matrícula"],
+    cons: ["peticiones"],
+    enc: ["«Una semana.»", "«Radico en libro. Pero las respuestas a tutelas están en el sistema.»"],
+    extra: [], vacio: "",
+    sis: ["S6", "S4"], prov: [] },
+  { id: "P12", n: "Práctica pedagógica", dueno: "Facultad de Educación", persona: "Facultad de Educación (la Parte 4 no nombra a la persona)",
+    critico: "Tres primeras semanas del semestre",
+    fechas: "Tres primeras semanas del semestre; las clases de 2027-1 empiezan el 1 de febrero de 2027 (Partes 2, 5 y 17)",
+    cal: ["Cada semestre, 3.400 estudiantes hacen práctica en 140 colegios en convenio. Ninguno puede entrar a un aula sin estar afiliado a riesgos laborales, y el listado para afiliarlos sale del sistema académico (Parte 1).",
+          "Afiliación a riesgos laborales como mínimo un día antes del inicio de la práctica; en los convenios con los 140 colegios, la universidad asumió la afiliación y el pago (Parte 12, Decreto 055 de 2015)."],
+    dep: "Sistema académico, operador de riesgos laborales, correo", manual: "Ninguna. Sin afiliación no hay práctica.",
+    vol: ["0", "3.400 afiliaciones", "Tres primeras semanas del semestre"],
+    cons: ["practica"],
+    enc: ["«No uso el sistema.»", "«Bueno, sí: de ahí sale el listado para la afiliación. Sin eso no entran al colegio.»"],
+    extra: [], vacio: "",
+    sis: ["S1", "S4"], prov: ["ARL"] }
+];
+const PMAP = {}; PROCS.forEach(function(p){ PMAP[p.id] = p; });
+const PIDS = PROCS.map(function(p){ return p.id; });
+
+/* Sistemas (Parte 6). t = lo que el caso da sobre el tiempo; d = lo que el caso dice del respaldo (Parte 8).
+   tDato / dDato: si el caso trae al menos un dato medido o contratado utilizable. */
+const RECS = [
+  { id: "S1", n: "SIGA · sistema académico", tipo: "s", donde: "Cuarto de servidores, Girardot. Base de datos en un servidor físico de 2016",
+    t: "Restaurar la base (310 GB): 31 horas, agosto de 2022; hoy pesa 480 GB. Volver de un apagado completo, sin daño: 9 h 15 min, mayo de 2026 (Partes 8 y 17). Repuesto de servidor: 10 días hábiles; servidor nuevo: 45 a 60 días (Parte 17). Restaurar todo el entorno desde cero: no se sabe (Parte 16).", tDato: true,
+    d: "Aplicación: T1, incremental diario a las 10:00 p.m. Base de datos: T2, completo los domingos e incremental diario a las 11:30 p.m.; retención de 14 días, en el mismo bastidor. Fuera del cuarto: el disco mensual de Honda, con el último volcado completo, sin cifrar, con meses sin copia; nunca se ha restaurado desde él (Partes 8 y 16). En 2022 se perdió un día de datos.", dDato: true },
+  { id: "S2", n: "Portal de pagos", tipo: "s", donde: "Módulo de SIGA más la pasarela PagoRed",
+    t: "No tiene medición propia: es un módulo de SIGA (ver S1). Pasarela: disponibilidad del 99,9 % por contrato y 99,95 % medida (Partes 10 y 17); el contrato no fija tiempo de recuperación.", tDato: false,
+    d: "La referencia de pago la genera SIGA (ver S1). Conciliación diaria por archivo de PagoRed. El contrato no dice qué pasa con los pagos confirmados que SIGA no alcanza a registrar (Partes 6 y 10).", dDato: true },
+  { id: "S3", n: "Aula virtual", tipo: "s", donde: "Nube pública, operada por EduNube S.A.S. Una sola región. El ingreso se valida contra el directorio de Girardot",
+    t: "Tiempo de recuperación por contrato: «el menor posible» (Parte 10; evidencia C, cláusula octava). Junio de 2025: 19 horas fuera de servicio (Parte 13). Cuánto tarda una restauración: no se sabe, nunca se ha pedido (Parte 16).", tDato: true,
+    d: "Copia diaria de EduNube, retención de siete días, en la misma región de nube. La universidad no tiene copia propia ni ha pedido nunca una restauración (Parte 8). Si las copias sirven: no se sabe (Parte 16).", dDato: true },
+  { id: "S4", n: "Correo y ofimática", tipo: "s", donde: "Nube pública, licenciamiento educativo. Las cuentas se crean y sincronizan desde el directorio local",
+    t: "El caso no trae tiempos de recuperación. Disponibilidad medida: 99,9 % (Parte 17).", tDato: false,
+    d: "Nadie lo respalda: solo la papelera del servicio, treinta días (Parte 8).", dDato: true },
+  { id: "S5", n: "Financiero y nómina", tipo: "s", donde: "Cuarto de servidores, Girardot. Licencia atada al identificador del servidor",
+    t: "Nunca se ha restaurado (Parte 8). Reinstalar en otro servidor exige reexpedir la licencia: 2 días hábiles; el proveedor no ofrece ambiente alterno ni atiende fines de semana (Partes 10 y 17). Apagado completo de mayo de 2026: 9 h 15 min (Parte 17).", tDato: true,
+    d: "Dos máquinas en T1, incremental diario a las 10:00 p.m., 14 días, en el mismo bastidor. Fuera del cuarto: la base del financiero va en el disco mensual de Honda, sin cifrar, con meses sin copia; nunca se ha restaurado desde él (Partes 8 y 16).", dDato: true },
+  { id: "S6", n: "Gestor documental", tipo: "s", donde: "Cuarto de servidores, Girardot. Documentos en una carpeta del almacenamiento central (3,6 TB)",
+    t: "Una carpeta borrada por error se restauró en cuarenta minutos, marzo de 2023. Nunca se ha restaurado la máquina completa (Parte 8). Apagado completo de mayo de 2026: 9 h 15 min (Parte 17). Lectura desde el equipo de respaldo: 95 MB por segundo, para estimar solo la copia de 3,6 TB (Parte 8).", tDato: true,
+    d: "Documentos: T3, incremental diario a las 12:30 a.m., 14 días. El 16 de mayo de 2026 llevaba 44 ejecuciones fallidas y 45 días sin respaldo (evidencia B). Máquina: T4, semanal, los sábados a las 8:00 p.m. No hay copia fuera del cuarto (Parte 8).", dDato: true },
+  { id: "S7", n: "Directorio, nombres y red inalámbrica", tipo: "s", donde: "Cuarto de servidores, Girardot. Dos controladores virtuales en el mismo clúster",
+    t: "Nunca se ha restaurado (Parte 8). 16 de mayo de 2026: cayó a las 6:05 a.m. y respondió a las 2:10 p.m., sin daño y encendido de memoria (Parte 14). Restaurarlo desde cero: no se sabe (Parte 16).", tDato: true,
+    d: "Dos máquinas en T1, incremental diario a las 10:00 p.m., 14 días, en el mismo bastidor. No hay copia fuera del cuarto (Parte 8).", dDato: true },
+  { id: "S8", n: "Biblioteca", tipo: "s", donde: "Nube, como servicio. El acceso remoto a bases bibliográficas pasa por un servidor intermedio en Girardot",
+    t: "El caso no trae tiempos de recuperación.", tDato: false,
+    d: "El caso no dice quién lo respalda ni cómo.", dDato: false },
+  { id: "S9", n: "Almacenamiento de investigación", tipo: "s", donde: "Oficinas de los grupos: nueve equipos, 38 TB. No están en el inventario de la Oficina de Tecnologías",
+    t: "El caso no trae tiempos de recuperación.", tDato: false,
+    d: "Nadie, institucionalmente: dos de los nueve grupos copian a cuentas personales de nube; los otros siete confían en el arreglo de discos (Parte 8). Qué hay exactamente en los equipos: no se sabe (Parte 16).", dDato: true },
+  { id: "S10", n: "Sistema del Instituto Pedagógico", tipo: "s", donde: "Nube, como servicio. Contrato del colegio, no de la universidad",
+    t: "El caso no trae tiempos de recuperación. Qué cubre el contrato: no se sabe (Parte 16).", tDato: false,
+    d: "Lo respalda el proveedor; se desconocen las condiciones (Parte 8).", dDato: false },
+  { id: "S11", n: "Sitio web institucional", tipo: "s", donde: "Alojamiento externo. No depende del cuarto de servidores",
+    t: "El caso no trae tiempos de recuperación.", tDato: false,
+    d: "Copia semanal del proveedor de alojamiento, incluida en el plan (Parte 8).", dDato: true },
+  { id: "S12", n: "Control de acceso, carné y cámaras", tipo: "s", donde: "Cuarto de servidores, Girardot. Los lectores del restaurante consultan a SIGA en línea",
+    t: "Nunca se ha restaurado una máquina virtual completa (Parte 8). Apagado completo de mayo de 2026: 9 h 15 min hasta tener todos los servicios arriba (Parte 17).", tDato: true,
+    d: "Máquina en T1, incremental diario a las 10:00 p.m., 14 días, en el mismo bastidor. No hay copia fuera del cuarto (Parte 8).", dDato: true },
+  { id: "S13", n: "Telefonía", tipo: "s", donde: "Cuarto de servidores, Girardot. Central virtual, 410 extensiones",
+    t: "Nunca se ha restaurado una máquina virtual completa (Parte 8). Apagado completo de mayo de 2026: 9 h 15 min hasta tener todos los servicios arriba (Parte 17).", tDato: true,
+    d: "Máquina en T1, incremental diario a las 10:00 p.m., 14 días, en el mismo bastidor. No hay copia fuera del cuarto (Parte 8).", dDato: true },
+
+  { id: "EduNube", n: "EduNube S.A.S.", tipo: "p", donde: "Aula virtual. Contrato del 1 de febrero al 31 de diciembre de 2026",
+    t: "Tiempo de recuperación: «el menor posible». Disponibilidad mensual del 99,5 %. Soporte de lunes a sábado, de 7:00 a.m. a 7:00 p.m. (Parte 10; evidencia C). Junio de 2025: 19 horas fuera de servicio (Parte 13).", tDato: true },
+  { id: "Andina", n: "Andina de Software S.A.S.", tipo: "p", donde: "Financiero y nómina. Soporte anual",
+    t: "Soporte en horario hábil, respuesta en cuatro horas hábiles. Reexpedir la licencia: dos días hábiles. No ofrece ambiente alterno. No atiende fines de semana (Parte 10).", tDato: true },
+  { id: "PagoRed", n: "PagoRed S.A.", tipo: "p", donde: "Pasarela de pagos",
+    t: "Disponibilidad del 99,9 % y archivo de conciliación diario. El contrato no fija tiempo de recuperación ni dice qué pasa con los pagos confirmados que SIGA no alcanza a registrar (Parte 10).", tDato: false },
+  { id: "Telemagdalena", n: "Telemagdalena S.A. E.S.P.", tipo: "p", donde: "Internet principal y enlaces a sedes",
+    t: "Disponibilidad anual del 99,6 % (medida: 99,5 %). Reparación en ocho horas por evento. El enlace de respaldo es de otro proveedor, pero comparte poste y ducto (Partes 10 y 17).", tDato: true },
+  { id: "Banco", n: "Banco recaudador", tipo: "p", donde: "Recaudo en ventanilla y portal empresarial",
+    t: "Convenio de reciprocidad, sin compromiso de disponibilidad; la medida es «sin dato» (Parte 17). El archivo de nómina lo produce el sistema financiero y el banco no recibe otro formato (Parte 10).", tDato: false },
+  { id: "MotorBD", n: "Fabricante del motor de base de datos", tipo: "p", donde: "Base de datos de SIGA",
+    t: "Sin contrato de soporte desde 2019. La versión instalada no recibe parches desde 2020 (Parte 10).", tDato: false },
+  { id: "MantServ", n: "Mantenimiento de servidores", tipo: "p", donde: "Bolsa de repuestos por demanda",
+    t: "Repuesto en diez días hábiles. El fabricante anunció fin de vida de ese modelo para 2027 (Parte 10).", tDato: true },
+  { id: "MantAire", n: "Mantenimiento de aire acondicionado", tipo: "p", donde: "Todo el campus, desde el 3 de agosto de 2026",
+    t: "Visita correctiva en 48 horas hábiles. No distingue el cuarto de servidores de un salón de clase (Parte 10). Contratarlo tomó 5 meses (Parte 17).", tDato: true },
+  { id: "Alimentacion", n: "Operador de alimentación", tipo: "p", donde: "Restaurante",
+    t: "4.200 raciones diarias; se paga por ración validada con el lector. El contrato no dice qué se paga, ni qué se sirve, si el lector no funciona (Parte 10).", tDato: false },
+  { id: "Vigilancia", n: "Vigilancia", tipo: "p", donde: "Bloque administrativo",
+    t: "Vigilante 24 horas; enciende la planta eléctrica. No tiene instrucción alguna sobre el cuarto de servidores (Parte 10).", tDato: false },
+  { id: "Planilla", n: "Operador de planilla de seguridad social", tipo: "p", donde: "Lo declara el dueño de P7 (Parte 5)",
+    t: "La Parte 10 no describe su contrato: el caso no trae tiempos.", tDato: false },
+  { id: "ARL", n: "Operador de riesgos laborales", tipo: "p", donde: "Lo declara el dueño de P12 (Parte 5)",
+    t: "La Parte 10 no describe su contrato: el caso no trae tiempos.", tDato: false },
+  { id: "InternetCentros", n: "Internet de los centros de tutoría", tipo: "p", donde: "Internet del colegio anfitrión (Parte 1); lo declara el dueño de P6 (Parte 5)",
+    t: "No es un servicio contratado por la universidad: el caso no trae tiempos.", tDato: false }
+];
+const RMAP = {}; RECS.forEach(function(r){ RMAP[r.id] = r; });
+/* Parte 6: el ingreso a SIGA, al aula virtual y al financiero depende del directorio; el portal de pagos es un módulo de SIGA */
+const NECESITA = [["S1", "S7"], ["S3", "S7"], ["S5", "S7"], ["S2", "S1"]];
+
+const SUSTENTOS = [
+  "Parte 2 · Inscripciones del 1 de septiembre al 23 de octubre de 2026: 9.400 aspirantes para 2.600 cupos",
+  "Parte 2 · Examen de admisión el 31 de octubre de 2026; la citación sale del sistema académico",
+  "Parte 2 · Publicación de admitidos el 20 de noviembre; incumplirla genera derechos de petición",
+  "Parte 2 · Exámenes finales del 30 de noviembre al 5 de diciembre; los de distancia, en el aula virtual",
+  "Parte 2 · Cierre de notas el 11 de diciembre a las 5:00 p.m.; sin cierre no hay promedios, ni grados, ni matrícula",
+  "Parte 2 · Grados el 17 y 18 de diciembre: 1.240 graduandos",
+  "Parte 2 · Matrícula del 18 al 29 de enero de 2027: hasta 4.100 en un solo día",
+  "Parte 2 · Inicio de clases el 1 de febrero de 2027",
+  "Parte 2 · Constancias para crédito educativo hasta el 12 de febrero: 2.300 estudiantes",
+  "Parte 2 · Corte del reporte de matriculados el 26 de febrero",
+  "Parte 2 · Nómina: novedades hasta el 20, liquidación del 21 al 25, pago el último día hábil",
+  "Parte 17 · Volumen de día normal y de día pico del proceso",
+  "Parte 17 · Giro de gratuidad: $21.400 millones sobre los matriculados reportados al 26 de febrero",
+  "Parte 17 · Recaudo propio de matrícula: $9.800 millones por semestre; el 70 % en las dos semanas",
+  "Parte 17 · Holgura del calendario: cinco días hábiles; más allá se corre todo el año",
+  "Parte 17 · Nómina mensual: $7.900 millones para 885 personas, más $2.600 millones para 610 docentes de cátedra",
+  "Parte 17 · Seguridad social: planilla de $2.900 millones; mora de unos $2 millones por día",
+  "Parte 17 · Examen de admisión: reprogramarlo cuesta $148 millones",
+  "Parte 17 · Peticiones y tutelas: 15 días hábiles; fallo de tutela, hasta 48 horas; 1.900 peticiones y tres tutelas en 2024",
+  "Parte 17 · Práctica pedagógica: cada semana de retraso es una semana menos para 3.400 estudiantes",
+  "Parte 17 · Docentes de cátedra: unos $650 millones por semana de atraso para 610 personas",
+  "Parte 17 · Acreditación: visita de renovación en el segundo semestre de 2027",
+  "Parte 13 · Agosto de 2022: 31 horas, un día de datos perdido, 2.300 notas redigitadas, nómina repetida",
+  "Parte 13 · Enero de 2024: once horas de servicio degradado, plantón y catorce notas de prensa",
+  "Parte 13 · Junio de 2025: aula virtual 19 horas fuera de servicio, 212 exámenes reprogramados",
+  "Parte 14 · 16 de mayo de 2026: 9 h 15 min; unos 3.900 estudiantes sin ingreso; 96 sesiones repuestas",
+  "Parte 12 · Ley 1755 de 2015: los términos corren aunque el gestor documental esté caído",
+  "Parte 12 · Decreto 055 de 2015: afiliación a riesgos laborales al menos un día antes de iniciar la práctica",
+  "Parte 1 · 4.200 almuerzos subsidiados al día; el 83 % de pregrado es de estratos 1 y 2",
+  "Evidencia E · respuesta del dueño (es opinión: se contrasta, no se copia)",
+  "Supuesto declarado: … · se pregunta a …"
+];
+
+/* ═════════ Estado ═════════ */
+const CLAVE = "sio0013-lab1-v1";
+function demoInicial(){
+  const c = momVacio(), n = momVacio();
+  c.fechas = PMAP.P2.fechas;
+  c.x.aca = [2, 4, 5, 5, 5]; c.x.leg = [3, 4, 5, 5, 5]; c.x.rep = [3, 4, 5, 5, 5]; c.x.fin = [1, 2, 3, 4, 5]; c.x.per = [1, 2, 3, 4, 5];
+  c.s.aca = "Partes 2 y 17: hasta 4.100 matrículas en el día pico, sin día libre en la ventana para reponerlas; cinco días hábiles de holgura";
+  c.s.fin = "Parte 17: $9.800 millones de recaudo propio, el 70 % en las dos semanas: unos $686 millones por día hábil, que se aplazan; corte del 26 de febrero";
+  c.s.leg = "Partes 13 y 17: en 2024, once horas de degradación dejaron 1.900 peticiones y tres tutelas";
+  c.s.rep = "Partes 4 y 13: plantón y catorce notas de prensa en 2024; el representante estudiantil tiene 31.000 seguidores; visita de acreditación en 2027 (Parte 17)";
+  c.s.per = "Parte 17: unos $650 millones por semana de atraso para 610 docentes de cátedra; 2.300 estudiantes con crédito educativo, límite el 12 de febrero";
+  c.rto = "8"; c.rtoU = "h"; c.rpo = "1"; c.rpoU = "h";
+  c.mbco = "Inscribir asignaturas y generar recibo para la franja citada ese día. El pago puede ir por ventanilla del banco.";
+  c.sus = "Supuesto por confirmar con Luz Dary Ospina y Yaneth Barrios (Parte 16). Tiempo objetivo: que una caída de madrugada esté resuelta antes de perder la jornada. Punto objetivo: una matrícula en línea no tiene de dónde reconstruirse; los pagos sí, porque PagoRed entrega archivo de conciliación diario (Parte 10).";
+  n.fechas = "Octubre: vale mientras falten más de dos semanas para la matrícula";
+  n.rto = "1"; n.rtoU = "sem"; n.rpo = "24"; n.rpoU = "h";
+  n.mbco = "No aplica: no hay operación.";
+  n.sus = "Parte 17: en un día normal P2 no registra una sola matrícula. El reloj que corre es la distancia a la próxima ventana.";
+  return { m: { critico: c, normal: n } };
+}
+function nuevoEstado(){
+  const p = {};
+  PROCS.forEach(function(q){
+    p[q.id] = { m: { critico: momVacio(), normal: momVacio() }, sis: q.sis.slice(), prov: q.prov.slice(), pers: "", origen: "" };
+    p[q.id].m.critico.fechas = q.fechas;
+  });
+  return { v: 1, equipo: "", umbral: 4, uquien: "", quinta: false, martes: "", martesDif: "", sel: [], p: p, demo: demoInicial(), brecha: {}, otros: {} };
+}
+function sanea(mom){
+  const b = momVacio();
+  if (!mom || typeof mom !== "object") return b;
+  ["fechas", "mt", "rto", "rpo", "mbco", "sus"].forEach(function(k){ if (typeof mom[k] === "string") b[k] = mom[k]; });
+  ["mtU", "rtoU", "rpoU"].forEach(function(k){ if (UNID[mom[k]]) b[k] = mom[k]; });
+  CATS.forEach(function(c){
+    if (mom.x && Array.isArray(mom.x[c.id])) b.x[c.id] = FRANJAS.map(function(_, i){ const v = mom.x[c.id][i]; return v >= 1 && v <= 5 ? Math.round(v) : null; });
+    if (mom.s && typeof mom.s[c.id] === "string") b.s[c.id] = mom.s[c.id];
+  });
+  return b;
+}
+function cargaEstado(){
+  const e = nuevoEstado();
+  let g = null;
+  try { g = JSON.parse(localStorage.getItem(CLAVE) || "null"); } catch (err) { g = null; }
+  if (!g || g.v !== 1 || !g.p) return e;
+  e.equipo = String(g.equipo || ""); e.uquien = String(g.uquien || ""); e.quinta = !!g.quinta;
+  e.martes = String(g.martes || ""); e.martesDif = String(g.martesDif || "");
+  if (g.umbral >= 3 && g.umbral <= 5) e.umbral = g.umbral;
+  if (Array.isArray(g.sel)) e.sel = g.sel.filter(function(x){ return PMAP[x]; });
+  PIDS.forEach(function(pid){
+    const q = g.p[pid]; if (!q) return;
+    e.p[pid].m.critico = sanea(q.m && q.m.critico); e.p[pid].m.normal = sanea(q.m && q.m.normal);
+    if (Array.isArray(q.sis)) e.p[pid].sis = q.sis.filter(function(x){ return RMAP[x] && RMAP[x].tipo === "s"; });
+    if (Array.isArray(q.prov)) e.p[pid].prov = q.prov.filter(function(x){ return RMAP[x] && RMAP[x].tipo === "p"; });
+    e.p[pid].pers = String(q.pers || ""); e.p[pid].origen = String(q.origen || "");
+  });
+  if (g.demo && g.demo.m) e.demo = { m: { critico: sanea(g.demo.m.critico), normal: sanea(g.demo.m.normal) } };
+  if (g.brecha && typeof g.brecha === "object") e.brecha = g.brecha;
+  if (g.otros && typeof g.otros === "object") {
+    Object.keys(g.otros).forEach(function(pid){
+      if (!PMAP[pid] || !Array.isArray(g.otros[pid])) return;
+      e.otros[pid] = g.otros[pid].map(function(o){ return { equipo: String(o.equipo || ""), m: { critico: sanea(o.m && o.m.critico), normal: sanea(o.m && o.m.normal) }, sis: o.sis || [], prov: o.prov || [], pers: String(o.pers || "") }; });
+    });
+  }
+  return e;
+}
+let E = cargaEstado();
+let tGuardar = null, tGlobal = null;
+function guardaYa(){
+  clearTimeout(tGuardar);
+  try { localStorage.setItem(CLAVE, JSON.stringify(E)); return true; } catch (err) { return false; }
+}
+function guarda(){
+  clearTimeout(tGuardar);
+  tGuardar = setTimeout(function(){
+    if (guardaYa()) {
+      const d = new Date();
+      $("estado").textContent = "avance guardado · " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    } else $("estado").textContent = "este navegador no deja guardar: exporten el CSV";
+  }, 350);
+}
+/* un cambio seguido de cierre o recarga no se pierde */
+window.addEventListener("pagehide", guardaYa);
+window.addEventListener("beforeunload", guardaYa);
+document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "hidden") guardaYa(); });
+
+/* ═════════ Utilidades de interfaz ═════════ */
+function esc(t){ return String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function momDe(pid, mid){ return pid === "D" ? E.demo.m[mid] : E.p[pid].m[mid]; }
+function umbralDe(pid){ return pid === "D" ? 4 : E.umbral; }
+function catsDe(pid){ return pid === "D" ? CATS : catsActivas(E.quinta); }
+function metaDe(pid){ return PMAP[pid === "D" ? "P2" : pid]; }
+function momN(mid){ return mid === "critico" ? "Momento crítico" : "Semana normal"; }
+function unidades(sel){ return Object.keys(UNID_N).map(function(u){ return '<option value="' + u + '"' + (u === sel ? " selected" : "") + ">" + UNID_N[u] + "</option>"; }).join(""); }
+function calcula(pid){
+  const cats = catsDe(pid), u = umbralDe(pid), r = {};
+  ["critico", "normal"].forEach(function(mid){
+    const mom = momDe(pid, mid);
+    r[mid] = { mt: mtpd(mom, u, cats), rto: aHoras(mom.rto, mom.rtoU), rpo: aHoras(mom.rpo, mom.rpoU),
+               av: validar(mom, { umbral: u, cats: cats, otro: mid === "critico" ? momDe(pid, "normal") : null }) };
+  });
+  return r;
+}
+function procSinDatos(pid){ return momSinDatos(E.p[pid].m.critico, CATS) && momSinDatos(E.p[pid].m.normal, CATS); }
+function txtTolerable(mt){
+  if (mt.estado === "vacia") return "—";
+  if (mt.estado === "no-cruza") return esNum(mt.h) ? fmtH(mt.h) : "Más de 2 semanas";
+  return fmtH(mt.h);
+}
+
+/* ═════════ Panel de datos del caso ═════════ */
+function htmlCaso(pid){
+  const p = metaDe(pid);
+  const med = [];
+  p.sis.forEach(function(s){ (MED_SIS[s] || []).forEach(function(t){ med.push(t); }); });
+  p.extra.forEach(function(t){ med.push(t); });
+  med.push(MED_GEN);
+  function li(a){ return "<ul>" + a.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>"; }
+  const cons = p.cons.length
+    ? li(p.cons.map(function(k){ return CONS[k]; }))
+    : "La tabla «Qué pasa cuando no se llega» de la Parte 17 no trae una consecuencia cuantificada propia de este proceso. Lo que valoren aquí sale de otras partes del caso o es un supuesto declarado.";
+  const enc = p.enc
+    ? "¿Cuánto tiempo puede operar su proceso sin el sistema? " + esc(p.enc[0]) + "<br>¿Qué haría si el sistema no vuelve en tres días? " + esc(p.enc[1]) + "<br><span style=\"color:var(--gris)\">Respuesta literal. Es opinión, no dato: materia prima que se contrasta.</span>"
+    : "El dueño de este proceso no respondió la encuesta (respondieron nueve de doce). La ficha de la entrevista de hoy, si la hicieron, es su única fuente directa.";
+  return '<details class="caso"><summary>Datos del caso para ' + esc(p.id) + " · " + esc(p.n) + "</summary><table><tbody>" +
+    '<tr><td class="k">Dueño (Partes 4 y 5)</td><td>' + esc(p.dueno) + ". " + esc(p.persona) + "</td></tr>" +
+    '<tr><td class="k">Momento crítico (Parte 5)</td><td>' + esc(p.critico) + "</td></tr>" +
+    '<tr><td class="k">Fechas y condiciones (Parte 2, salvo otra cita)</td><td>' + li(p.cal) + "</td></tr>" +
+    '<tr><td class="k">De qué depende, según el dueño (Parte 5)</td><td>' + esc(p.dep) + ".</td></tr>" +
+    '<tr><td class="k">Alternativa manual hoy (Parte 5)</td><td>' + esc(p.manual) + "</td></tr>" +
+    '<tr><td class="k">Volumen (Parte 17)</td><td>Día normal: <b>' + esc(p.vol[0]) + "</b> · Día pico: <b>" + esc(p.vol[1]) + "</b> · Cuándo es el pico: " + esc(p.vol[2]) + ".</td></tr>" +
+    '<tr><td class="k">Consecuencias de no llegar (Parte 17)</td><td>' + cons + "</td></tr>" +
+    '<tr><td class="k">Lo que respondió el dueño (evidencia E)</td><td>' + enc + "</td></tr>" +
+    '<tr><td class="k">Tiempos y antecedentes ya medidos</td><td>' + li(med) + "</td></tr>" +
+    (p.vacio ? '<tr><td class="k">Lo que no se sabe (Parte 16)</td><td>' + esc(p.vacio) + "</td></tr>" : "") +
+    "</tbody></table></details>";
+}
+
+/* ═════════ Tarjeta de proceso ═════════ */
+function htmlMom(pid, mid){
+  const p = metaDe(pid), a = 'data-p="' + pid + '" data-m="' + mid + '"', pre = pid + "-" + mid;
+  const quien = (pid === "D" ? "Ejemplo P2" : pid) + ", " + momN(mid).toLowerCase();
+  let h = '<div class="mom ' + mid + '"><div class="mom-h"><b>' + momN(mid) + '</b><label class="lb" for="' + pre + '-fe" style="margin:0">Fechas o condición</label>' +
+    '<input type="text" id="' + pre + '-fe" ' + a + ' data-f="fechas" placeholder="' + (mid === "normal" ? "cuándo vale «semana normal» para este proceso (Parte 2)" : "fechas del momento crítico (Partes 2, 5 y 17)") + '"></div>' +
+    '<div class="mgrid"><div><table class="mx"><thead><tr><th style="width:112px">Categoría</th>' +
+    FRANJAS.map(function(f){ return '<th style="width:50px">' + f.n + "</th>"; }).join("") +
+    "<th>Dato del caso que lo sustenta</th></tr></thead><tbody>";
+  CATS.forEach(function(c){
+    h += '<tr class="c-' + c.id + '"><td>' + c.n + "</td>";
+    FRANJAS.forEach(function(f, i){
+      h += '<td><select ' + a + ' data-f="x" data-c="' + c.id + '" data-i="' + i + '" aria-label="' + quien + ", " + c.n.toLowerCase() + ", " + f.n + '">' +
+        '<option value="">–</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></td>';
+    });
+    h += '<td><input type="text" list="dl-sus" ' + a + ' data-f="s" data-c="' + c.id + '" placeholder="Parte… · dato, o supuesto declarado" aria-label="' + quien + ", sustento del impacto " + c.n.toLowerCase() + '"></td></tr>';
+  });
+  h += '<tr class="niv"><td>Nivel de la franja</td>' + FRANJAS.map(function(_, i){ return '<td id="' + pre + "-n" + i + '">–</td>'; }).join("") +
+    '<td class="cr" id="' + pre + '-cr"></td></tr></tbody></table><div class="avisos mav" id="' + pre + '-av" aria-live="polite"></div></div>' +
+    '<div class="tm"><div class="pmt full"><div class="lb">Periodo máximo tolerable · lo propone la curva</div><div class="val" id="' + pre + '-pmt" aria-live="polite">—</div><div class="sub" id="' + pre + '-pmts"></div></div>' +
+    '<div class="full"><label for="' + pre + '-mt">Afinarlo dentro de la franja (opcional)</label><div class="par"><input type="text" inputmode="decimal" id="' + pre + '-mt" ' + a + ' data-f="mt" placeholder="vacío = la franja"><select ' + a + ' data-f="mtU" aria-label="' + quien + ', unidad del periodo tolerable afinado">' + unidades("h") + "</select></div></div>" +
+    '<div><label for="' + pre + '-rto">Tiempo objetivo de recuperación</label><div class="par"><input type="text" inputmode="decimal" id="' + pre + '-rto" ' + a + ' data-f="rto"><select ' + a + ' data-f="rtoU" aria-label="' + quien + ', unidad del tiempo objetivo">' + unidades("h") + "</select></div></div>" +
+    '<div><label for="' + pre + '-rpo">Punto objetivo de recuperación</label><div class="par"><input type="text" inputmode="decimal" id="' + pre + '-rpo" ' + a + ' data-f="rpo"><select ' + a + ' data-f="rpoU" aria-label="' + quien + ', unidad del punto objetivo">' + unidades("h") + "</select></div></div>" +
+    '<div class="full"><label for="' + pre + '-mb">Nivel mínimo de operación: qué funciones, para quién</label><textarea id="' + pre + '-mb" ' + a + ' data-f="mbco" rows="2"></textarea></div>' +
+    '<div class="full"><label for="' + pre + '-su">Dato o supuesto que sostiene estos tiempos</label><textarea id="' + pre + '-su" ' + a + ' data-f="sus" rows="2" placeholder="Parte… · de dónde se reconstruyen los datos · a quién se pregunta"></textarea></div>' +
+    "</div></div></div>";
+  return h;
+}
+function montaProc(cont, pid){
+  const p = metaDe(pid), d = document.createElement("details");
+  d.className = "proc" + (pid === "D" ? " demo" : ""); d.id = "c-" + pid;
+  if (pid === "D") d.open = true;
+  d.innerHTML = "<summary><span class=\"pid\">" + (pid === "D" ? "P2" : pid) + "</span><span>" + esc(p.n) + (pid === "D" ? " · ejemplo del docente" : "") + "</span>" +
+    (pid === "D" ? "" : '<span class="tag" id="' + pid + '-tag"></span>') + '<span class="chips" id="' + pid + '-chips"></span></summary>' +
+    '<div class="pbody">' + htmlCaso(pid) +
+    (pid === "P2" ? '<div class="fila noimp"><button class="sec mini" id="trae-demo">Traer el ejemplo guiado para revisarlo</button><span class="leyenda" style="margin:0" id="trae-msg" aria-live="polite">No es para copiarlo: es para sostenerlo o cambiarlo con argumento.</span></div>' : "") +
+    htmlMom(pid, "critico") + htmlMom(pid, "normal") +
+    '<div class="mgrid" style="margin-top:14px"><div class="curva"><div class="lb">Curva de impacto: nivel más alto por franja</div><div id="' + pid + '-svg"></div></div>' +
+    (pid === "D"
+      ? '<p class="leyenda" style="margin:0">Los avisos de coherencia aparecen debajo de la matriz de cada momento, a medida que llenan.</p>'
+      : '<div class="tm"><div class="full"><label for="' + pid + '-pers">Personas y sedes de las que depende (Partes 4, 7 y 9)</label>' +
+        '<textarea id="' + pid + '-pers" data-pp="' + pid + '" rows="3" placeholder="quién sabe hacerlo y no tiene reemplazo; desde dónde se opera · con la parte del caso"></textarea></div>' +
+        '<div class="full leyenda" style="margin:0">Sistemas y proveedores se marcan en el ejercicio 2. Los avisos de coherencia aparecen debajo de la matriz de cada momento.</div></div>') +
+    "</div></div>";
+  cont.appendChild(d);
+}
+function vuelca(pid){
+  $$('[data-p="' + pid + '"]').forEach(function(el){
+    const d = el.dataset, mom = momDe(pid, d.m);
+    if (d.f === "x") { const v = mom.x[d.c][+d.i]; el.value = v == null ? "" : String(v); }
+    else if (d.f === "s") { el.value = mom.s[d.c]; el.title = el.value; }
+    else el.value = mom[d.f];
+  });
+  if (pid !== "D") $(pid + "-pers").value = E.p[pid].pers || "";
+}
+function svgCurva(nc, nn, u, ic, inn){
+  const W = 460, H = 236, L = 26, R = 8, T = 30, B = 44, pw = W - L - R, ph = H - T - B, g = pw / 5, bw = 27;
+  function y(v){ return T + ph - v * ph / 5; }
+  let s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Curva de impacto. Momento crítico: ' + nc.map(function(v){ return v == null ? "sin valorar" : v; }).join(", ") +
+    ". Semana normal: " + nn.map(function(v){ return v == null ? "sin valorar" : v; }).join(", ") + ". Umbral: nivel " + u + '." xmlns="http://www.w3.org/2000/svg" font-family="Consolas,monospace">';
+  for (let v = 1; v <= 5; v++)
+    s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#D8DBDF" stroke-width="1"/><text x="' + (L - 7) + '" y="' + (y(v) + 3.5) + '" font-size="10" text-anchor="end" fill="#5C5C5C">' + v + "</text>";
+  FRANJAS.forEach(function(f, i){
+    const x0 = L + i * g + (g - 2 * bw - 5) / 2;
+    [[nc[i], "#F36406", i === ic], [nn[i], "#5C5C5C", i === inn]].forEach(function(b, k){
+      const x = x0 + k * (bw + 5);
+      if (b[0] == null) { s += '<text x="' + (x + bw / 2) + '" y="' + (y(0) - 4) + '" font-size="10" text-anchor="middle" fill="#9aa0a6">·</text>'; return; }
+      s += '<rect x="' + x + '" y="' + y(b[0]) + '" width="' + bw + '" height="' + (y(0) - y(b[0])) + '" fill="' + b[1] + '"/>' +
+           '<text x="' + (x + bw / 2) + '" y="' + (y(b[0]) - 4) + '" font-size="10.5" font-weight="700" text-anchor="middle" fill="#15171C">' + b[0] + (b[2] ? " ▼" : "") + "</text>";
+    });
+    s += '<text x="' + (L + i * g + g / 2) + '" y="' + (y(0) + 15) + '" font-size="10" font-weight="700" text-anchor="middle" fill="#15171C">' + f.n.toUpperCase() + "</text>";
+  });
+  s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="#15171C" stroke-width="2"/>' +
+       '<line x1="' + (L - 4) + '" x2="' + (W - R + 4) + '" y1="' + y(u) + '" y2="' + y(u) + '" stroke="#15171C" stroke-width="2.4" stroke-dasharray="7 3"/>' +
+       '<rect x="' + L + '" y="6" width="11" height="11" fill="#F36406"/><text x="' + (L + 16) + '" y="15.5" font-size="10" fill="#15171C">momento crítico</text>' +
+       '<rect x="' + (L + 122) + '" y="6" width="11" height="11" fill="#5C5C5C"/><text x="' + (L + 138) + '" y="15.5" font-size="10" fill="#15171C">semana normal</text>' +
+       '<line x1="' + (L + 232) + '" x2="' + (L + 254) + '" y1="11.5" y2="11.5" stroke="#15171C" stroke-width="2.4" stroke-dasharray="7 3"/><text x="' + (L + 259) + '" y="15.5" font-size="10" fill="#15171C">umbral: nivel ' + u + " · ▼ cruza</text>" +
+       '<text x="' + L + '" y="' + (H - 6) + '" font-size="9.5" fill="#5C5C5C">La primera barra que toca la línea marca el periodo máximo tolerable.</text></svg>';
+  return s;
+}
+function refresca(pid){
+  const r = calcula(pid), u = umbralDe(pid), todos = [];
+  const ORD = { error: 0, aviso: 1, nota: 2 }, ROT = { error: "Incoherencia", aviso: "Aviso", nota: "Nota" };
+  ["critico", "normal"].forEach(function(mid){
+    const pre = pid + "-" + mid, mt = r[mid].mt;
+    mt.niv.forEach(function(v, i){
+      const td = $(pre + "-n" + i);
+      td.textContent = v == null ? "–" : v + (v >= u ? " ▲" : "");
+      td.className = v != null && v >= u ? "sup" : "";
+    });
+    $(pre + "-cr").textContent = mt.estado === "vacia" ? "Sin valorar todavía." :
+      mt.estado === "cruza" ? "Toca el umbral (nivel " + u + ") en la franja de " + FRANJAS[mt.idx].n + "." : "No toca el umbral (nivel " + u + ") en ninguna franja valorada.";
+    $(pre + "-pmt").textContent = mt.estado === "vacia" ? "—" : mt.estado === "cruza" ? fmtH(mt.h) : (esNum(mt.h) ? fmtH(mt.h) : "Más de 2 semanas");
+    $(pre + "-pmts").textContent = mt.estado === "vacia" ? "Aparece cuando valoren el impacto por franja." :
+      mt.estado === "cruza" ? "Propuesta de la curva: " + fmtH(mt.propuestaH) + " (franja de " + FRANJAS[mt.idx].n + "). El cruce real está entre " + fmtH(mt.previaH) + " y " + fmtH(mt.propuestaH) + "." +
+        (mt.adoptH != null && mt.adoptOk ? " Afinado por el equipo a " + fmtH(mt.adoptH) + "." : "")
+      : "La curva no llega al umbral en dos semanas. O el proceso tolera más en este momento del calendario, o falta valorar.";
+    $$('select[data-p="' + pid + '"][data-m="' + mid + '"][data-f="x"]').forEach(function(el){ el.className = el.value !== "" && +el.value >= u ? "alto" : ""; });
+    const lista = r[mid].av.slice().sort(function(a, b){ return ORD[a.niv] - ORD[b.niv]; });
+    $(pre + "-av").innerHTML = lista.length
+      ? "<ul>" + lista.map(function(a){ return '<li class="' + a.niv + '"><b>' + ROT[a.niv] + "</b>" + esc(a.msg) + "</li>"; }).join("") + "</ul>"
+      : (momSinDatos(momDe(pid, mid), CATS) ? "" : '<p style="margin:4px 0;color:var(--gris)">Sin avisos en este momento: pasa las reglas que la herramienta revisa. Las reglas no reemplazan el argumento.</p>');
+    lista.forEach(function(a){ todos.push({ mid: mid, a: a }); });
+  });
+  $(pid + "-svg").innerHTML = svgCurva(r.critico.mt.niv, r.normal.mt.niv, u, r.critico.mt.idx, r.normal.mt.idx);
+  const ne = todos.filter(function(t){ return t.a.niv === "error"; }).length, na = todos.filter(function(t){ return t.a.niv === "aviso"; }).length;
+  $(pid + "-chips").textContent = ["critico", "normal"].map(function(mid){
+    return (mid === "critico" ? "crítico" : "normal") + ": tolerable " + txtTolerable(r[mid].mt).toLowerCase() + " · objetivo " + (esNum(r[mid].rto) ? fmtH(r[mid].rto) : "—");
+  }).join("  |  ") + (ne || na ? "  |  " + (ne ? ne + " incoherencia" + (ne > 1 ? "s" : "") + " " : "") + (na ? na + " aviso" + (na > 1 ? "s" : "") : "") : "");
+  if (pid !== "D") {
+    const sel = E.sel.indexOf(pid) >= 0, card = $("c-" + pid);
+    card.classList.toggle("sel", sel); card.classList.toggle("vacia", procSinDatos(pid));
+    const org = String(E.p[pid].origen || "").trim();
+    $(pid + "-tag").textContent = org ? "lo analizó " + nomEq(org) : sel ? "lo profundiza este equipo" : (procSinDatos(pid) ? "lo consolida el grupo" : "con datos");
+  }
+  return r;
+}
+
+/* ═════════ Tabla consolidada ═════════ */
+function depsTxt(pid){
+  const p = E.p[pid];
+  return p.sis.concat(p.prov.map(function(x){ return RMAP[x] ? RMAP[x].n : x; })).join(", ");
+}
+function pintaTabla(){
+  const cats = catsActivas(E.quinta), u = E.umbral;
+  let h = "<thead><tr>" + [["Proceso y dueño", 12], ["Momento", 12], ["4 h", 3.1], ["1 d", 3.1], ["3 d", 3.1], ["1 sem", 3.1], ["2 sem", 3.1],
+      ["Periodo máximo tolerable", 6.5], ["Tiempo objetivo", 6], ["Punto objetivo", 6], ["Nivel mínimo de operación", 12], ["Dependencias", 11], ["Dato o supuesto", 14], ["Avisos", 5]]
+    .map(function(c){ return '<th style="width:' + c[1] + "%" + (c[1] < 4 ? ";text-align:center;padding-left:0;padding-right:0" : "") + '">' + c[0] + "</th>"; }).join("") + "</tr></thead><tbody>";
+  let nErr = 0, nAv = 0, conDatos = 0, primera = 0, completos = 0;
+  PROCS.forEach(function(p){
+    const r = calcula(p.id), vacio = procSinDatos(p.id);
+    if (!vacio) conDatos++;
+    if (r.critico.mt.estado !== "vacia" && r.normal.mt.estado !== "vacia") {
+      completos++;
+      if (r.critico.mt.idx === 0 && r.normal.mt.idx === 0) primera++;
+    }
+    ["critico", "normal"].forEach(function(mid, k){
+      const mom = E.p[p.id].m[mid], x = r[mid];
+      const e = x.av.filter(function(a){ return a.niv === "error"; }).length, a = x.av.filter(function(a){ return a.niv === "aviso"; }).length;
+      nErr += e; nAv += a;
+      const sus = cats.map(function(c){ return mom.s[c.id]; }).concat([mom.sus]).filter(function(t){ return String(t).trim(); });
+      h += "<tr" + (k === 0 ? ' class="pri"' : "") + ">" +
+        (k === 0 ? '<td rowspan="2"><b>' + p.id + " · " + esc(p.n) + "</b><br>" + esc(p.dueno) + (String(E.p[p.id].origen || "").trim() ? '<br><span class="mal">' + esc(nomEq(E.p[p.id].origen)) + "</span>" : E.sel.indexOf(p.id) >= 0 ? '<br><span class="mal">este equipo</span>' : "") + "</td>" : "") +
+        "<td><b>" + (mid === "critico" ? "Crítico" : "Normal") + "</b>" + (mom.fechas ? "<br>" + esc(mom.fechas) : "") + "</td>" +
+        x.mt.niv.map(function(v){ return '<td class="c' + (v != null && v >= u ? " sup" : "") + '">' + (v == null ? "–" : v) + "</td>"; }).join("") +
+        '<td class="c">' + esc(txtTolerable(x.mt)) + '</td><td class="c">' + (esNum(x.rto) ? fmtH(x.rto) : "—") + '</td><td class="c">' + (esNum(x.rpo) ? fmtH(x.rpo) : "—") + "</td>" +
+        "<td>" + esc(mom.mbco) + "</td>" + (k === 0 ? '<td rowspan="2">' + esc(depsTxt(p.id)) + (String(E.p[p.id].pers || "").trim() ? "<br><b>Personas y sedes:</b> " + esc(E.p[p.id].pers) : "") + "</td>" : "") +
+        "<td>" + (sus.length ? esc(sus.join(" · ")) : (momSinDatos(mom, CATS) ? '<span style="color:var(--gris)">pendiente</span>' : '<span class="rojo">sin fuente</span>')) + "</td>" +
+        '<td class="c">' + (e ? '<span class="rojo">' + e + " inc.</span> " : "") + (a ? '<span class="mal">' + a + " av.</span>" : "") + (!e && !a ? (momSinDatos(mom, CATS) ? "" : '<span class="ok">ok</span>') : "") + "</td></tr>";
+    });
+  });
+  $("tcons").innerHTML = h + "</tbody>";
+  const g = [];
+  g.push({ niv: "nota", t: "Procesos con datos: " + conDatos + " de 12. " + (conDatos < 12 ? "Faltan " + (12 - conDatos) + ": lo que no se negocia es que los doce queden cubiertos entre todos los equipos." : "Los doce están cubiertos.") });
+  if (nErr) g.push({ niv: "error", t: nErr + (nErr === 1 ? " incoherencia abierta" : " incoherencias abiertas") + " en la tabla. Revisen las tarjetas de proceso antes de entregar." });
+  if (nAv) g.push({ niv: "aviso", t: nAv + (nAv === 1 ? " aviso abierto" : " avisos abiertos") + " (sustento, nivel mínimo, momentos iguales…)." });
+  if (completos >= 3 && primera === completos)
+    g.push({ niv: "aviso", t: "Todos los procesos valorados cruzan el umbral en la primera franja, en sus dos momentos. Declarar que todo es crítico todo el año es la definición de trabajo malo de la Parte 18: un análisis de impacto entrega prioridades, no una lista de todo." });
+  if (conDatos > 0 && !E.uquien.trim())
+    g.push({ niv: "nota", t: "Falta decir quién debe aprobar el umbral de lo inaceptable. Es una decisión de la dirección, no del equipo asesor." });
+  const ROT = { error: "Incoherencia", aviso: "Aviso", nota: "Nota" };
+  $("avglobal").innerHTML = "<ul>" + g.map(function(a){ return '<li class="' + a.niv + '"><b>' + ROT[a.niv] + "</b>" + esc(a.t) + "</li>"; }).join("") + "</ul>";
+}
+
+/* ═════════ Ejercicio 2 · dependencias y herencia ═════════ */
+function activos(){ return PIDS.filter(function(pid){ return E.sel.indexOf(pid) >= 0 || !procSinDatos(pid); }); }
+function listaHerencia(){
+  return activos().map(function(pid){
+    const r = calcula(pid);
+    return { pid: pid, deps: E.p[pid].sis.concat(E.p[pid].prov),
+             moms: ["critico", "normal"].map(function(mid){ return { id: mid, rtoH: r[mid].rto, rpoH: r[mid].rpo }; }) };
+  });
+}
+function txtDe(e){
+  if (!e || !e.n) return "";
+  if (!esNum(e.h)) return "Sin tiempo fijado en " + e.sin.join(", ");
+  return e.de.map(function(d){ return d.pid + " · " + (d.mom === "critico" ? "momento crítico" : "semana normal"); }).join("; ") +
+    (e.sin.length ? " (sin tiempo todavía: " + e.sin.join(", ") + ")" : "");
+}
+let firmaDep = null, firmaBre = null;
+function pintaDep(){
+  const act = activos(), firma = act.join(",");
+  if (!act.length) {
+    $("dep").innerHTML = '<div class="panel"><p style="margin:0;color:var(--gris)">Marquen primero sus cuatro procesos en el ejercicio 1. Aquí aparece una columna por cada proceso del equipo o con datos.</p></div>';
+    $("avdep").innerHTML = ""; firmaDep = null; pintaBrecha({}, {}); return;
+  }
+  if (firma !== firmaDep) {
+    firmaDep = firma;
+    let h = '<div class="cont"><table class="dep"><thead><tr><th style="width:250px">Recurso</th>' +
+      act.map(function(pid){ return '<th class="pc" title="' + esc(PMAP[pid].n) + '">' + pid + "</th>"; }).join("") +
+      '<th style="width:96px">Tiempo objetivo heredado</th><th>De qué proceso viene</th><th style="width:90px">Punto objetivo heredado</th></tr></thead><tbody>';
+    let tipo = "";
+    RECS.forEach(function(r){
+      if (r.tipo !== tipo) { tipo = r.tipo; h += '<tr class="sep"><td colspan="' + (act.length + 4) + '">' + (tipo === "s" ? "Sistemas · Parte 6" : "Proveedores y terceros · Parte 10") + "</td></tr>"; }
+      h += "<tr><td><b>" + (r.tipo === "s" ? r.id + " · " : "") + esc(r.n) + "</b><small>" + esc(r.donde) + "</small></td>";
+      act.forEach(function(pid){
+        const decl = (r.tipo === "s" ? PMAP[pid].sis : PMAP[pid].prov).indexOf(r.id) >= 0;
+        h += '<td class="pc' + (decl ? " decl" : "") + '"><input type="checkbox" data-dp="' + pid + '" data-dr="' + r.id + '" aria-label="' + pid + " depende de " + esc(r.tipo === "s" ? r.id + " " + r.n : r.n) + (decl ? " (declarado en la Parte 5)" : "") + '"></td>';
+      });
+      h += '<td class="h" id="h-' + r.id + '">—</td><td id="hd-' + r.id + '"></td><td class="h" id="hp-' + r.id + '">' + (r.tipo === "s" ? "—" : "") + "</td></tr>";
+    });
+    $("dep").innerHTML = h + '</tbody></table></div><div class="leyenda">Celda sombreada: dependencia que el dueño declaró en la Parte 5. Pueden desmarcarla si la discuten, y deben marcar las que falten. El punto objetivo se hereda solo a los sistemas: es de datos.</div>';
+  }
+  $$("[data-dp]").forEach(function(el){
+    const p = E.p[el.dataset.dp], r = RMAP[el.dataset.dr];
+    el.checked = (r.tipo === "s" ? p.sis : p.prov).indexOf(r.id) >= 0;
+  });
+  const lista = listaHerencia(), hr = heredar(lista, "rtoH"), hp = heredar(lista, "rpoH");
+  RECS.forEach(function(r){
+    const e = hr[r.id];
+    $("h-" + r.id).textContent = e && esNum(e.h) ? fmtH(e.h) : (e ? "sin fijar" : "—");
+    $("h-" + r.id).parentNode.classList.toggle("sinuso", !e);
+    $("hd-" + r.id).textContent = txtDe(e);
+    if (r.tipo === "s") { const q = hp[r.id]; $("hp-" + r.id).textContent = q && esNum(q.h) ? fmtH(q.h) : (q ? "sin fijar" : "—"); }
+  });
+  const av = [];
+  act.forEach(function(pid){
+    const s = E.p[pid].sis;
+    NECESITA.forEach(function(par){
+      if (s.indexOf(par[0]) >= 0 && s.indexOf(par[1]) < 0)
+        av.push(par[1] === "S7"
+          ? pid + " marca " + par[0] + " y no marca S7. Según la Parte 6, del directorio dependen el ingreso al aula virtual, a SIGA, al financiero y a la red de las tres sedes. " + (PMAP[pid].sis.indexOf("S7") < 0 ? "El dueño no lo declaró (Parte 5)." : "El dueño sí lo había declarado.")
+          : pid + " marca S2 y no marca S1. El portal de pagos es un módulo de SIGA: la referencia de pago la genera el sistema académico (Parte 6).");
+    });
+  });
+  act.forEach(function(pid){
+    if (!E.p[pid].sis.length && !E.p[pid].prov.length)
+      av.push(pid + " no tiene ninguna dependencia marcada. Ningún proceso de la Parte 5 funciona sin sistemas ni terceros: revisen la columna.");
+    if (!procSinDatos(pid) && !String(E.p[pid].pers || "").trim())
+      av.push(pid + " no dice de qué personas y sedes depende (campo al pie de su tarjeta). El criterio «dependencias completas» pide el directorio, las personas y los proveedores.");
+  });
+  const s7 = hr.S7;
+  if (act.length && !s7) av.push("Ningún proceso de la tabla depende todavía de S7. El 16 de mayo el aula virtual estaba arriba y unos 3.900 estudiantes no pudieron entrar (Parte 14, hallazgo H8).");
+  $("avdep").innerHTML = av.length ? "<ul>" + av.map(function(t){ return '<li class="aviso"><b>Advertencia</b>' + esc(t) + "</li>"; }).join("") + "</ul>" : "";
+  pintaBrecha(hr, hp);
+}
+
+/* ═════════ Ejercicio 3 · la brecha ═════════ */
+function bre(rid){ return E.brecha[rid] || (E.brecha[rid] = { cap: "", capU: "h", fte: "", pr: "", prU: "h", prF: "" }); }
+function txtBrecha(rid, modo, obj){
+  const r = RMAP[rid], b = bre(rid);
+  const cap = modo === "t" ? aHoras(b.cap, b.capU) : aHoras(b.pr, b.prU), fte = modo === "t" ? b.fte : b.prF;
+  const hay = modo === "t" ? r.tDato : r.dDato, x = brecha(cap, obj);
+  if (x.t === "no-numero") return "Escriban solo la cifra y elijan la unidad.";
+  if (x.t === "cero") return "Un 0 no es una estimación: ningún recurso vuelve en cero y ninguna copia tiene cero antigüedad. Si no se sabe, dejen el campo vacío y declaren el vacío con destinatario.";
+  if (x.t === "sin-capacidad" || (x.t === "sin-objetivo" && cap == null))
+    return (hay ? "Sin estimar. El caso trae datos: úsenlos y citen la parte." : "Desconocido: el caso no lo da. Declárenlo como vacío, con destinatario (Parte 16).") +
+           (x.t === "sin-objetivo" ? " Falta además el objetivo heredado." : "");
+  if (x.t === "sin-objetivo") return "Falta el objetivo heredado: fijen los tiempos de los procesos que usan este recurso.";
+  let t = x.t === "brecha"
+    ? "Brecha de " + fmtH(x.h) + ": hoy se estima " + fmtH(cap) + " frente a un objetivo de " + fmtH(obj) + "."
+    : "Cabe: " + fmtH(cap) + " frente a un objetivo de " + fmtH(obj) + (x.h > EPS ? ", con " + fmtH(x.h) + " de holgura." : ", sin holgura.");
+  if (!String(fte).trim()) t += " Falta la fuente de la estimación.";
+  else if (!sustentoValido(fte)) t += " La fuente no cita una parte del caso ni se declara como supuesto.";
+  else if (!hay && !/supuesto/i.test(fte)) t += " El caso no trae medición para este recurso: si el número es de ustedes, díganlo como supuesto.";
+  return t;
+}
+function pintaBrecha(hr, hp){
+  const filas = RECS.filter(function(r){ return hr[r.id]; }), firma = filas.map(function(r){ return r.id; }).join(",");
+  if (firma !== firmaBre) {
+    firmaBre = firma;
+    if (!filas.length) {
+      $("bre-t").innerHTML = '<div class="panel"><p style="margin:0;color:var(--gris)">Aparece una fila por cada sistema o proveedor del que dependa algún proceso de la tabla (ejercicio 2).</p></div>';
+      $("bre-d").innerHTML = "";
+    } else {
+      function tabla(modo, lista){
+        const cap = modo === "t" ? "cap" : "pr", fte = modo === "t" ? "fte" : "prF";
+        return '<table class="bre"><thead><tr><th style="width:14%">Recurso</th><th style="width:11%">' + (modo === "t" ? "Tiempo objetivo heredado" : "Punto objetivo heredado") + '</th><th style="width:28%">' +
+          (modo === "t" ? "Lo que hoy se puede lograr, según el caso" : "Lo que el caso dice de su respaldo (Parte 8)") + '</th><th style="width:14%">' +
+          (modo === "t" ? "Capacidad actual estimada" : "Punto real estimado") + '</th><th style="width:16%">Fuente de la estimación</th><th style="width:17%">Brecha</th></tr></thead><tbody>' +
+          lista.map(function(r){
+            const nom = (r.tipo === "s" ? r.id + " · " : "") + r.n;
+            return "<tr><td><b>" + esc(nom) + '</b></td><td id="b' + modo + "o-" + r.id + '"></td><td>' + esc(modo === "t" ? r.t : r.d) + "</td>" +
+              '<td><div class="par"><input type="text" inputmode="decimal" data-b="' + r.id + '" data-f="' + cap + '" aria-label="' + esc(nom) + (modo === "t" ? ", capacidad actual estimada" : ", punto real estimado") + '"><select data-b="' + r.id + '" data-f="' + cap + 'U" aria-label="' + esc(nom) + ', unidad">' + unidades("h") + "</select></div></td>" +
+              '<td><input type="text" data-b="' + r.id + '" data-f="' + fte + '" placeholder="Parte… o supuesto" aria-label="' + esc(nom) + ', fuente de la estimación"></td>' +
+              '<td class="out" id="b' + modo + "x-" + r.id + '" aria-live="polite"></td></tr>';
+          }).join("") + "</tbody></table>";
+      }
+      $("bre-t").innerHTML = tabla("t", filas);
+      const sis = filas.filter(function(r){ return r.tipo === "s"; });
+      $("bre-d").innerHTML = sis.length ? tabla("d", sis) : '<div class="panel"><p style="margin:0;color:var(--gris)">Ningún sistema marcado todavía.</p></div>';
+      $$("[data-b]").forEach(function(el){ el.value = bre(el.dataset.b)[el.dataset.f]; });
+    }
+  }
+  filas.forEach(function(r){
+    const e = hr[r.id];
+    $("bto-" + r.id).innerHTML = (esNum(e.h) ? "<b>" + fmtH(e.h) + "</b>" : "<b>sin fijar</b>") + "<br>" + esc(txtDe(e));
+    $("btx-" + r.id).textContent = txtBrecha(r.id, "t", e.h);
+    if (r.tipo === "s") {
+      const q = hp[r.id];
+      $("bdo-" + r.id).innerHTML = (q && esNum(q.h) ? "<b>" + fmtH(q.h) + "</b>" : "<b>sin fijar</b>") + "<br>" + esc(txtDe(q));
+      $("bdx-" + r.id).textContent = txtBrecha(r.id, "d", q ? q.h : null);
+    }
+  });
+}
+function csvBrecha(){
+  const lista = listaHerencia(), hr = heredar(lista, "rtoH"), hp = heredar(lista, "rpoH");
+  const filas = [["recurso", "nombre", "tiempo_objetivo_heredado_h", "viene_de", "capacidad_estimada", "unidad", "capacidad_h", "fuente", "brecha_tiempo",
+                  "punto_objetivo_heredado_h", "punto_viene_de", "punto_real_estimado", "punto_unidad", "punto_real_h", "punto_fuente", "brecha_datos", "equipo"]];
+  RECS.forEach(function(r){
+    const e = hr[r.id]; if (!e) return;
+    const b = bre(r.id), q = hp[r.id];
+    filas.push([r.id, r.n, numCSV(e.h), txtDe(e), b.cap, b.capU, numCSV(aHoras(b.cap, b.capU)), b.fte, txtBrecha(r.id, "t", e.h),
+      r.tipo === "s" && q ? numCSV(q.h) : "", r.tipo === "s" ? txtDe(q) : "", r.tipo === "s" ? b.pr : "", r.tipo === "s" ? b.prU : "",
+      r.tipo === "s" ? numCSV(aHoras(b.pr, b.prU)) : "", r.tipo === "s" ? b.prF : "", r.tipo === "s" ? txtBrecha(r.id, "d", q ? q.h : null) : "", E.equipo]);
+  });
+  return csvTexto(filas);
+}
+
+/* ═════════ Selección, importación y conflictos ═════════ */
+function pintaSel(){
+  $$("#selp input").forEach(function(el){ el.checked = E.sel.indexOf(el.value) >= 0; });
+  const n = E.sel.length;
+  $("selmarca").textContent = n + " de 12 marcados" + (n === 4 ? "" : " · la presentación pide cuatro por equipo");
+}
+function pintaConflictos(){
+  const pids = Object.keys(E.otros).filter(function(pid){ return E.otros[pid] && E.otros[pid].length; });
+  if (!pids.length) { $("conflictos").innerHTML = ""; return; }
+  const cats = catsActivas(E.quinta);
+  function res(m){
+    return ["critico", "normal"].map(function(mid){
+      const mt = mtpd(m[mid], E.umbral, cats);
+      return "<td>" + esc(txtTolerable(mt)) + "</td><td>" + fmtH(aHoras(m[mid].rto, m[mid].rtoU)) + "</td><td>" + fmtH(aHoras(m[mid].rpo, m[mid].rpoU)) + "</td>";
+    }).join("");
+  }
+  $("conflictos").innerHTML = pids.map(function(pid){
+    return '<div class="conf"><b>' + pid + " · " + esc(PMAP[pid].n) + "</b>: lo analizó más de un equipo. Comparen el argumento de cada fila; no promedien." +
+      "<table><thead><tr><th>Versión</th><th>Tolerable · crítico</th><th>Objetivo · crítico</th><th>Punto · crítico</th><th>Tolerable · normal</th><th>Objetivo · normal</th><th>Punto · normal</th><th class=\"noimp\">Decisión</th></tr></thead><tbody>" +
+      "<tr><td><b>La de esta tabla</b></td>" + res(E.p[pid].m) + '<td class="noimp"><button class="sec mini" data-conf="queda" data-pid="' + pid + '">Conservar esta y descartar las demás</button></td></tr>' +
+      E.otros[pid].map(function(o, i){
+        return "<tr><td>" + esc(nomEq(o.equipo)) + "</td>" + res(o.m) + '<td class="noimp"><button class="sec mini" data-conf="adopta" data-pid="' + pid + '" data-i="' + i + '">Adoptar esta</button></td></tr>';
+      }).join("") + "</tbody></table></div>";
+  }).join("");
+}
+function nomEq(e){
+  e = String(e || "").trim();
+  return !e ? "equipo sin nombre" : (/^equipo\b/i.test(e) ? e : "equipo " + e);
+}
+function instanciaVacia(){ return PIDS.every(procSinDatos) && !E.equipo.trim() && !E.sel.length; }
+function ponCampos(){
+  $("equipo").value = E.equipo; $("uquien").value = E.uquien; $("umbral").value = String(E.umbral); $("quinta").checked = E.quinta;
+  $("martes").value = E.martes; $("martesdif").value = E.martesDif;
+  document.body.classList.toggle("sin5", !E.quinta);
+}
+function importa(txt){
+  const marca = $("impmarca");
+  if (esCSVBrecha(txt)) {
+    const rb = importarBrechaCSV(txt, RECS.map(function(x){ return x.id; }));
+    if (!rb.ok) { marca.textContent = rb.error; return; }
+    let nb = 0, cb = 0;
+    Object.keys(rb.b).forEach(function(rid){
+      const loc = bre(rid), vac = !["cap", "fte", "pr", "prF"].some(function(k){ return String(loc[k] || "").trim(); });
+      if (vac) { E.brecha[rid] = rb.b[rid]; nb++; } else if (JSON.stringify(loc) !== JSON.stringify(rb.b[rid])) cb++;
+    });
+    firmaBre = null;
+    marca.textContent = "Brecha importada" + (rb.equipo ? " de " + nomEq(rb.equipo) : "") + ": " + nb + " recurso(s) con estimación nueva" +
+      (cb ? "; " + cb + " ya tenían aquí una estimación distinta y se conservó la de esta tabla" : "") +
+      ". Cada fila aparece en el ejercicio 3 cuando algún proceso de la tabla depende de ese recurso.";
+    todo(); return;
+  }
+  const r = importarCSV(txt, PIDS);
+  if (!r.ok) { marca.textContent = r.error; return; }
+  const limpia = instanciaVacia(), extra = [];
+  if (limpia) {
+    E.equipo = r.equipo; E.uquien = r.aprobador; E.umbral = r.umbral; E.martes = r.martes; E.martesDif = r.martesDif;
+    E.sel = r.sel.filter(function(x){ return PMAP[x]; });
+    extra.push("Esta tabla estaba vacía: se adoptaron el equipo, el umbral, quién lo aprueba y el reparto del archivo.");
+  } else if (r.umbral !== E.umbral) extra.push("Ojo: ese archivo usó el umbral " + r.umbral + " y esta tabla usa el " + E.umbral + "; acuerden uno.");
+  let nuevos = 0, dobles = 0, iguales = 0, repetidos = 0;
+  Object.keys(r.p).forEach(function(pid){
+    const q = r.p[pid];
+    q.sis = q.sis.filter(function(x){ return RMAP[x] && RMAP[x].tipo === "s"; });
+    q.prov = q.prov.filter(function(x){ return RMAP[x] && RMAP[x].tipo === "p"; });
+    const org = String(q.origen || r.equipo || "").trim(), origen = org === E.equipo.trim() ? "" : org;
+    if (momSinDatos(q.m.critico, CATS) && momSinDatos(q.m.normal, CATS)) {
+      if (String(q.pers || "").trim() && !String(E.p[pid].pers || "").trim()) E.p[pid].pers = q.pers;
+      return;
+    }
+    if (procSinDatos(pid)) { E.p[pid] = { m: q.m, sis: q.sis, prov: q.prov, pers: q.pers || E.p[pid].pers || "", origen: origen }; nuevos++; }
+    else if (JSON.stringify(E.p[pid].m) === JSON.stringify(q.m)) iguales++;
+    else {
+      const lst = E.otros[pid] || (E.otros[pid] = []);
+      if (lst.some(function(o){ return JSON.stringify(o.m) === JSON.stringify(q.m); })) repetidos++;
+      else { lst.push({ equipo: org, m: q.m, sis: q.sis, prov: q.prov, pers: q.pers || "" }); dobles++; }
+    }
+  });
+  if (r.quinta && !E.quinta) { E.quinta = true; extra.push("El archivo trae la quinta categoría, «sobre personas»: quedó activada para toda la tabla; si no la usan, apáguenla en el panel del equipo."); }
+  ponCampos();
+  marca.textContent = "Importado" + (r.equipo ? " de " + nomEq(r.equipo) : "") + ": " + nuevos + " proceso(s) nuevos, " + dobles + " con dos versiones para discutir" +
+    (iguales ? ", " + iguales + " idénticos a los de esta tabla" : "") + (repetidos ? ", " + repetidos + " versión(es) que ya estaban importadas" : "") + ". " +
+    extra.concat(r.avisos).join(" ");
+  E.sel.forEach(function(pid){ $("c-" + pid).open = true; });
+  PIDS.forEach(vuelca); todo();
+}
+function muestraTexto(txt, nota){
+  const a = $("csvtxt");
+  a.hidden = false; $("csvlb").hidden = false; a.value = txt; a.focus(); a.select();
+  $("impmarca").textContent = nota;
+}
+function descarga(nombre, txt){
+  try {
+    const b = new Blob(["\uFEFF" + txt], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(b); a.download = nombre; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); document.body.removeChild(a); }, 500);
+    $("impmarca").textContent = "Descarga pedida: " + nombre + ". Si no aparece en la carpeta de descargas, usen «Mostrar la tabla como texto».";
+  } catch (err) {
+    muestraTexto(txt, "La descarga falló en este navegador. Copien el texto del cuadro y guárdenlo en un archivo llamado " + nombre + ", o péguenlo en el otro portátil.");
+  }
+}
+function exigeEquipo(){
+  if (E.equipo.trim()) return true;
+  $("impmarca").textContent = "Escriban primero el nombre del equipo, en el panel del ejercicio 1: el archivo lo lleva en el nombre y en cada fila.";
+  $("equipo").focus();
+  return false;
+}
+function metaProcs(){ const meta = {}; PROCS.forEach(function(p){ meta[p.id] = { n: p.n, dueno: p.dueno }; }); return meta; }
+function nomArchivo(base){
+  const eq = E.equipo.trim().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return "SIO0013-Lab1-" + base + (eq ? "-" + eq : "") + ".csv";
+}
+
+/* ═════════ Impresión: identificación, valores completos y desplegables ═════════ */
+const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+function pintaIdent(){
+  const d = new Date();
+  $("ident").innerHTML = "<b>Laboratorio 1 · SIO0013 · Análisis de impacto de la Universidad Pedagógica Colombiana</b><br>" +
+    "<b>Equipo:</b> " + esc(E.equipo.trim() || "sin nombre") + " · <b>Fecha:</b> " + d.getDate() + " de " + MESES[d.getMonth()] + " de " + d.getFullYear() +
+    " · <b>Nivel inaceptable (umbral):</b> " + E.umbral + " · <b>Quién debe aprobarlo:</b> " + esc(E.uquien.trim() || "sin definir") +
+    "<br><b>Procesos que profundizó el equipo:</b> " + (E.sel.join(", ") || "ninguno marcado") +
+    " · <b>Categorías:</b> " + catsActivas(E.quinta).map(function(c){ return c.n.toLowerCase(); }).join(", ") +
+    "<br><b>Estimación del martes:</b> " + esc(E.martes.trim() || "—") + "<br><b>Hoy, y por qué difiere:</b> " + esc(E.martesDif.trim() || "—");
+}
+/* cada campo lleva al lado un texto con su valor completo, que es lo que sale en papel */
+function espejo(){
+  $$("input[type=text], textarea, select").forEach(function(el){
+    if (el.closest(".noimp")) return;
+    let s = el.nextElementSibling;
+    if (!s || !s.classList.contains("pv")) { s = document.createElement("span"); s.className = "pv"; el.parentNode.insertBefore(s, el.nextSibling); }
+    let v;
+    if (el.tagName === "SELECT") {
+      const par = el.parentNode.classList.contains("par") ? el.parentNode.querySelector("input") : null;
+      v = par ? (par.value.trim() ? el.options[el.selectedIndex].text : "") : (el.value === "" ? "–" : el.options[el.selectedIndex].text);
+    } else v = el.value.trim() || "—";
+    s.textContent = v;
+  });
+}
+let estadoDet = null;
+function antesImprimir(){
+  if (!estadoDet) estadoDet = $$("details").map(function(d){ return [d, d.open]; });
+  $$("details.proc").forEach(function(d){ d.open = !d.classList.contains("vacia"); });
+  pintaIdent(); espejo();
+}
+function despuesImprimir(){
+  if (!estadoDet) return;
+  estadoDet.forEach(function(x){ x[0].open = x[1]; });
+  estadoDet = null;
+}
+/* la hoja común abre TODOS los desplegables al imprimir y no los cierra: aquí se abren solo las tarjetas con datos y se restaura después */
+window.removeEventListener("beforeprint", abreTodo);
+abreTodo = antesImprimir;
+window.addEventListener("beforeprint", antesImprimir);
+window.addEventListener("afterprint", despuesImprimir);
+if (window.matchMedia) {
+  const mqImp = window.matchMedia("print");
+  if (mqImp.addEventListener) mqImp.addEventListener("change", function(e){ if (!e.matches) despuesImprimir(); });
+}
+
+/* ═════════ Refresco general y eventos ═════════ */
+function pintaGlobal(){ pintaTabla(); pintaDep(); pintaConflictos(); pintaIdent(); espejo(); }
+function todo(){ refresca("D"); PIDS.forEach(refresca); pintaSel(); pintaGlobal(); guarda(); }
+function luego(){ clearTimeout(tGlobal); tGlobal = setTimeout(pintaGlobal, 180); guarda(); }
+
+function alCambiar(ev){
+  const el = ev.target, d = el.dataset;
+  if (d.p) {
+    const mom = momDe(d.p, d.m);
+    if (d.f === "x") mom.x[d.c][+d.i] = el.value === "" ? null : +el.value;
+    else if (d.f === "s") { mom.s[d.c] = el.value; el.title = el.value; }
+    else mom[d.f] = el.value;
+    refresca(d.p); if (d.p !== "D") luego(); else guarda();
+  } else if (d.dp) {
+    const p = E.p[d.dp], r = RMAP[d.dr], arr = r.tipo === "s" ? p.sis : p.prov, i = arr.indexOf(r.id);
+    if (el.checked && i < 0) arr.push(r.id); else if (!el.checked && i >= 0) arr.splice(i, 1);
+    pintaTabla(); pintaDep(); guarda();
+  } else if (d.pp) {
+    E.p[d.pp].pers = el.value; luego();
+  } else if (d.b) {
+    bre(d.b)[d.f] = el.value;
+    const lista = listaHerencia(); pintaBrecha(heredar(lista, "rtoH"), heredar(lista, "rpoH")); guarda();
+  }
+}
+document.addEventListener("input", alCambiar);
+document.addEventListener("change", function(ev){ if (ev.target.tagName === "SELECT" || ev.target.type === "checkbox") alCambiar(ev); });
+
+function monta(){
+  $("dl-sus").innerHTML = SUSTENTOS.map(function(t){ return '<option value="' + esc(t) + '"></option>'; }).join("");
+  montaProc($("demo"), "D");
+  PROCS.forEach(function(p){ montaProc($("procs"), p.id); });
+  $("selp").innerHTML = PROCS.map(function(p){ return '<label><input type="checkbox" value="' + p.id + '"><span><b>' + p.id + "</b> " + esc(p.n) + "</span></label>"; }).join("");
+  ponCampos();
+  ["D"].concat(PIDS).forEach(vuelca);
+  E.sel.forEach(function(pid){ $("c-" + pid).open = true; });
+
+  $("selp").addEventListener("change", function(ev){
+    const v = ev.target.value, i = E.sel.indexOf(v);
+    if (ev.target.checked && i < 0) { E.sel.push(v); $("c-" + v).open = true; } else if (!ev.target.checked && i >= 0) E.sel.splice(i, 1);
+    E.sel.sort(function(a, b){ return PIDS.indexOf(a) - PIDS.indexOf(b); });
+    todo();
+  });
+  $$("[data-rep]").forEach(function(b){ b.addEventListener("click", function(){
+    E.sel = b.dataset.rep.split(","); E.sel.forEach(function(pid){ $("c-" + pid).open = true; }); todo();
+  }); });
+  $("equipo").addEventListener("input", function(){ E.equipo = this.value; guarda(); });
+  $("uquien").addEventListener("input", function(){ E.uquien = this.value; luego(); });
+  $("martes").addEventListener("input", function(){ E.martes = this.value; luego(); });
+  $("martesdif").addEventListener("input", function(){ E.martesDif = this.value; luego(); });
+  $("umbral").addEventListener("change", function(){ E.umbral = +this.value; todo(); });
+  $("quinta").addEventListener("change", function(){ E.quinta = this.checked; document.body.classList.toggle("sin5", !E.quinta); todo(); });
+  $("demo-reset").addEventListener("click", function(){ E.demo = demoInicial(); vuelca("D"); refresca("D"); guarda(); });
+  $("trae-demo").addEventListener("click", function(){
+    if (!procSinDatos("P2") && !confirm("P2 ya tiene datos de su equipo. ¿Reemplazarlos por el ejemplo guiado?")) return;
+    E.p.P2.m = JSON.parse(JSON.stringify(E.demo.m));
+    if (!E.quinta) {            // la quinta categoría es decisión del equipo: no se activa sola
+      ["critico", "normal"].forEach(function(mid){ E.p.P2.m[mid].x.per = [null, null, null, null, null]; E.p.P2.m[mid].s.per = ""; });
+      $("trae-msg").textContent = "Se trajeron cuatro categorías: «sobre personas» está apagada en la tabla de su equipo. Si la quieren, actívenla en el panel del equipo y traigan el ejemplo otra vez.";
+    } else $("trae-msg").textContent = "Ejemplo traído con sus cinco categorías. Ahora revísenlo: sosténganlo o cámbienlo con argumento.";
+    vuelca("P2"); todo();
+  });
+  $("b-csv").addEventListener("click", function(){ if (exigeEquipo()) descarga(nomArchivo("tabla"), exportarCSV(E, metaProcs())); });
+  $("b-csv2").addEventListener("click", function(){ if (exigeEquipo()) descarga(nomArchivo("herencia-y-brecha"), csvBrecha()); });
+  $("b-txt").addEventListener("click", function(){
+    muestraTexto(exportarCSV(E, metaProcs()), "Texto de la tabla seleccionado: cópienlo (Ctrl+C) y péguenlo en el otro portátil, o guárdenlo en un archivo .csv.");
+  });
+  $("b-txtimp").addEventListener("click", function(){
+    const a = $("csvtxt");
+    if (a.hidden || !a.value.trim()) { a.hidden = false; $("csvlb").hidden = false; a.value = ""; a.focus(); $("impmarca").textContent = "Peguen en el cuadro el texto del CSV y pulsen otra vez «Importar el texto pegado»."; return; }
+    importa(a.value);
+  });
+  $("b-imp").addEventListener("click", function(){ antesImprimir(); window.print(); });
+  $("f-imp").addEventListener("change", function(){
+    const f = this.files && this.files[0]; if (!f) return;
+    const lector = new FileReader(), campo = this;
+    lector.onload = function(){
+      const buf = new Uint8Array(lector.result); let txt;
+      try { txt = new TextDecoder("utf-8", { fatal: true }).decode(buf); }
+      catch (err) { txt = new TextDecoder("windows-1252").decode(buf); }       // guardado desde una hoja de cálculo en ANSI
+      importa(txt); campo.value = "";
+    };
+    lector.onerror = function(){ $("impmarca").textContent = "No se pudo leer el archivo."; };
+    lector.readAsArrayBuffer(f);
+  });
+  $("b-borrar").addEventListener("click", function(){
+    if (!confirm("Se borra todo lo diligenciado en este navegador: valoraciones, tiempos, dependencias y brecha. ¿Continuar?")) return;
+    try { localStorage.removeItem(CLAVE); } catch (err) {}
+    E = nuevoEstado(); firmaDep = firmaBre = null;
+    ponCampos();
+    $("impmarca").textContent = ""; $("csvtxt").value = ""; $("csvtxt").hidden = true; $("csvlb").hidden = true;
+    $("trae-msg").textContent = "No es para copiarlo: es para sostenerlo o cambiarlo con argumento.";
+    ["D"].concat(PIDS).forEach(vuelca); todo();
+    guardaYa();
+    $("estado").textContent = "avance borrado";
+  });
+  $("conflictos").addEventListener("click", function(ev){
+    const d = ev.target.dataset; if (!d.conf) return;
+    if (d.conf === "adopta") { const o = E.otros[d.pid][+d.i]; E.p[d.pid] = { m: o.m, sis: o.sis, prov: o.prov, pers: o.pers || E.p[d.pid].pers || "", origen: o.equipo === E.equipo.trim() ? "" : o.equipo }; }
+    delete E.otros[d.pid];
+    vuelca(d.pid); todo();
+  });
+  refresca("D"); PIDS.forEach(refresca); pintaSel(); pintaGlobal();
+}
+monta();
+
+/* ═════════ Repaso ═════════ */
+montarQuiz("quiz", [
+ ["Tiempo a partir del cual no haber reanudado resulta inaceptable. Lo fija el negocio mirando consecuencias, no la tecnología mirando lo que puede dar.",
+  "Periodo máximo tolerable", "Es un límite, no una meta. Se deduce de la curva: la primera franja en que alguna categoría toca el nivel que la dirección declaró inaceptable."],
+ ["Plazo, contado desde el incidente y no desde que tecnología se entera, para reanudar al nivel mínimo. Siempre menor que el límite, con margen.",
+  "Tiempo objetivo de recuperación", "El reloj arranca con el incidente e incluye detectar, decidir, restaurar y verificar. El 16 de mayo pasaron 2 h 45 min antes de la primera llamada."],
+ ["Mide datos y mira hacia atrás: cuánto de lo registrado se acepta perder. Determina cada cuánto hay que copiar y dónde debe quedar la copia.",
+  "Punto objetivo de recuperación", "No es «cuánto tardo en recuperar los datos»: eso es parte del tiempo objetivo. La pregunta que lo fija es de dónde se reconstruye lo perdido."],
+ ["Responde a «¿recuperado hasta dónde?»: qué funciones, para cuántos usuarios y con qué calidad se opera mientras dura la interrupción.",
+  "Nivel mínimo de operación", "ISO 22300:2021 lo llama objetivo mínimo de continuidad del negocio. Sin él, el tiempo objetivo no se puede verificar. Muchas veces es un procedimiento manual, no un sistema."],
+ ["Exige fijar el tiempo a partir del cual el impacto es inaceptable y los plazos priorizados de reanudación, pero no define esos términos ni les fija valor; apenas dice, en dos notas, que pueden llamarse MTPD y RTO.",
+  "ISO 22301:2019, cláusula 8.2.2", "Es la norma de requisitos: manda fijar los plazos, no dice cuánto. RPO y MBCO no aparecen en ella. El error de cita típico es atribuirle la definición o un valor («ISO 22301 exige un RTO de 4 horas»), o citarla como fuente del punto objetivo o del nivel mínimo."],
+ ["Documento donde están las definiciones de los cuatro términos; es al que se remite la cita cuando se nombra el concepto.",
+  "ISO 22300:2021", "Es el vocabulario. La guía de análisis de impacto es ISO/TS 22317:2021, y el punto objetivo (RPO) y el objetivo mínimo de continuidad (MBCO) se usan en ISO/IEC 27031:2025."]
+], ["Periodo máximo tolerable", "Tiempo objetivo de recuperación", "Punto objetivo de recuperación", "Nivel mínimo de operación", "ISO 22301:2019, cláusula 8.2.2", "ISO 22300:2021"], "qver", "qreset", "qmarca");
+</script>
+
+</body>
+</html>
